@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<rss version="2.0">
+<channel>
+<title>HALCON: Tips of the Day</title>
+<link>http://www.halcon.com/</link>
+<description>Tips and tricks for HALCON users.</description>
+<language>en-us</language>
+<copyright>MVTec Software GmbH</copyright>
+<pubDate>Mon, 29 Feb 2016 0:00:01 +0000</pubDate>
+<image>
+<url>http://www.halcon.com/headlines/halcon-home.gif</url>
+<title>HALCON</title>
+<link>http://www.halcon.com/</link>
+</image>
+
+<item>
+<title>Organize Windows</title>
+<description>When having many overlapping windows, to regain the overview and making the four most important HDevelop windows accessible again, use 'Window -> Organize Windows' (Ctrl+Shift+W,O).</description>
+<link>OrganizeWindows</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Move the Tool Bar</title>
+<description>If the height of the main window is not sufficient, you can get some more height by dragging the elements of the tool bar by their dragging points from the top to the side of the main window.</description>
+<link>HuiMainWnd</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Use the Full Screen</title>
+<description>If the height of the main window is not sufficient, you can get some more height using 'Window -> Full Screen' (Ctrl+Shift+W,F) to fade out the window title.</description>
+<link>FullScreen</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Output Console</title>
+<description>To open the output console with a log of the most recent messages including HALCON low-level errors, double-click on the message area of the status bar.</description>
+<link>HuiEventLogWdg</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Feature Histogram</title>
+<description>To easily select regions or contours depending on their shape, use the 'Feature Histogram', which can be found in the tool bar.</description>
+<link>HuiFeatureHistoDlg</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Mon, 29 Feb 2016 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Gray Histogram</title>
+<description>To interactively find the correct parameters for the 'threshold'-operator, use the 'Gray Histogram', which can be found in the tool bar.</description>
+<link>HuiGrayHistoDlg</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Mon, 29 Feb 2016 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Create Procedures from Code</title>
+<description>To create procedures from existing code, simply select the corresponding code in the program listing and open the procedure interface dialog using 'Procedures -> Create New Procedure...' (Ctrl+Shift+P,C) to setup the new procedure.</description>
+<link>HuiCreateProcDlg</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Password-protected Procedures</title>
+<description>Procedures and procedure libraries can be protected with a password to protect your intellectual property.</description>
+<link>HuiProcInterfaceDlg/PasswordEdit</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Mon, 29 Feb 2016 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Procedure Documentation</title>
+<description>HDevelop procedures can be documented like operators. The documentation may include a detailed description of the functionality of the procedure, example code, links to other procedures or operators, and concise documentation of each parameter.</description>
+<link>ProcedureDocumentation</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Mon, 29 Feb 2016 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Status Bar</title>
+<description>The status bar at the bottom of the main window displays status information, e.g., context-sensitive information about a specific user action or the runtime of operator or procedure calls.</description>
+<link>StatusBar</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Mon, 29 Feb 2016 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Information about Operators</title>
+<description>For information concerning individual program lines, double click them so that the name of the applied operator and its parameters are displayed in the operator window. There, the help button provides specific information.</description>
+<link>MenuHelp</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Mon, 29 Feb 2016 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Parameter Order in Operator Calls</title>
+<description>The order of parameters in an operator call is always: 1) iconic input objects (e.g., images), 2) iconic output objects, 3) control input arrays (e.g., numbers and strings), and 4) control output arrays.</description>
+<link>TypesParameters</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Mon, 29 Feb 2016 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Scope of Variables</title>
+<description>HDevelop supports local and global variables. All variables are local by default, i.e., they exist only within their procedure.</description>
+<link>VariableScope</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Mon, 29 Feb 2016 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Just-in-time Compilation</title>
+<description>HDevelop supports just-in-time (JIT) compilation of procedures for optimized performance of HDevelop programs. The JIT compiler is enabled in the “experienced user” settings of the preferences dialog.</description>
+<link>JITCompilation</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Mon, 29 Feb 2016 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Save Window</title>
+<description>To save the content of the current Graphics Window into an image, right-click in the Graphics Window and choose the 'Save Window...' entry from the context menu (Ctrl+Shift+G,S).</description>
+<link>SaveWindow</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Inspect Pixels</title>
+<description>The gray value and image coordinates of a pixel at the position of the mouse cursor are displayed in the status bar or, holding down the Ctrl key, next to the mouse cursor.</description>
+<link>HuiGraphicsWnd</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Mouse Precision</title>
+<description>You can select the precision in which the mouse positions are returned using 'Visualization -> Position Precision'. By default, integer values are used (precision 0).</description>
+<link>PositionPrecision</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Interactive ROI Generation</title>
+<description>The Graphics Window provides a tool bar icon to access the ROI window. There, you can interactively draw ROIs and XLDs and perform simple measurements.</description>
+<link>HuiRoiDlg</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Drag-and-Drop Images</title>
+<description>To open an image from file you can simply drag it from a file browser to the HDevelop window and drop it there.</description>
+<link>DragImages</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Scatter Plot</title>
+<description>To generate a scatter plot of a pair of numeric tuples of equal length, right-click it in the Variable Window (select both tuples simultaneously using the Ctrl key) and use the 'Plot as X/Y pair(s)' entry from the context menu.</description>
+<link>HuiVarFunctionInspectWdg</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Inspect Variables</title>
+<description>You can open an inspection window of a control variable with variable-specific functionality by double-clicking on it in the Variable Window.</description>
+<link>InspectionWindow</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Inspect 3D Object Models</title>
+<description>You can open an inspection window of a 3D object model with information about the model and the possibility to interactively display it by double-clicking the handle in the Variable Window.</description>
+<link>HuiVarModel3DInspectWdg</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Live Display</title>
+<description>You can open an inspection window of an image acquisition device with parameter information and the possibility of a live display by double-clicking its handle in the Variable Window.</description>
+<link>HuiVarFGInspectWdg</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Save Variable Content</title>
+<description>You can save the content of a variable to file by right-clicking on the variable name in the Variable Window and using the 'Save' entry from the context menu.</description>
+<link>HuiVarWnd</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Copy Variable Content</title>
+<description>To copy the content of a variable, right-click on the name of the control variable in the Variable Window and use the 'Copy' (Ctrl+C) entry from the context menu. Then, you can paste the content (Ctrl+V), e.g., at a selected position in the program listing.</description>
+<link>HuiVarWnd/TableControlVars</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Profiling Programs</title>
+<description>You can inspect the execution times of single lines of code and thus find bottlenecks in your programs using 'Execute -> Activate Profiler' (Ctrl+Shift+F,F).</description>
+<link>HuiProgWnd/ProcProfilerLines</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Call Stack</title>
+<description>You can visualize the hierarchy of the procedures that were currently called on HDevelop's internal call stack using 'Execute -> Thread View / Call Stack' (Ctrl+Shift+O,C).</description>
+<link>CallStackWnd</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Operator Suggestions</title>
+<description>When having selected an operator call in the Program Window, the menu 'Suggestions' provides suggestions for alternative, preceding, and succeeding operator calls.</description>
+<link>OperatorSuggestions</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Tool Tips for a Program Line</title>
+<description>Resting the mouse pointer on an operator, procedure, or variable name within the Program Window displays a tool tip providing specific information, e.g., the name and (parts of) the content of a variable.</description>
+<link>HuiOptionsDlg/TabProgListing</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Open Procedures in new Tabs</title>
+<description>To display a procedure in a new tab card, press the Ctrl key while selecting the procedure from the drop-down list of the Program Window.</description>
+<link>HuiProgWnd</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Copy Procedures</title>
+<description>To copy an internal procedure that is only open in the Program Window, select 'Procedures -> Duplicate...' and enter a new name in the corresponding dialog.</description>
+<link>HuiProcInterfaceDlg</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Assistants</title>
+<description>You can access assistants that guide you through often needed tasks like image acquisition, camera calibration, matching, 1D measuring, or OCR via the menu 'Assistants'.</description>
+<link>HDevelopAssistants</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Image Acquisition Assistant</title>
+<description>To acquire images and adjust the parameters of your image acquisition device, use 'Assistants -> Open New Image Acquisition' or the corresponding tool bar button.</description>
+<link>HasImageAcquisitionDlg</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Copy and Paste</title>
+<description>You can start multiple instances of HDevelop to comfortably copy program code and procedures between different HDevelop programs.</description>
+<link>CopyAndPaste</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>View Procedures</title>
+<description>You can view or edit a selected procedure in a new tab with Alt+Ctrl+Enter.</description>
+<link>ShortcutHuiProgWnd</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Advanced Autocompletion</title>
+<description>Using the Tab key, advanced autocompletion is possible when working with the full text editor.</description>
+<link>FullTextEditor</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Behavior of Return Key</title>
+<description>You can change the behavior of the Return key from 'enter and execute' to 'enter' via 'Edit -> Preferences -> General Options -> General Options' or the corresponding tool bar button in the Program Window.</description>
+<link>HuiOptionsDlg/TabGeneralOptions</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Quick Navigation</title>
+<description>You can manage your program lines, e.g., navigate between bookmarked program lines or list lines containing a search term using 'Window -> Open Quick Navigation' (Ctrl+Shift+O,R).</description>
+<link>HuiProcLineResultDlg</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Set Bookmarks</title>
+<description>You can set temporary bookmarks to quickly navigate between important program lines of large programs using 'Set Bookmark' of the Program Window's context menu (Ctrl+F11).</description>
+<link>SetBookmarks</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+
+<item>
+<title>Code Export</title>
+<description>You can export your HDevelop programs to several programming languages using 'File -> Export...' (Ctrl+Shift+O,X) or the corresponding tool bar button.</description>
+<link>CodeExport</link>
+<author>MVTec Software GmbH, webmaster@mvtec.com</author>
+<pubDate>Wed, 28 May 2014 0:00:01 +0000</pubDate>
+</item>
+</channel>
+</rss>

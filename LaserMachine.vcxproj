@@ -1,0 +1,384 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{3E10888A-A806-427D-84EE-9806F52C098B}</ProjectGuid>
+    <RootNamespace>LaserMachine</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>LaserMachine</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Dynamic</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v120_xp</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <UseOfMfc>Static</UseOfMfc>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)\halcon\include\halconcpp;$(SolutionDir)\Daheng\inc;$(SolutionDir)\halcon\include;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\halcon\lib\$(HALCONARCH);$(LibraryPath);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)MPC2810\include;$(SolutionDir)BSLCard\include;$(SolutionDir)Halcon\include;$(SolutionDir)Halcon\include\halconcpp;$(SolutionDir)Daheng\inc;$(VC_IncludePath);$(WindowsSDK_IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)MPC2810\lib;$(SolutionDir)BSLCard\lib;$(SolutionDir)Halcon\lib\x64-win64;$(SolutionDir)Daheng\lib\x64;$(LibraryPath);$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+    <ExecutablePath>$(VC_ExecutablePath_x64);$(CommonExecutablePath)</ExecutablePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(SolutionDir)MPC2810\include;$(SolutionDir)BSLCard\include;$(SolutionDir)Halcon\include;$(SolutionDir)Halcon\include\halconcpp;$(SolutionDir)Daheng\inc;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)MPC2810\lib;$(SolutionDir)Daheng\lib\x64;$(SolutionDir)Halcon\lib\x64-win64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions);_USE_MATH_DEFINES</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>halconcpp.lib;GxIAPI.lib;DxImageProc.lib;</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)\Daheng\lib\x64;$(SolutionDir)\halcon\lib\$(HALCONARCH);$(LibraryPath)</AdditionalLibraryDirectories>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0804</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions);_USE_MATH_DEFINES</PreprocessorDefinitions>
+      <SDLCheck>false</SDLCheck>
+      <AdditionalIncludeDirectories>D:\_myGitRepo\LaserMachine\boostX;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>halcon.lib;halconc.lib;halconcpp.lib;GxIAPICPP.lib;mpc2810.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)MPC2810\lib;$(SolutionDir)Halcon\lib\x64-win64;$(SolutionDir)Daheng\lib\x64;$(LibraryPath)</AdditionalLibraryDirectories>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0804</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0804</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>false</SDLCheck>
+      <AdditionalIncludeDirectories>D:\_myGitRepo\LaserMachine\boostX</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(SolutionDir)Halcon\lib\x64-win64;$(SolutionDir)MPC2810\lib;$(SolutionDir)Daheng\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>halcon.lib;halconc.lib;halconcpp.lib;GxIAPICPP.lib;mpc2810.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0804</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="LaserMachine.txt" />
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CameraPosition.h" />
+    <ClInclude Include="CameraView.h" />
+    <ClInclude Include="CButtonLongPush.h" />
+    <ClInclude Include="CDlgDevCfgTabCamera.h" />
+    <ClInclude Include="CDlgDevCfgTabLaser.h" />
+    <ClInclude Include="CDlgDevCfgTabScanner.h" />
+    <ClInclude Include="CDlgDevCfgTabWorktable.h" />
+    <ClInclude Include="CDlgSetParaGrid.h" />
+    <ClInclude Include="CGridListCtrlEx\CGridColumnTrait.h" />
+    <ClInclude Include="CGridListCtrlEx\CGridColumnTraitCombo.h" />
+    <ClInclude Include="CGridListCtrlEx\CGridColumnTraitDateTime.h" />
+    <ClInclude Include="CGridListCtrlEx\CGridColumnTraitEdit.h" />
+    <ClInclude Include="CGridListCtrlEx\CGridColumnTraitHyperLink.h" />
+    <ClInclude Include="CGridListCtrlEx\CGridColumnTraitImage.h" />
+    <ClInclude Include="CGridListCtrlEx\CGridColumnTraitMultilineEdit.h" />
+    <ClInclude Include="CGridListCtrlEx\CGridColumnTraitText.h" />
+    <ClInclude Include="CGridListCtrlEx\CGridColumnTraitVisitor.h" />
+    <ClInclude Include="CGridListCtrlEx\CGridListCtrlEx.h" />
+    <ClInclude Include="CGridListCtrlEx\CGridListCtrlGroups.h" />
+    <ClInclude Include="CGridListCtrlEx\CGridRowTrait.h" />
+    <ClInclude Include="CGridListCtrlEx\CGridRowTraitText.h" />
+    <ClInclude Include="CGridListCtrlEx\CGridRowTraitVisitor.h" />
+    <ClInclude Include="CGridListCtrlEx\CGridRowTraitXP.h" />
+    <ClInclude Include="CGridListCtrlEx\ViewConfigSection.h" />
+    <ClInclude Include="CheckPassword.h" />
+    <ClInclude Include="DeviceLaser.h" />
+    <ClInclude Include="DeviceLaserBellin.h" />
+    <ClInclude Include="DlgCameraPositionSetDestinedMarkPoint.h" />
+    <ClInclude Include="DlgCameraPositionSetRealMarkPoint.h" />
+    <ClInclude Include="HalconModel.h" />
+    <ClInclude Include="HalconWndDlg.h" />
+    <ClInclude Include="PointF.h" />
+    <ClInclude Include="DevCfgDlg.h" />
+    <ClInclude Include="DeviceCamera.h" />
+    <ClInclude Include="DeviceCameraDahengMER.h" />
+    <ClInclude Include="DeviceCameraGeneralGE.h" />
+    <ClInclude Include="DeviceCardMark.h" />
+    <ClInclude Include="DeviceCardMarkBSL.h" />
+    <ClInclude Include="DeviceCardWorktable.h" />
+    <ClInclude Include="DeviceCardWorktableMPC2810.h" />
+    <ClInclude Include="DlgSetParaCamera.h" />
+    <ClInclude Include="HalconWnd.h" />
+    <ClInclude Include="LaserMachine.h" />
+    <ClInclude Include="LaserMachineConst.h" />
+    <ClInclude Include="LaserMachineDoc.h" />
+    <ClInclude Include="LaserMachineView.h" />
+    <ClInclude Include="MachineListContainer.h" />
+    <ClInclude Include="MachineObjArc.h" />
+    <ClInclude Include="MachineObjArcEll.h" />
+    <ClInclude Include="MachineObjCircle.h" />
+    <ClInclude Include="MachineObjDef.h" />
+    <ClInclude Include="MachineObjEllipse.h" />
+    <ClInclude Include="MachineObjGroup.h" />
+    <ClInclude Include="MachineObjLine.h" />
+    <ClInclude Include="MachineObjPoint.h" />
+    <ClInclude Include="MachineObjPolyline.h" />
+    <ClInclude Include="MachineObjTiltEllipse.h" />
+    <ClInclude Include="MachineObj_Comm.h" />
+    <ClInclude Include="MachinePara_Layer.h" />
+    <ClInclude Include="MainControlDlg.h" />
+    <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="ObjectProperty.h" />
+    <ClInclude Include="ObjPropertyDlgEdit.h" />
+    <ClInclude Include="PreProcess.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="Socket.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="XSleep.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CameraPosition.cpp" />
+    <ClCompile Include="CameraView.cpp" />
+    <ClCompile Include="CButtonUpDown.cpp" />
+    <ClCompile Include="CDlgDevCfgTabCamera.cpp" />
+    <ClCompile Include="CDlgDevCfgTabLaser.cpp" />
+    <ClCompile Include="CDlgDevCfgTabScanner.cpp" />
+    <ClCompile Include="CDlgDevCfgTabWorktable.cpp" />
+    <ClCompile Include="CDlgSetParaGrid.cpp" />
+    <ClCompile Include="CGridListCtrlEx\CGridColumnTraitCombo.cpp" />
+    <ClCompile Include="CGridListCtrlEx\CGridColumnTraitDateTime.cpp" />
+    <ClCompile Include="CGridListCtrlEx\CGridColumnTraitEdit.cpp" />
+    <ClCompile Include="CGridListCtrlEx\CGridColumnTraitHyperLink.cpp" />
+    <ClCompile Include="CGridListCtrlEx\CGridColumnTraitImage.cpp" />
+    <ClCompile Include="CGridListCtrlEx\CGridColumnTraitMultilineEdit.cpp" />
+    <ClCompile Include="CGridListCtrlEx\CGridColumnTraitText.cpp" />
+    <ClCompile Include="CGridListCtrlEx\CGridListCtrlEx.cpp" />
+    <ClCompile Include="CGridListCtrlEx\CGridListCtrlGroups.cpp" />
+    <ClCompile Include="CGridListCtrlEx\CGridRowTraitText.cpp" />
+    <ClCompile Include="CGridListCtrlEx\CGridRowTraitXP.cpp" />
+    <ClCompile Include="CGridListCtrlEx\ViewConfigSection.cpp" />
+    <ClCompile Include="CheckPassword.cpp" />
+    <ClCompile Include="DeviceLaser.cpp" />
+    <ClCompile Include="DeviceLaserBellin.cpp" />
+    <ClCompile Include="DlgCameraPositionSetDestinedMarkPoint.cpp" />
+    <ClCompile Include="DlgCameraPositionSetRealMarkPoint.cpp" />
+    <ClCompile Include="HalconModel.cpp" />
+    <ClCompile Include="HalconWndDlg.cpp" />
+    <ClCompile Include="PointF.cpp" />
+    <ClCompile Include="DevCfgDlg.cpp" />
+    <ClCompile Include="DeviceCamera.cpp" />
+    <ClCompile Include="DeviceCameraDahengMER.cpp" />
+    <ClCompile Include="DeviceCameraGeneralGE.cpp" />
+    <ClCompile Include="DeviceCardMark.cpp" />
+    <ClCompile Include="DeviceCardMarkBSL.cpp" />
+    <ClCompile Include="DeviceCardWorktable.cpp" />
+    <ClCompile Include="DeviceCardWorktableMPC2810.cpp" />
+    <ClCompile Include="DlgSetParaCamera.cpp" />
+    <ClCompile Include="HalconWnd.cpp" />
+    <ClCompile Include="LaserMachine.cpp" />
+    <ClCompile Include="LaserMachineDoc.cpp" />
+    <ClCompile Include="LaserMachineView.cpp" />
+    <ClCompile Include="MachineListContainer.cpp" />
+    <ClCompile Include="MachineObjArc.cpp" />
+    <ClCompile Include="MachineObjArcEll.cpp" />
+    <ClCompile Include="MachineObjCircle.cpp" />
+    <ClCompile Include="MachineObjEllipse.cpp" />
+    <ClCompile Include="MachineObjGroup.cpp" />
+    <ClCompile Include="MachineObjLine.cpp" />
+    <ClCompile Include="MachineObjPoint.cpp" />
+    <ClCompile Include="MachineObjPolyline.cpp" />
+    <ClCompile Include="MachineObjTiltEllipse.cpp" />
+    <ClCompile Include="MachineObj_Comm.cpp" />
+    <ClCompile Include="MachinePara_Layer.cpp" />
+    <ClCompile Include="MainControlDlg.cpp" />
+    <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="ObjectProperty.cpp" />
+    <ClCompile Include="ObjPropertyDlgEdit.cpp" />
+    <ClCompile Include="PreProcess.cpp" />
+    <ClCompile Include="Socket.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="XSleep.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="LaserMachine.reg" />
+    <None Include="res\LaserMachine.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="LaserMachine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="ButtonMarkPoint0.bmp" />
+    <Image Include="C:\Users\Jason Zou\Desktop\ButtonMarkPoint0.bmp" />
+    <Image Include="C:\Users\Jason Zou\Desktop\mark1.bmp" />
+    <Image Include="C:\Users\Jason Zou\Desktop\mark2.bmp" />
+    <Image Include="mark0.bmp" />
+    <Image Include="mark1.bmp" />
+    <Image Include="mark2.bmp" />
+    <Image Include="mark3.bmp" />
+    <Image Include="mark4.bmp" />
+    <Image Include="res\bitmap1.bmp" />
+    <Image Include="res\ico00001.ico" />
+    <Image Include="res\ico00002.ico" />
+    <Image Include="res\ico00003.ico" />
+    <Image Include="res\ico00004.ico" />
+    <Image Include="res\ico00005.ico" />
+    <Image Include="res\ico00006.ico" />
+    <Image Include="res\ico00007.ico" />
+    <Image Include="res\icon1.ico" />
+    <Image Include="res\icon_gri.ico" />
+    <Image Include="res\LaserMachine.ico" />
+    <Image Include="res\LaserMachineDoc.ico" />
+    <Image Include="res\Toolbar.bmp" />
+    <Image Include="res\toolbar_modify.bmp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="LaserMachine.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

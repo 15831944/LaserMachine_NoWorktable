@@ -1,0 +1,56 @@
+﻿说明：
+1,修改CLaserMachineApp::InitInstance(),增加加载文件判断,限制只容许运行一个实例,2019.05
+2,修改CMainFrame::PreCreateWindow,修改主窗口标题,设置窗口尺寸,2019.05
+3,修改String Table,增加字符串,修改static UINT indicators[],以便状态栏显示,未完成,2019.06
+4,添加一个对话框类 CMainControlDlg类,用作主控制对话框,2019.06
+5,添加一个ScrollView类,用于相机图像显示,2019.06
+6,添加一个常数头文件LaserMachineConst.h,用于定义所有自定义常数,2019.06
+7,修改CMainFrame::OnCreateClient,设置窗口拆分方法和大小,由于用了CLaserMachineView类,必须
+  在MainFrm.cpp中添加#include "LaserMachineView.h",并在LaserMachineView.h中添加#include
+  "LaserMachineDoc.h",2019.06
+8,在CMainControlDlg中添加 CMainControlDlg::OnSize,当此窗口尺寸被调整时向主窗口发送消息,
+  以恢复本窗口尺寸,2019.06
+9,增加一个拆分窗口,用于对象属性显示,该窗口通过调整分割尺寸显示\隐藏,尺寸锁定已经完成,2019.06
+10,主菜单栏视图中也增加了对象属性窗口的开关,图形视频窗口切换项,
+11,CMainFrame *pFrame = (CMainFrame*)(AfxGetApp()->m_pMainWnd);
+   pFrame->m_strSysPassword = m_strPassword;
+   能提供子窗口访问主窗口数据的方法,
+12,对于密码校验对话框，需在OnInitDialog()中设置焦点,并将返回值由默认的return TRUE改为return FALSE
+13,在CMainFrame::OnSize(UINT nType, int cx, int cy)中加入判断,if (rc.right == 0 && rc.bottom == 0)
+   窗口最小化时直接退出,不要调整拆分窗口尺寸,否则会出现异常中断,--2019.06.13
+14,
+15,
+16,
+17,导入激光加工用对象列表类(集中放在筛选器"MachineObjList"中),已完成部分含点\线段\园 --2019.06.30
+18,逻辑坐标系下，图形显示、缩放、平移等完成--2019.07.02
+19,为了便于CLaserMachineDoc类向CLaserMachineView类发送消息,将主窗口拆分变量m_wndSplitter和
+   m_wndSplitter变更为public, --2019.07.03
+20,加工文件装载和保存正常(暂缺振镜加工参数)
+21,图元对象完成了Point,Line,Circle,Arc,Ellipse,ArcEllipse,TileEllipse,PolyLinne,基本涵盖了常用的
+   AutoCad图元,暂缺Spline,
+22,群组对象尚未开始
+23,现有图元坐标计算无误,显示正常,但图元较多是显示效果不甚理想,下一步用双缓冲区处理显示闪烁缺陷
+24,---2019.07.23
+25,加入了群组对象
+26,对象属性编辑面板基本完成---涵盖单个和组合对象加工参数修改,默认参数保存,组群/解散,polyline生成/打散,
+   对象顺序调整,对象起终点调整等
+27,图形显示加入对象方向指示(一个指向终点的箭头,其方向为运动方向)---非常直观和重要
+28,现有对象加工链表的保存和读出完全无误(含群组),内存管理无异常,程序退出不会出现内存释放不干净问题
+29,编辑面板的插入按钮未编程,这里会加入螺旋线等全新对象,另外文字对象待样条对象完成后再加入
+30,下期重点是绘图区编辑,预期时间一周
+31,---2019.08.13
+32,在 CLaserMachineView::OnMouseMove()中添加 pFrame->SetActiveView(this),使得鼠标划过View窗口就激活,避免工具栏
+   按钮启用需再次点击窗口的弊病
+33,排除了Polyline化中的几个BUG,设及图层和点坐标的错误
+34,由于优化对象显示面板的原因,耽搁了图形区编辑功能编写,现仅完成点对象的拾取,其他对象拾取顺延一周,
+35,---2019.08.20
+36,在View中增加了一个指针变量m_pLaserObjList,直接关联Doc类中同名对象
+37,所有对象拾取完成,点选和框选均正常(为了简化计算,框选对凹图不是非常理想,但影响非常小)
+38,增加了内存缓冲绘图,避免了图形更新可能出现的闪烁(注意:OnEraseBkgnd函数必须重写,直接返回即可)
+39,---2019.08.23
+40,属性编辑对话框主要功能完成
+41,又发现几处BUG,主要是笔误,未发现原则性错误
+42,这里还未完成部分为,加工排序,预计2-3天可完成
+43,---2019.09.01
+44,排序完成
+45,---2019.09.02
