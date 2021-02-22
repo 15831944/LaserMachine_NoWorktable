@@ -129,12 +129,6 @@ void CMainControlDlg::OnBnClickedButtonStartMark()
 	CMachineListContainer* pListContainerTmp = pDoc->m_pLaserObjList;
 	pDevCardMark->LoadMachineObjList(pListContainerTmp);
 
-	//double ptPos[][2] = { {50,0}, {-50, 0}, {0, 50}, {50,0} };
-	//theApp.pDevCardMark->AddEntityCircle(ptCenter, 50, 0, 0);
-	//double ptCenter[2] = { 0, 0 };
-	//theApp.pDevCardMark->AddEntityLines(4, ptPos);
-	//theApp.pDevCardMark->AddEntityLines(2, ptPos);
-
 	pDevCardMark->StartMarkCardMark();
 	pDevCardMark->WaitForThreadsEnded();
 	MessageBoxTimeout(NULL, _T("标刻完成"), _T("提示"), MB_OK, 0, 1000);

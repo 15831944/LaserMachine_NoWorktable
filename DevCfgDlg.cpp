@@ -73,13 +73,13 @@ BOOL CDevCfgDlg::OnInitDialog()
 	//为Tab Control增加4个页面
 	m_tab.InsertItem(0, _T("激光器"));
 	m_tab.InsertItem(1, _T("振镜"));
-	m_tab.InsertItem(2, _T("工作台"));
-	m_tab.InsertItem(3, _T("相机"));
+	//m_tab.InsertItem(2, _T("工作台"));
+	m_tab.InsertItem(2, _T("相机"));
 
 	//创建4个对话框
 	m_dlgDevCfgTabLASER.Create(IDD_DEVICE_CONFIG_TAB_LASER, &m_tab);
 	m_dlgDevCfgTabScanner.Create(IDD_DEVICE_CONFIG_TAB_SCANNER, &m_tab);
-	m_dlgDevCfgTabWorktable.Create(IDD_DEVICE_CONFIG_TAB_WORKTABLE, &m_tab);
+	//m_dlgDevCfgTabWorktable.Create(IDD_DEVICE_CONFIG_TAB_WORKTABLE, &m_tab);
 	m_dlgDevCfgTabCamera.Create(IDD_DEVICE_CONFIG_TAB_CAMERA, &m_tab);
 
 	//设定在Tab内显示的范围
@@ -91,19 +91,19 @@ BOOL CDevCfgDlg::OnInitDialog()
 	rc.right -= 0;
 	m_dlgDevCfgTabLASER.MoveWindow(&rc);
 	m_dlgDevCfgTabScanner.MoveWindow(&rc);
-	m_dlgDevCfgTabWorktable.MoveWindow(&rc);
+	//m_dlgDevCfgTabWorktable.MoveWindow(&rc);
 	m_dlgDevCfgTabCamera.MoveWindow(&rc);
 
 	//把对话框对象指针保存起来
 	pDialog[0] = &m_dlgDevCfgTabLASER;
 	pDialog[1] = &m_dlgDevCfgTabScanner;
-	pDialog[2] = &m_dlgDevCfgTabWorktable;
-	pDialog[3] = &m_dlgDevCfgTabCamera;
+	//pDialog[2] = &m_dlgDevCfgTabWorktable;
+	pDialog[2] = &m_dlgDevCfgTabCamera;
 	//显示初始页面
 	pDialog[0]->ShowWindow(SW_SHOW);
 	pDialog[1]->ShowWindow(SW_HIDE);
+	//pDialog[2]->ShowWindow(SW_HIDE);
 	pDialog[2]->ShowWindow(SW_HIDE);
-	pDialog[3]->ShowWindow(SW_HIDE);
 	//保存当前选择
 	m_CurSelTab = 0;
 

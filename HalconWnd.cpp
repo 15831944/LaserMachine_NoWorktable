@@ -175,6 +175,13 @@ int CHalconWnd::OnCreate(LPCREATESTRUCT cs)
 		break;
 	}
 
+	if (NULL == m_pDevCam)
+	{
+		AfxMessageBox(_T("相机初始化失败"));
+		m_bThreadsAreRunning = FALSE;
+		return 0;
+	}
+
 	if (FALSE == m_pDevCam->OpenDevCamera())
 	{
 		delete m_pDevCam;

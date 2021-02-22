@@ -35,9 +35,10 @@ protected:
 	int m_CurSelTab;
 	CDlgDevCfgTabLaser m_dlgDevCfgTabLASER;
 	CDlgDevCfgTabScanner m_dlgDevCfgTabScanner;
-	CDlgDevCfgTabWorktable m_dlgDevCfgTabWorktable;
+	//CDlgDevCfgTabWorktable m_dlgDevCfgTabWorktable;
 	CDlgDevCfgTabCamera m_dlgDevCfgTabCamera;
-	CDialog* pDialog[4];  //用来保存对话框对象指针
+	//CDialog* pDialog[4];  //用来保存对话框对象指针
+	CDialog* pDialog[3];  //用来保存对话框对象指针
 	virtual BOOL OnInitDialog();
 	afx_msg void OnTcnSelchangeTabDeviceConfig(NMHDR* pNMHDR, LRESULT* pResult);
 };

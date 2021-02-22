@@ -124,15 +124,16 @@ BOOL CLaserMachineApp::InitInstance()
 	}
 	if (NULL == pDevCardWorktable)
 	{
-		AfxMessageBox(_T("请选择运动控制卡"));
+		//AfxMessageBox(_T("请选择运动控制卡"));
 	}
 	else
 	{
-		if (FALSE == pDevCardWorktable->InitialCardWorktable())
+		//if (FALSE == pDevCardWorktable->InitialCardWorktable())
+		pDevCardWorktable->InitialCardWorktable();
 		{
 			delete pDevCardWorktable;
 			pDevCardWorktable = NULL;
-			AfxMessageBox(_T("运动控制卡初始化失败"));
+			//AfxMessageBox(_T("运动控制卡初始化失败"));
 		}
 	}
 	//激光器硬件
