@@ -272,7 +272,7 @@ void CCameraView::OnTestFindModel()
 	fMinScore = ReadDevCameraMarkCircleFindMinScore();
 	fScaleMin = ReadDevCameraMarkCircleFindScaleMin();
 	fScaleMax = ReadDevCameraMarkCircleFindScaleMax();
-	HalconModel hoModel(_T("Բ"), fRadius, fPixelSize, fScaleMin, fScaleMax, fMinScore);
+	HalconModel hoModel(_T("Բ"), fRadius, fPixelSize, fScaleMin, fScaleMax, fMinScore, 0, 0, 0, 0);
 	std::vector<CPointF> ptVec;
 	m_pHalconWnd->LocateModel(hoModel, &ptVec);
 }

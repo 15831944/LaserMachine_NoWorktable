@@ -2259,12 +2259,12 @@ int CHalconWnd::LocateModel(HalconModel modelHalcon, std::vector<CPointF>* vPtPo
 		ClearContourMask();
 		ClearStringMask();
 		hoImageDisplay = GetImageDisplay();
-		hoModelContour = modelHalcon.hoXldModel;
-		hv_ScaleMin = modelHalcon.hvModelScaleMin;
-		hv_ScaleMax = modelHalcon.hvModelScaleMax;
-		hv_ModelOriginRow = modelHalcon.hvModelOriginRow;
-		hv_ModelOriginColumn = modelHalcon.hvModelOriginColumn;
-		hv_MinScore = modelHalcon.hvModelMinScore;
+		hoModelContour = modelHalcon.m_hoXldModel;
+		hv_ScaleMin = modelHalcon.m_hvModelScaleMin;
+		hv_ScaleMax = modelHalcon.m_hvModelScaleMax;
+		hv_ModelOriginRow = modelHalcon.m_hvModelOriginRow;
+		hv_ModelOriginColumn = modelHalcon.m_hvModelOriginColumn;
+		hv_MinScore = modelHalcon.m_hvModelMinScore;
 
 		//зЅБъ
 		GetObjClass(hoModelContour, &hv_Class);

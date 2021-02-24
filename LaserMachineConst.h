@@ -56,3 +56,8 @@
 #define WM_Init_ReSize			WM_USER + 15
 #define WM_ObjList_Refresh		WM_USER + 16
 #define WM_File_MRU_Open		WM_USER + 17
+
+#define WM_START_MARK		WM_USER + 188
+#define WM_STOP_MARK		WM_USER + 189
+#define ID_TIMEER_MARK_PROCESS_TIME WM_USER+190
+

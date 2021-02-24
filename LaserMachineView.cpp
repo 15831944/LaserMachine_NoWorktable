@@ -14,9 +14,25 @@
 #include "ObjectProperty.h"
 #include "MainFrm.h"
 #include "CDlgSetParaGrid.h"
+#include "CameraView.h"
+#include "XSleep.h"
+#include "PreProcess.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
+#endif
+
+// 添加MessageBoxTimeout支持
+extern "C"
+{
+	int WINAPI MessageBoxTimeoutA(IN HWND hWnd, IN LPCSTR lpText, IN LPCSTR lpCaption, IN UINT uType, IN WORD wLanguageId, IN DWORD dwMilliseconds);
+	int WINAPI MessageBoxTimeoutW(IN HWND hWnd, IN LPCWSTR lpText, IN LPCWSTR lpCaption, IN UINT uType, IN WORD wLanguageId, IN DWORD dwMilliseconds);
+};
+#ifdef UNICODE
+#define MessageBoxTimeout MessageBoxTimeoutW
+#else
+#define MessageBoxTimeout MessageBoxTimeoutA
 #endif
 
 
@@ -49,6 +65,10 @@ BEGIN_MESSAGE_MAP(CLaserMachineView, CView)
 
 	ON_WM_ERASEBKGND()
 	ON_COMMAND(ID_SETPARA_GRID, &CLaserMachineView::OnSetparaGrid)
+	ON_MESSAGE(WM_START_MARK, &CLaserMachineView::OnStartMark)
+	ON_MESSAGE(WM_STOP_MARK, &CLaserMachineView::OnStopMark)
+	ON_WM_DESTROY()
+	ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 // CLaserMachineView 构造/析构
@@ -143,6 +163,24 @@ void CLaserMachineView::OnInitialUpdate()
 		return;
 	m_pLaserObjList = pDoc->m_pLaserObjList;
 	ResetViewSize();
+
+	//加工线程相关
+#if defined(_UNICODE) || defined(__UNICODE)
+	MarkProcStopEvent = CreateEventW(NULL, TRUE, FALSE, NULL);
+#else
+	MarkProcStopEvent = CreateEventA(NULL, TRUE, FALSE, NULL);
+#endif
+	ResetEvent(MarkProcStopEvent);
+	//m_pListContainer = NULL;
+	m_bLocate = FALSE;
+	m_bMarkThreadIsRunning = FALSE;
+	m_pThMarkProc = NULL;
+	InitializeCriticalSection(&ProcObjListMutex);
+
+	CCameraView* pCameraView = (CCameraView*)
+		((CMainFrame*)(AfxGetApp()->m_pMainWnd))->m_wndSplitter1.GetPane(1, 0);
+	m_hwndCameraView = pCameraView->GetSafeHwnd();
+
 }
 
 BOOL CLaserMachineView::OnEraseBkgnd(CDC* pDC)
@@ -793,4 +831,336 @@ void CLaserMachineView::OnSetparaGrid()
 	// TODO: 在此添加命令处理程序代码
 	CDlgSetParaGrid dlgSetParaGrid;
 	dlgSetParaGrid.DoModal();
+}
+
+
+
+afx_msg LRESULT CLaserMachineView::OnStartMark(WPARAM wParam, LPARAM lParam)
+{
+	//判断是否抓靶
+	m_bLocate = (BOOL)wParam;
+
+	CLaserMachineDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return 1;
+	m_pLaserObjList = pDoc->m_pLaserObjList;
+
+	if (!m_bMarkThreadIsRunning)
+	{
+		m_lTimeStartMarkProcess = GetTickCount();
+		SetTimer(ID_TIMEER_MARK_PROCESS_TIME, 200, NULL);
+		StartMarkThread();
+		m_bMarkThreadIsRunning = TRUE;
+		WaitForMarkThreadEnded();
+		m_bMarkThreadIsRunning = FALSE;
+		KillTimer(ID_TIMEER_MARK_PROCESS_TIME);
+		MessageBoxTimeout(NULL, _T("加工完成"), _T("提示"), MB_OK, 0, 1000);
+	}
+
+	return 0;
+}
+
+
+afx_msg LRESULT CLaserMachineView::OnStopMark(WPARAM wParam, LPARAM lParam)
+{
+	if (NULL == pDevCardMark)
+	{
+		//AfxMessageBox(_T("打标卡未初始化"));
+		return 1;
+	}
+	if (m_bMarkThreadIsRunning)
+	{
+		SetEvent(MarkProcStopEvent);
+		pDevCardMark->StopMarkCardMark();
+		m_bMarkThreadIsRunning = FALSE;
+	}
+
+	return 0;
+}
+
+
+void CLaserMachineView::StartMarkThread()
+{
+	// reset all event handles to initial states 
+	ResetEvent(MarkProcStopEvent);
+
+	// stop threads if still running ...
+	if ((*this).m_pThMarkProc)
+	{
+		WaitForSingleObject(m_pThMarkProc->m_hThread, INFINITE);
+		StopMarkThread(m_pThMarkProc);
+	}
+
+	m_pThMarkProc = AfxBeginThread(MarkProcRun, this, THREAD_PRIORITY_NORMAL, 0, CREATE_SUSPENDED, 0);
+	m_pThMarkProc->m_bAutoDelete = FALSE;
+	m_pThMarkProc->ResumeThread();
+
+}
+void CLaserMachineView::StopMarkThread(CWinThread* pThred)
+{
+	//停止加工
+	DWORD dwExit = 0;
+	MSG msg;
+	do
+	{
+		Sleep(1);
+		GetExitCodeThread(pThred->m_hThread, &dwExit);
+		if (::PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			::TranslateMessage(&msg);
+			::DispatchMessage(&msg);
+		}
+	} while (dwExit == STILL_ACTIVE);
+
+	//删除线程指针
+	delete pThred;
+
+}
+void CLaserMachineView::WaitForMarkThreadEnded()
+{
+	//退出加工线程
+	if (m_pThMarkProc)
+	{
+		BOOL bQuit = FALSE;
+		DWORD dRet;
+		MSG msg;
+		int nCt = 0;
+		while (!bQuit)
+		{
+			if (FALSE == m_bMarkThreadIsRunning)
+				break;
+
+			dRet = MsgWaitForMultipleObjects(1, &m_pThMarkProc->m_hThread, FALSE, INFINITE, QS_ALLINPUT);
+			if (dRet == WAIT_OBJECT_0 + 1)
+			{
+				//收到消息
+				TRACE("加工线程消息,函数返回值为%d \n", dRet);
+				while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+				{
+					TRACE("PeekMessage_Count = %d \n", ++nCt);
+					if (msg.message == WM_QUIT)
+					{
+						bQuit = TRUE;
+						break;
+					}
+					TranslateMessage(&msg);
+					DispatchMessage(&msg);
+				}
+			}
+			else if (WAIT_OBJECT_0 == dRet)
+			{
+				//线程退出
+				TRACE("加工线程已退出，函数返回值: %d \n", dRet);
+				delete m_pThMarkProc;
+				m_pThMarkProc = NULL;
+				break;
+			}
+			else
+			{
+				//线程非正常退出
+				TRACE("加工线程非正常退出，函数返回值: %d \n", dRet);
+				delete m_pThMarkProc;
+				m_pThMarkProc = NULL;
+				break;
+			}
+		}
+	}
+
+	m_bMarkThreadIsRunning = FALSE;
+}
+//ThreadFunc
+UINT CLaserMachineView::MarkProcRun(LPVOID lpParam)
+{
+	
+	CLaserMachineView* pView = (CLaserMachineView*)lpParam;
+	//const HWND hPostDlg = pView->GetSafeHwnd();
+
+	//读对象链表
+	EnterCriticalSection(&pView->ProcObjListMutex);        // CriticalSect
+	CMachineListContainer* pList = pView->m_pLaserObjList;
+	BOOL bLocate = pView->m_bLocate;
+	LeaveCriticalSection(&pView->ProcObjListMutex);        // CriticalSect
+
+	//导入对象，判断幅面
+	CPreProcess preProcess;
+	if (FALSE == preProcess.DoSingleGrid(pList))
+		return 1;
+
+	//判断是否需要抓靶定位
+	int nCountMarkPoints = 0;
+	std::vector <CPointF> vPtPosDestinedMark;
+	std::vector <CPointF> vPtPosRealMark;
+	std::vector <HalconModel> vMarkPointModel;
+	if (bLocate == FALSE)
+	{
+		nCountMarkPoints = 0;
+		vPtPosDestinedMark.resize(0);
+		vPtPosRealMark.resize(0);
+		vMarkPointModel.resize(0);
+	}
+	else
+	{
+		//抓靶定位流程
+		//读mark层生成mark点理论坐标及其model
+		int nCountMarkPoints;
+		nCountMarkPoints = preProcess.GenMarkPoints(vPtPosDestinedMark, vMarkPointModel, pList);
+		if (0 == nCountMarkPoints)
+			return 1;
+		//依次抓靶生成mark点实际坐标
+	}
+
+	//计算平移旋转
+	preProcess.DoSingleTrans(pList, nCountMarkPoints, vPtPosDestinedMark, vPtPosRealMark);
+
+	//导入对象，开始加工
+	preProcess.WriteEntitiesPerGridToBuffer(0, pDevCardMark, pList);
+	pDevCardMark->SetPensFromAllLayers(pList);
+	pDevCardMark->StartMarkCardMark();
+	pDevCardMark->WaitForThreadsEnded();
+	return 0;
+
+
+
+	/*
+	//分格
+	CPreProcess preProcess;
+	std::vector<ObjRect> vecGridRect;
+	if (0 < vecGridX.size())
+		preProcess.CalculateGrid(vecGridRect, pListContainerTmp, vecGridX, vecGridY);
+	else
+		preProcess.CalculateGrid(vecGridRect, pListContainerTmp);
+	preProcess.DoGrid(vecGridRect, pListContainerTmp);
+
+	//暂存当前工作台位置
+	double fPosSavedX, fPosSavedY;
+	pDevCardWorktable->GetAbsPosXY(&fPosSavedX, &fPosSavedY);
+
+	//抓标
+	//暂存手动抓标结果
+	int nCountMarkPoints = g_nCountMarkPoints;
+	std::vector <CPointF> vPtPosDestinedMark(g_vPtPosDestinedMark);
+	std::vector <CPointF> vPtPosRealMark(g_vPtPosRealMark);
+	std::vector <HalconModel> vMarkPointModel(g_vMarkPointModel);
+	//准备自动抓标结果
+	if (0 != nCountMarkPoints)
+	{
+		//抓图计算
+		for (int i = 0; i < nCountMarkPoints; i++)
+		{
+			double fPosTmpX, fPosTmpY;
+			pDevCardWorktable->GetAbsPosXY(&fPosTmpX, &fPosTmpY);
+			pDevCardWorktable->PosMoveXY(vPtPosRealMark[i].x - fPosTmpX, vPtPosRealMark[i].y - fPosTmpY, TRUE);
+
+			XSleep(1000);
+
+			std::vector <CPointF> vPtPosFinded;
+			::SendMessage(pMainContorlDlg->m_hwndCameraView, WM_LOCATE, (WPARAM) & (vMarkPointModel[i]), (LPARAM)&vPtPosFinded);
+			//int nFindedMark = pCameraView->m_pHalconWnd->LocateModel(vMarkPointModel[i], &vPtPosFinded);
+			int nFindedMark = vPtPosFinded.size();
+			if (0 >= nFindedMark)
+			{
+				//如果没抓到圆
+				XSleep(1);
+				AfxMessageBox(_T("没有抓到mark点"));
+				return 1;
+			}
+			else if (1 < nFindedMark)
+			{
+				//如果抓到多个圆
+				XSleep(1);
+				AfxMessageBox(_T("抓到多个mark点"));
+				return 1;
+			}
+			else
+			{
+				XSleep(1000);
+				//如果抓到一个
+				//AfxMessageBox(_T("抓到1个mark点"));
+				vPtPosRealMark[i] += vPtPosFinded[0];
+			}
+		}
+	}
+
+	//平移旋转拉伸
+	double ptOrg[2], ptScale[2], fRotateDegree, ptReal[2];
+	preProcess.CalculateTrans(nCountMarkPoints, vPtPosDestinedMark, vPtPosRealMark, vecGridRect, fPosSavedX, fPosSavedY,
+		ptOrg, ptScale, &fRotateDegree, ptReal);
+	preProcess.DoTrans(ptOrg, ptScale, fRotateDegree, ptReal);
+
+
+	//开始加工
+	//写加工参数
+	pDevCardMark->SetPensFromAllLayers(pListContainerTmp);
+
+	//循环遍历每个分格
+	double fGridCenterX, fGridCenterY;
+	double fAbsCurPosX, fAbsCurPosY;
+	for (int nGridIndex = 0; nGridIndex < vecGridRect.size(); nGridIndex++)
+	{
+		if (WAIT_OBJECT_0 == WaitForSingleObject((pMainContorlDlg->MarkProcStopEvent), 0))
+			break;
+
+		//工作平台运动到分格中心
+		preProcess.GetGridCenter(nGridIndex, &fGridCenterX, &fGridCenterY);
+		pDevCardWorktable->GetAbsPosXY(&fAbsCurPosX, &fAbsCurPosY);
+		pDevCardWorktable->PosMoveXY(fGridCenterX - fAbsCurPosX, fGridCenterY - fAbsCurPosY, TRUE);
+		//运动过程中写打标卡缓冲区
+		preProcess.WriteEntitiesPerGridToBuffer(nGridIndex, pDevCardMark, pListContainerTmp);
+		//等待工作台运动完成
+		pDevCardWorktable->WaitForMoveEndedXY();
+		XSleep(1);
+		//出光
+		pDevCardMark->StartMarkCardMark();
+		pDevCardMark->WaitForThreadsEnded();
+	}
+
+	//工作台回原位置
+	pDevCardWorktable->GetAbsPosXY(&fAbsCurPosX, &fAbsCurPosY);
+	pDevCardWorktable->PosMoveXY(fPosSavedX - fAbsCurPosX, fPosSavedY - fAbsCurPosY, TRUE);
+	pDevCardWorktable->WaitForMoveEndedXY();
+
+	pMainContorlDlg->m_bMarkThreadIsRunning = FALSE;
+
+
+	*/
+	//AfxMessageBox(_T("加工完成"));
+	//return 0;
+}
+
+
+void CLaserMachineView::OnDestroy()
+{
+	CView::OnDestroy();
+
+	// TODO: 在此处添加消息处理程序代码
+	OnStopMark(NULL, NULL);
+	DeleteCriticalSection(&ProcObjListMutex);
+
+}
+
+
+void CLaserMachineView::OnTimer(UINT_PTR nIDEvent)
+{
+	// TODO: 在此添加消息处理程序代码和/或调用默认值
+	CMainFrame* pFrame = (CMainFrame*)AfxGetApp()->m_pMainWnd;
+	CString strTime;
+	switch (nIDEvent)
+	{
+	case ID_TIMEER_MARK_PROCESS_TIME:
+		long lTimeCount, lTimeHrs, lTimeMins, lTimeSnds;
+		lTimeCount = GetTickCount();
+		lTimeSnds = (lTimeCount - m_lTimeStartMarkProcess) / 1000;
+		lTimeMins = lTimeSnds / 60;
+		lTimeHrs = lTimeMins / 60;
+		lTimeSnds = lTimeSnds - lTimeMins * 60;
+		lTimeMins = lTimeMins - lTimeHrs * 60;
+		strTime.Format(_T("耗时: %02d:%02d:%02d"), lTimeHrs, lTimeMins, lTimeSnds);
+		pFrame->m_wndStatusBar.SetPaneText(3, strTime);
+		break;
+	default:
+		break;
+	}
+
+	CView::OnTimer(nIDEvent);
 }

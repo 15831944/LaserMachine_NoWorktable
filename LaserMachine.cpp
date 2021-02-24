@@ -285,6 +285,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedOk();
+protected:
+//	afx_msg LRESULT OnStartMark(WPARAM wParam, LPARAM lParam);
 };
 
 CAboutDlg::CAboutDlg() : CDialogEx(CAboutDlg::IDD)
@@ -298,6 +300,7 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 	ON_BN_CLICKED(IDOK, &CAboutDlg::OnBnClickedOk)
+//	ON_REGISTERED_MESSAGE(WM_START_MARK, &CAboutDlg::OnStartMark)
 END_MESSAGE_MAP()
 
 // 用于运行对话框的应用程序命令
@@ -317,3 +320,9 @@ void CAboutDlg::OnBnClickedOk()
 }
 
 
+
+
+//afx_msg LRESULT CAboutDlg::OnStartMark(WPARAM wParam, LPARAM lParam)
+//{
+//	return 0;
+//}
