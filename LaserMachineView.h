@@ -168,7 +168,7 @@ private:
 	CWinThread* m_pThMarkProc;				//线程指针
 	//DWORD m_dwThMarkProc;					//线程ID
 	long m_lTimeStartMarkProcess;
-	HWND m_hwndCameraView;
+	HWND m_pHwndHalconWnd;
 	//加工进程控制**************************加工进程控制
 
 public:

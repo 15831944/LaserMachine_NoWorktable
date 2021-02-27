@@ -1,7 +1,9 @@
 #pragma once
 #include "HalconWnd.h"
 
-#define WM_LOCATE WM_USER+200
+#define WM_LOCATE WM_USER + 200
+
+
 
 // CCameraView йсм╪
 

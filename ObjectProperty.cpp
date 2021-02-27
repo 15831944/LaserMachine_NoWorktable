@@ -1,4 +1,4 @@
-// ObjectProperty.cpp : ÊµÏÖÎÄ¼ş
+ï»¿// ObjectProperty.cpp : å®ç°æ–‡ä»¶
 //
 
 #include "stdafx.h"
@@ -17,6 +17,8 @@ CObjectProperty::CObjectProperty()
 	: CFormView(CObjectProperty::IDD)
 {
 	m_Init_Flag = FALSE;
+	m_bLocate = FALSE;
+	m_strBtnMark = _T("ç›´æ¥åŠ å·¥");
 }
 
 CObjectProperty::~CObjectProperty()
@@ -64,12 +66,12 @@ void CObjectProperty::OnInitialUpdate()
 
 	m_PropertyList.SetExtendedStyle(m_PropertyList.GetExtendedStyle()
 		| LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	// ÎªÁĞ±íÊÓÍ¼¿Ø¼şÌí¼ÓÎåÁĞ   
-	m_PropertyList.InsertColumn(0, _T("Ë÷Òı"), LVCFMT_LEFT, 36, 0);
-	m_PropertyList.InsertColumn(1, _T("Àà   ĞÍ"), LVCFMT_CENTER, 60, 1);
-	m_PropertyList.InsertColumn(2, _T("Í¼ ²ã"), LVCFMT_CENTER, 48, 2);
-	m_PropertyList.InsertColumn(3, _T("Æğµã×ø±ê"), LVCFMT_CENTER, 110, 3);
-	m_PropertyList.InsertColumn(4, _T("ÖÕµã×ø±ê"), LVCFMT_CENTER, 110, 4);
+	// ä¸ºåˆ—è¡¨è§†å›¾æ§ä»¶æ·»åŠ äº”åˆ—   
+	m_PropertyList.InsertColumn(0, _T("ç´¢å¼•"), LVCFMT_LEFT, 36, 0);
+	m_PropertyList.InsertColumn(1, _T("ç±»   å‹"), LVCFMT_CENTER, 60, 1);
+	m_PropertyList.InsertColumn(2, _T("å›¾ å±‚"), LVCFMT_CENTER, 48, 2);
+	m_PropertyList.InsertColumn(3, _T("èµ·ç‚¹åæ ‡"), LVCFMT_CENTER, 110, 3);
+	m_PropertyList.InsertColumn(4, _T("ç»ˆç‚¹åæ ‡"), LVCFMT_CENTER, 110, 4);
 
 	UIDeselectAll();
 	if (gLaserType == IPG_Fiber_Laser)
@@ -102,10 +104,11 @@ BEGIN_MESSAGE_MAP(CObjectProperty, CFormView)
 	ON_BN_CLICKED(IDC_OBJECT_PROPERTY_BTN1, &CObjectProperty::OnBnClickedObjectPropertyBtn1)
 	ON_BN_CLICKED(IDC_OBJECT_PROPERTY_BTN2, &CObjectProperty::OnBnClickedObjectPropertyBtn2)
 	ON_WM_MOUSEMOVE()
+	ON_BN_CLICKED(IDC_BUTTON_OBJECT_START_MARK, &CObjectProperty::OnBnClickedButtonObjectStartMark)
 END_MESSAGE_MAP()
 
 
-// CObjectProperty Õï¶Ï
+// CObjectProperty è¯Šæ–­
 #ifdef _DEBUG
 void CObjectProperty::AssertValid() const
 {
@@ -120,14 +123,14 @@ void CObjectProperty::Dump(CDumpContext& dc) const
 #endif
 #endif //_DEBUG
 
-// ×Ô¶¨Òåº¯Êı
+// è‡ªå®šä¹‰å‡½æ•°
 void CObjectProperty::HScroll(int Index)
 {
-	int nItem = m_PropertyList.GetTopIndex();	// »ñÈ¡¶¥²ãË÷Òı
+	int nItem = m_PropertyList.GetTopIndex();	// è·å–é¡¶å±‚ç´¢å¼•
 	CRect rc;
 	m_PropertyList.GetItemRect(nItem, rc, LVIR_BOUNDS);
 	nItem = Index - nItem - 5;
-	CSize sz(0, nItem * rc.Height());	// È¡µÃÒª¹ö¶¯µÄsize
+	CSize sz(0, nItem * rc.Height());	// å–å¾—è¦æ»šåŠ¨çš„size
 	m_PropertyList.Scroll(sz);
 }
 
@@ -142,30 +145,30 @@ void CObjectProperty::UIDeselectAll()
 		m_PropertyList.SetItemState(index, LVNI_FOCUSED & LVIS_SELECTED,
 			LVNI_FOCUSED | LVIS_SELECTED);
 	}
-	GetDlgItem(IDC_BTN_OBJ_UP)->SetWindowText(_T("ÉÏÒÆ"));
+	GetDlgItem(IDC_BTN_OBJ_UP)->SetWindowText(_T("ä¸Šç§»"));
 	GetDlgItem(IDC_BTN_OBJ_UP)->EnableWindow(FALSE);
-	GetDlgItem(IDC_BTN_OBJ_DOWN)->SetWindowText(_T("ÏÂÒÆ"));
+	GetDlgItem(IDC_BTN_OBJ_DOWN)->SetWindowText(_T("ä¸‹ç§»"));
 	GetDlgItem(IDC_BTN_OBJ_DOWN)->EnableWindow(FALSE);
-	GetDlgItem(IDC_BTN_OBJ_DELETE)->SetWindowText(_T("É¾³ı"));
+	GetDlgItem(IDC_BTN_OBJ_DELETE)->SetWindowText(_T("åˆ é™¤"));
 	GetDlgItem(IDC_BTN_OBJ_DELETE)->EnableWindow(FALSE);
-	GetDlgItem(IDC_BTN_OBJ_INSERT)->SetWindowText(_T("²åÈë"));
+	GetDlgItem(IDC_BTN_OBJ_INSERT)->SetWindowText(_T("æ’å…¥"));
 	GetDlgItem(IDC_BTN_OBJ_INSERT)->EnableWindow(FALSE);
-	GetDlgItem(IDC_BTN_OBJ_T_G)->SetWindowText(_T("¾ÛºÏ"));
+	GetDlgItem(IDC_BTN_OBJ_T_G)->SetWindowText(_T("èšåˆ"));
 	GetDlgItem(IDC_BTN_OBJ_T_G)->EnableWindow(FALSE);
-	GetDlgItem(IDC_BTN_OBJ_EXPLODE)->SetWindowText(_T("·Ö ½â"));
+	GetDlgItem(IDC_BTN_OBJ_EXPLODE)->SetWindowText(_T("åˆ† è§£"));
 	GetDlgItem(IDC_BTN_OBJ_EXPLODE)->EnableWindow(FALSE);
-	GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->SetWindowText(_T("ÆğÖÕµã»¥»»"));
+	GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->SetWindowText(_T("èµ·ç»ˆç‚¹äº’æ¢"));
 	GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->EnableWindow(FALSE);
-	GetDlgItem(IDC_BTN_OBJ_EDIT)->SetWindowText(_T("±à ¼­"));
+	GetDlgItem(IDC_BTN_OBJ_EDIT)->SetWindowText(_T("ç¼– è¾‘"));
 	GetDlgItem(IDC_BTN_OBJ_EDIT)->EnableWindow(FALSE);
 	GetDlgItem(IDC_OBJECT_PROPERTY_STATIC11)->ShowWindow(SW_SHOW);
 	GetDlgItem(IDC_OBJECT_PROPERTY_EDIT6)->ShowWindow(SW_SHOW);
 	GetDlgItem(IDC_OBJECT_PROPERTY_STATIC12)->ShowWindow(SW_SHOW);
-	GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->SetWindowText(_T("ĞŞ¸Ä¶ÔÏó\n¼Ó¹¤²ÎÊı"));
+	GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->SetWindowText(_T("ä¿®æ”¹å¯¹è±¡\nåŠ å·¥å‚æ•°"));
 	GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->EnableWindow(FALSE);
 	GetDlgItem(IDC_OBJECT_PROPERTY_BTN2)->EnableWindow(TRUE);
 	GetDlgItem(IDC_OBJECT_PROPERTY_BTN3)->EnableWindow(TRUE);
-	//***¼Ó¹¤²ÎÊıÇø
+	//***åŠ å·¥å‚æ•°åŒº
 	m_Speed = gProcessSpeed;
 	m_Power = gProcessPower;
 	m_Frequncy = (float)gProcessFrequncy / 1000;
@@ -182,16 +185,16 @@ BOOL CObjectProperty::UISetBySingleSel(int Index)
 	ProcessPara para;
 	if (Index == m_ObjSel_Old)
 	{
-		//*****Ñ¡ÖĞ±»È¡Ïû
+		//*****é€‰ä¸­è¢«å–æ¶ˆ
 		m_ObjSel_Old = -1;
 		UIDeselectAll();
 		return FALSE;
 	}
 	else
 	{
-		//*****Ñ¡ÖĞ
+		//*****é€‰ä¸­
 		m_ObjSel_Old = Index;
-		//***ÊôĞÔÇø
+		//***å±æ€§åŒº
 		nType = m_pObjList->GetObjAtIndex(Index)->GetObjType();
 		GetDlgItem(IDC_BTN_OBJ_UP)->EnableWindow(TRUE);
 		GetDlgItem(IDC_BTN_OBJ_DOWN)->EnableWindow(TRUE);
@@ -201,17 +204,17 @@ BOOL CObjectProperty::UISetBySingleSel(int Index)
 		GetDlgItem(IDC_BTN_OBJ_T_G)->EnableWindow(FALSE);
 		if (nType == MachineObj_Type_Polyline)
 		{
-			GetDlgItem(IDC_BTN_OBJ_EXPLODE)->SetWindowText(_T("·Ö ½â"));
+			GetDlgItem(IDC_BTN_OBJ_EXPLODE)->SetWindowText(_T("åˆ† è§£"));
 			GetDlgItem(IDC_BTN_OBJ_EXPLODE)->EnableWindow(TRUE);
 		}
 		else if (nType == MachineObj_Type_Group)
 		{
-			GetDlgItem(IDC_BTN_OBJ_EXPLODE)->SetWindowText(_T("´ò É¢"));
+			GetDlgItem(IDC_BTN_OBJ_EXPLODE)->SetWindowText(_T("æ‰“ æ•£"));
 			GetDlgItem(IDC_BTN_OBJ_EXPLODE)->EnableWindow(TRUE);
 		}
 		else
 		{
-			GetDlgItem(IDC_BTN_OBJ_EXPLODE)->SetWindowText(_T("·Ö ½â"));
+			GetDlgItem(IDC_BTN_OBJ_EXPLODE)->SetWindowText(_T("åˆ† è§£"));
 			GetDlgItem(IDC_BTN_OBJ_EXPLODE)->EnableWindow(FALSE);
 		}
 		if (nType == MachineObj_Type_Line
@@ -220,24 +223,24 @@ BOOL CObjectProperty::UISetBySingleSel(int Index)
 			|| nType == MachineObj_Type_TiltEllipse
 			|| nType == MachineObj_Type_Polyline)
 		{
-			GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->SetWindowText(_T("ÆğÖÕµã»¥»»"));
+			GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->SetWindowText(_T("èµ·ç»ˆç‚¹äº’æ¢"));
 			GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->EnableWindow(TRUE);
 
 		}
 		else if (nType == MachineObj_Type_Circle
 			|| nType == MachineObj_Type_Ellipse)
 		{
-			GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->SetWindowText(_T("¸Ä±äÆğµã"));
+			GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->SetWindowText(_T("æ”¹å˜èµ·ç‚¹"));
 			GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->EnableWindow(TRUE);
-			GetDlgItem(IDC_BTN_OBJ_EXPLODE)->SetWindowText(_T("»» Ïò"));
+			GetDlgItem(IDC_BTN_OBJ_EXPLODE)->SetWindowText(_T("æ¢ å‘"));
 			GetDlgItem(IDC_BTN_OBJ_EXPLODE)->EnableWindow(TRUE);
 		}
 		else
 		{
-			GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->SetWindowText(_T("ÆğÖÕµã»¥»»"));
+			GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->SetWindowText(_T("èµ·ç»ˆç‚¹äº’æ¢"));
 			GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->EnableWindow(FALSE);
 		}
-		//***¼Ó¹¤²ÎÊıÇø
+		//***åŠ å·¥å‚æ•°åŒº
 		str = m_PropertyList.GetItemText(Index, 2);
 		if (str == _T("Border") || str == _T("Mark") || str == ""
 			|| nType == MachineObj_Type_Group)
@@ -306,7 +309,7 @@ void CObjectProperty::UISetByMultipleSel(int Index)
 	{
 		Index = m_PropertyList.GetNextSelectedItem(pos);
 		m_pObjList->SetObjSelect(Index);
-		//***ÊôĞÔÇø
+		//***å±æ€§åŒº
 		nType = m_pObjList->GetObjAtIndex(Index)->GetObjType();
 		if (!(nType == MachineObj_Type_Line
 			|| nType == MachineObj_Type_Arc
@@ -320,7 +323,7 @@ void CObjectProperty::UISetByMultipleSel(int Index)
 			|| nType == MachineObj_Type_TiltEllipse
 			|| nType == MachineObj_Type_Polyline))
 			bExchange = FALSE;
-		//***²ÎÊıÇø
+		//***å‚æ•°åŒº
 		str = m_PropertyList.GetItemText(Index, 2);
 		if (nLayer != m_pObjList->FindLayerByName(str))
 			nLayer = -1;
@@ -336,7 +339,7 @@ void CObjectProperty::UISetByMultipleSel(int Index)
 				PointTime = m_WaitTime;
 		}
 	}
-	//*****ÊôĞÔÇø
+	//*****å±æ€§åŒº
 	GetDlgItem(IDC_BTN_OBJ_UP)->EnableWindow(FALSE);
 	GetDlgItem(IDC_BTN_OBJ_DOWN)->EnableWindow(FALSE);
 	GetDlgItem(IDC_BTN_OBJ_EDIT)->EnableWindow(TRUE);
@@ -344,27 +347,27 @@ void CObjectProperty::UISetByMultipleSel(int Index)
 	GetDlgItem(IDC_BTN_OBJ_INSERT)->EnableWindow(TRUE);
 	if (bEnPolyline)
 	{
-		GetDlgItem(IDC_BTN_OBJ_T_G)->SetWindowText(_T("¾Û ºÏ"));
+		GetDlgItem(IDC_BTN_OBJ_T_G)->SetWindowText(_T("èš åˆ"));
 		GetDlgItem(IDC_BTN_OBJ_T_G)->EnableWindow(TRUE);
 	}
 	else
 	{
-		GetDlgItem(IDC_BTN_OBJ_T_G)->SetWindowText(_T("¾Û ºÏ"));
+		GetDlgItem(IDC_BTN_OBJ_T_G)->SetWindowText(_T("èš åˆ"));
 		GetDlgItem(IDC_BTN_OBJ_T_G)->EnableWindow(FALSE);
 	}
-	GetDlgItem(IDC_BTN_OBJ_EXPLODE)->SetWindowText(_T("×é ºÏ"));
+	GetDlgItem(IDC_BTN_OBJ_EXPLODE)->SetWindowText(_T("ç»„ åˆ"));
 	GetDlgItem(IDC_BTN_OBJ_EXPLODE)->EnableWindow(TRUE);
 	if (bExchange)
 	{
-		GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->SetWindowText(_T("ÆğÖÕµã»¥»»"));
+		GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->SetWindowText(_T("èµ·ç»ˆç‚¹äº’æ¢"));
 		GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->EnableWindow(TRUE);
 	}
 	else
 	{
-		GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->SetWindowText(_T("ÆğÖÕµã»¥»»"));
+		GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->SetWindowText(_T("èµ·ç»ˆç‚¹äº’æ¢"));
 		GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->EnableWindow(FALSE);
 	}
-	//*****²ÎÊıÇø
+	//*****å‚æ•°åŒº
 	if (nLayer < 0)
 	{
 		GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->EnableWindow(TRUE);
@@ -410,11 +413,11 @@ void CObjectProperty::UISetByMultipleSel(int Index)
 	UpdateData(FALSE);
 }
 
-// CObjectProperty ÏûÏ¢´¦Àí³ÌĞò
+// CObjectProperty æ¶ˆæ¯å¤„ç†ç¨‹åº
 void CObjectProperty::OnSize(UINT nType, int cx, int cy)
 {
 	CFormView::OnSize(nType, cx, cy);
-	//ÊÔÍ¼µ÷Õû´°¿Ú³ß´ç£¬ÔòÏòÉÏ¼¶·¢ËÍÏûÏ¢£¬ÓÃÓÚËø¶¨±¾¶Ô»°¿ò³ß´ç
+	//è¯•å›¾è°ƒæ•´çª—å£å°ºå¯¸ï¼Œåˆ™å‘ä¸Šçº§å‘é€æ¶ˆæ¯ï¼Œç”¨äºé”å®šæœ¬å¯¹è¯æ¡†å°ºå¯¸
 	GetParentFrame()->SendMessage(WM_ObPrtyWindows_Size, NULL, NULL);
 }
 
@@ -445,56 +448,56 @@ afx_msg LRESULT CObjectProperty::OnObjlistRefresh(WPARAM wParam, LPARAM lParam)
 			switch (pObj->GetObjType())
 			{
 			case MachineObj_Type_Point:
-				str = _T("µã");
+				str = _T("ç‚¹");
 				CMachineObjPoint* pPoint;
 				pPoint = (CMachineObjPoint*)pObj;
 				point1 = pPoint->GetPoint();
 				point2.x = pPoint->m_MachineWaitTime;
 				break;
 			case MachineObj_Type_Line:
-				str = _T("Ö±Ïß");
+				str = _T("ç›´çº¿");
 				CMachineObjLine* pLine;
 				pLine = (CMachineObjLine*)pObj;
 				point1 = pLine->GetLineStart();
 				point2 = pLine->GetLineEnd();
 				break;
 			case MachineObj_Type_Circle:
-				str = _T("Ô°");
+				str = _T("å›­");
 				CMachineObjCircle* pCircle;
 				pCircle = (CMachineObjCircle*)pObj;
 				point1 = pCircle->GetCircleStart();
 				point2 = point1;
 				break;
 			case MachineObj_Type_Arc:
-				str = _T("Ô°»¡");
+				str = _T("å›­å¼§");
 				CMachineObjArc* pArc;
 				pArc = (CMachineObjArc*)pObj;
 				point1 = pArc->GetArcStart();
 				point2 = pArc->GetArcEnd();
 				break;
 			case MachineObj_Type_Ellipse:
-				str = _T("ÍÖÔ°");
+				str = _T("æ¤­å›­");
 				CMachineObjEllipse* pEllipse;
 				pEllipse = (CMachineObjEllipse*)pObj;
 				point1 = pEllipse->GetEllipseStart();
 				point2 = point1;
 				break;
 			case MachineObj_Type_ArcEll:
-				str = _T("ÍÖÔ°»¡");
+				str = _T("æ¤­å›­å¼§");
 				CMachineObjArcEll* pArcEll;
 				pArcEll = (CMachineObjArcEll*)pObj;
 				point1 = pArcEll->GetArcStart();
 				point2 = pArcEll->GetArcEnd();
 				break;
 			case MachineObj_Type_TiltEllipse:
-				str = _T("Ğ±ÍÖÔ°»¡");
+				str = _T("æ–œæ¤­å›­å¼§");
 				CMachineObjTiltEllipse* pTileEll;
 				pTileEll = (CMachineObjTiltEllipse*)pObj;
 				point1 = pTileEll->GetTiltEllipseStart();
 				point2 = pTileEll->GetTiltEllipseEnd();
 				break;
 			case MachineObj_Type_Polyline:
-				str = _T("¶à¶ÎÏß");
+				str = _T("å¤šæ®µçº¿");
 				CMachineObjPolyline* pPolyline;
 				pPolyline = (CMachineObjPolyline*)pObj;
 				pVpoint = pPolyline->GetPolylineStart();
@@ -505,7 +508,7 @@ afx_msg LRESULT CObjectProperty::OnObjlistRefresh(WPARAM wParam, LPARAM lParam)
 				point2.y = pVpoint.y;
 				break;
 			case MachineObj_Type_Group:
-				str = _T("Èº ×é");
+				str = _T("ç¾¤ ç»„");
 				break;
 			default:
 				str = "";
@@ -527,9 +530,9 @@ afx_msg LRESULT CObjectProperty::OnObjlistRefresh(WPARAM wParam, LPARAM lParam)
 				if (pObj->GetObjType() == MachineObj_Type_Point)
 				{
 					if (point2.x < 1000)
-						str.Format(_T("Í£ÁôÊ±¼ä=%.1fms"), point2.x);
+						str.Format(_T("åœç•™æ—¶é—´=%.1fms"), point2.x);
 					else
-						str.Format(_T("Í£ÁôÊ±¼ä=%.2fs"), point2.x / 1000);
+						str.Format(_T("åœç•™æ—¶é—´=%.2fs"), point2.x / 1000);
 				}
 				else
 					str.Format(_T("%.3f,%.3f"), point2.x, point2.y);
@@ -619,7 +622,7 @@ void CObjectProperty::OnClickObjectPropertyList(NMHDR *pNMHDR, LRESULT *pResult)
 	int Index = pNMItemActivate->iItem;
 	if (nCount == 1)
 	{
-		//****µ¥Ñ¡****
+		//****å•é€‰****
 		m_pObjList->SetObjUnSelectAll();
 		if (UISetBySingleSel(Index))
 			m_pObjList->SetObjSelect(Index);
@@ -627,7 +630,7 @@ void CObjectProperty::OnClickObjectPropertyList(NMHDR *pNMHDR, LRESULT *pResult)
 	}
 	else
 	{
-		//****¶àÑ¡****
+		//****å¤šé€‰****
 		m_AllSelObjInLayer = FALSE;
 		m_pObjList->SetObjUnSelectAll();
 		UISetByMultipleSel(Index);
@@ -662,7 +665,7 @@ void CObjectProperty::OnRclickObjectPropertyList(NMHDR *pNMHDR, LRESULT *pResult
 	if (pNMItemActivate->iSubItem != 2 && m_PropertyList.GetSelectedCount() == 1)
 	{
 		m_AllSelObjInLayer = FALSE;
-		GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->SetWindowText(_T("ĞŞ¸Ä¶ÔÏó\n¼Ó¹¤²ÎÊı"));
+		GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->SetWindowText(_T("ä¿®æ”¹å¯¹è±¡\nåŠ å·¥å‚æ•°"));
 		return;
 	}
 	CString str, str1;
@@ -696,13 +699,13 @@ void CObjectProperty::OnRclickObjectPropertyList(NMHDR *pNMHDR, LRESULT *pResult
 	if (str != LayerName_Border&&str != LayerName_Mark)
 	{
 		m_AllSelObjInLayer = TRUE;
-		GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->SetWindowText(_T("ĞŞ¸Ä¸Ã²ã\n¼Ó¹¤²ÎÊı"));
+		GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->SetWindowText(_T("ä¿®æ”¹è¯¥å±‚\nåŠ å·¥å‚æ•°"));
 		GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->EnableWindow(TRUE);
 	}
 	else
 	{
 		m_AllSelObjInLayer = FALSE;
-		GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->SetWindowText(_T("ĞŞ¸Ä¶ÔÏó\n¼Ó¹¤²ÎÊı"));
+		GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->SetWindowText(_T("ä¿®æ”¹å¯¹è±¡\nåŠ å·¥å‚æ•°"));
 		GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->EnableWindow(FALSE);
 		
 	}
@@ -749,10 +752,10 @@ void CObjectProperty::OnBnClickedBtnObjUp()
 			m_ObjSel_Old = nIndex - 1;
 		}
 		else
-			MessageBox(_T("ÎŞ·¨ÉÏÒÆ"));
+			MessageBox(_T("æ— æ³•ä¸Šç§»"));
 	}
 	else
-		MessageBox(_T("ÎŞ·¨ÉÏÒÆ"));
+		MessageBox(_T("æ— æ³•ä¸Šç§»"));
 	HScroll(nIndex);
 	m_PropertyList.SetFocus();
 }
@@ -789,10 +792,10 @@ void CObjectProperty::OnBnClickedBtnObjDown()
 			m_ObjSel_Old = nIndex + 1;
 		}
 		else
-			MessageBox(_T("ÎŞ·¨ÏÂÒÆ"));
+			MessageBox(_T("æ— æ³•ä¸‹ç§»"));
 	}
 	else
-		MessageBox(_T("ÎŞ·¨ÏÂÒÆ"));
+		MessageBox(_T("æ— æ³•ä¸‹ç§»"));
 	HScroll(nIndex);
 	m_PropertyList.SetFocus();
 }
@@ -800,8 +803,8 @@ void CObjectProperty::OnBnClickedBtnObjDown()
 void CObjectProperty::OnBnClickedBtnObjDelete()
 {
 	m_AllSelObjInLayer = FALSE;
-	GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->SetWindowText(_T("ĞŞ¸Ä¶ÔÏó\n¼Ó¹¤²ÎÊı"));
-	if (MessageBox(_T("È·¶¨É¾³ıÑ¡ÖĞ¶ÔÏó?\n(É¾³ıÊÇ²»¿É»Ö¸´µÄ!)"),
+	GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->SetWindowText(_T("ä¿®æ”¹å¯¹è±¡\nåŠ å·¥å‚æ•°"));
+	if (MessageBox(_T("ç¡®å®šåˆ é™¤é€‰ä¸­å¯¹è±¡?\n(åˆ é™¤æ˜¯ä¸å¯æ¢å¤çš„!)"),
 		_T(""), MB_YESNO | MB_ICONWARNING) != IDYES)
 		return;
 	int Index, i;
@@ -820,10 +823,10 @@ void CObjectProperty::OnBnClickedBtnObjDelete()
 	m_pView->SendMessage(WM_ObjBound_ReSize, NULL, NULL);
 }
 
-//¶ÔÏó²åÈë´ı¶¨
+//å¯¹è±¡æ’å…¥å¾…å®š
 void CObjectProperty::OnBnClickedBtnObjInsert()
 {
-	// TODO:  ÔÚ´ËÌí¼Ó¿Ø¼şÍ¨Öª´¦Àí³ÌĞò´úÂë
+	// TODO:  åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
 }
 
 void CObjectProperty::OnBnClickedBtnObjPolymeric()
@@ -864,10 +867,10 @@ void CObjectProperty::OnBnClickedBtnObjExplode()
 	pos = m_PropertyList.GetFirstSelectedItemPosition();
 	if (m_PropertyList.GetSelectedCount() == 1)
 	{
-		//ÒÑÑ¡¶ÔÏó=1 
+		//å·²é€‰å¯¹è±¡=1 
 		Index = m_PropertyList.GetNextSelectedItem(pos);
 		int nType = m_pObjList->GetObjAtIndex(Index)->GetObjType();
-		//Ô°»òÍÖÔ²Îª»»Ïò
+		//å›­æˆ–æ¤­åœ†ä¸ºæ¢å‘
 		if (nType == MachineObj_Type_Circle)
 		{
 			CMachineObjCircle* pCircle = (CMachineObjCircle*) m_pObjList->GetObjAtIndex(Index);
@@ -880,7 +883,7 @@ void CObjectProperty::OnBnClickedBtnObjExplode()
 			pEllipse->ExchangeDirection();
 			m_pView->Invalidate();
 		}
-		//ÆäËûÔò·Ö½â»ò´òÉ¢ 
+		//å…¶ä»–åˆ™åˆ†è§£æˆ–æ‰“æ•£ 
 		else
 		{
 			if (m_pObjList->ExplodeObjAtIndex(Index))
@@ -899,7 +902,7 @@ void CObjectProperty::OnBnClickedBtnObjExplode()
 	}
 	else
 	{
-		//ÒÑÑ¡¶ÔÏó>1 ×éºÏ
+		//å·²é€‰å¯¹è±¡>1 ç»„åˆ
 		vector<int> nList;
 		while (pos)
 		{
@@ -971,7 +974,7 @@ void CObjectProperty::OnBnClickedBtnObjExchange()
 	vector<int>(nList).swap(nList);
 }
 
-//´ıÍêÉÆ
+//å¾…å®Œå–„
 void CObjectProperty::OnBnClickedBtnObjEdit()
 {
 	if (m_PropertyList.GetSelectedCount() < 1)
@@ -1130,7 +1133,7 @@ void CObjectProperty::OnBnClickedObjectPropertyBtn3()
 {
 	if (!UpdateData(TRUE))
 		return;
-	//Êı¾İÓĞĞ§ĞÔĞ£Ñé´ı²¹
+	//æ•°æ®æœ‰æ•ˆæ€§æ ¡éªŒå¾…è¡¥
 	gLaserOnDelay = m_LaserOnDelay;
 	gLaserOffDelay = m_LaserOffDelay;
 	gBeforMarkDelay = m_BeforMarkDelay;
@@ -1147,20 +1150,59 @@ void CObjectProperty::OnMouseMove(UINT nFlags, CPoint point)
 
 
 
+void CObjectProperty::OnBnClickedButtonObjectStartMark()
+{
+	// TODO: åœ¨æ­¤æ·»åŠ æ§ä»¶é€šçŸ¥å¤„ç†ç¨‹åºä»£ç 
+	CString str;
+	GetDlgItem(IDC_BUTTON_OBJECT_START_MARK)->GetWindowText(str);
+
+	if (_T("åœæ­¢åŠ å·¥") == str)
+	{
+		::SendMessage(m_pView->GetSafeHwnd(), WM_STOP_MARK, NULL, NULL);
+		GetDlgItem(IDC_BUTTON_OBJECT_START_MARK)->SetWindowText(m_strBtnMark);
+	}
+	else
+	{
+		GetDlgItem(IDC_BUTTON_OBJECT_START_MARK)->SetWindowText(_T("åœæ­¢åŠ å·¥"));
+		::SendMessage(m_pView->GetSafeHwnd(), WM_START_MARK, m_bLocate, NULL);
+		GetDlgItem(IDC_BUTTON_OBJECT_START_MARK)->SetWindowText(m_strBtnMark);
+	}
+}
 
 
+BOOL CObjectProperty::PreTranslateMessage(MSG* pMsg)
+{
+	// TODO: åœ¨æ­¤æ·»åŠ ä¸“ç”¨ä»£ç å’Œ/æˆ–è°ƒç”¨åŸºç±»
+	if (WM_RBUTTONDOWN == pMsg->message)
+	{
+		CRect rt;
+		POINT pt;
+		::GetWindowRect(GetDlgItem(IDC_BUTTON_OBJECT_START_MARK)->GetSafeHwnd(), &rt); //å¾—åˆ°buttonæ‰€åœ¨çš„rect
+		::GetCursorPos(&pt);															//å¾—åˆ°é¼ æ ‡åŠ¨ä½œçš„ä½ç½®
+		if (PtInRect(&rt, pt))															 //åˆ¤æ–­é¼ æ ‡åŠ¨ä½œæ˜¯å¦åœ¨buttonèŒƒå›´ä¹‹å†… Â  Â Â 
+		{
+			CString str;
+			GetDlgItem(IDC_BUTTON_OBJECT_START_MARK)->GetWindowText(str);
+
+			if (_T("åœæ­¢åŠ å·¥") == str)
+			{
+				//do nothing
+			}
+			else if (FALSE == m_bLocate)
+			{
+				m_bLocate = TRUE;
+				m_strBtnMark = _T("å®šä½åŠ å·¥");
+				GetDlgItem(IDC_BUTTON_OBJECT_START_MARK)->SetWindowText(m_strBtnMark);
+			}
+			else
+			{
+				m_bLocate = FALSE;
+				m_strBtnMark = _T("ç›´æ¥åŠ å·¥");
+				GetDlgItem(IDC_BUTTON_OBJECT_START_MARK)->SetWindowText(m_strBtnMark);
+			}
+		}
+	}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+	return CFormView::PreTranslateMessage(pMsg);
+}

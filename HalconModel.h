@@ -2,6 +2,7 @@
 
 #include <cstring>
 #include <vector>
+#include "PointF.h"
 #include<HalconCpp.h>
 #include<HALCONCpp/HDevThread.h>
 
@@ -18,26 +19,27 @@ class HalconModel
 public:
 	//~HalconModel() {};
 	HalconModel();
-	HalconModel(CString strCircle, double fRadius, double fPixelSize, double fScaleMin = DEFAULT_SCALE_MIN, double fScaleMax = DEFAULT_SCALE_MAX, double fMinScore = DEFAULT_MIN_SCORE,
-		int nRgnRowMin = 0, int nRgnRowMax = 0, int nRgnColMin = 0, int nRgnColMax = 0);
-	HalconModel(CString strCross, double fLength, double fWidth, double fPixelSize, double fScaleMin = DEFAULT_SCALE_MIN, double fScaleMax = DEFAULT_SCALE_MAX, double fMinScore = DEFAULT_MIN_SCORE,
-		int nRgnRowMin = 0, int nRgnRowMax = 0, int nRgnColMin = 0, int nRgnColMax = 0);
+	HalconModel(CString strCircle, double fRadius, double fPixelSize);
+	HalconModel(CString strCross, double fLength, double fWidth, double fPixelSize);
 
+	void SetScale(double fScaleMin, double fScaleMax);
+	void SetMinScore(double fMinScore);
+	void SetMatchDomain(double fPosX, double fPosY, double fPixelSize, double fSizeFactor = 2);
 
 public:
 	CString m_strModelType;
 	HObject m_hoImg;							//抓标时的相机图片
 	HObject m_hoXldModel;						//抓标模板，可能是Image或contour
 	HObject m_hoXldModelContourAffine;		//抓标结果contour
-	HTuple m_hvModelOriginRow;
+
+	HTuple m_hvModelOriginRow;				//抓标锚点
 	HTuple m_hvModelOriginColumn;
-	HTuple m_hvModelScaleMin;
+	HTuple m_hvModelScaleMin;				//抓标尺寸容差
 	HTuple m_hvModelScaleMax;
-	HTuple m_hvModelMinScore;
-	int m_nRgnRowMin;
-	int m_nRgnRowMax;
-	int m_nRgnColMin;
-	int m_nRgnColMax;
+	HTuple m_hvModelMinScore;				//抓标最小得分
+	CPointF m_ptMatchDomainPos;				//在相机局部视窗中匹配时，局部视窗中心相对相机中心的像素坐标
+	double m_fMatchDomainSizeFactor;		//在相机局部视窗中匹配时，因子 = 局部视窗尺寸/模板外框尺寸
+	std::vector<CPointF> m_vPtPosFindedModels;
 
 };
 

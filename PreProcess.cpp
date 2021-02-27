@@ -640,7 +640,7 @@ void CPreProcess::GetGridCenter(int nGridIndex, double* pGridCenterX, double* pG
 	return;
 }
 
-BOOL CPreProcess::WriteEntitiesPerGridToBuffer(int nGridIndex, CDeviceCardMark* pDevCardMark, CMachineListContainer* pObjList)
+BOOL CPreProcess::WriteEntitiesPerGridToBuffer(int nGridIndex, CMachineListContainer* pObjList)
 {
 
 	if (NULL == pDevCardMark)
@@ -1436,7 +1436,7 @@ int CPreProcess::GenMarkPoints(std::vector <CPointF> vPtPosDestinedMark, std::ve
 
 	return nIndexMarkPoint;
 }
-BOOL CPreProcess::GenMarkPointModel(HalconModel* pHalconModel, CMachineObj_Comm* pObj, double fCrossWidthPixel)
+BOOL CPreProcess::GenMarkPointModel(HalconModel* pHalconModel, CMachineObj_Comm* pObj, double fCrossWidth)
 {
 	if (MachineObj_Type_Circle == pObj->GetObjType())
 	{
@@ -1449,8 +1449,172 @@ BOOL CPreProcess::GenMarkPointModel(HalconModel* pHalconModel, CMachineObj_Comm*
 	}
 	else if (MachineObj_Type_Group == pObj->GetObjType())
 	{
+		ObjRect rtBorder = pObj->GetObjBound();
+		double fCrossLength = rtBorder.max_x - rtBorder.min_x;
+		double fPixelSize = ReadDevCameraPixelSize();
 
+		HalconModel hModelTmp(_T("十字叉"), fCrossLength, fCrossWidth, fPixelSize);
+		*pHalconModel = hModelTmp;
 	}
+
+	return TRUE;
+}
+
+int CPreProcess::GenMarkPoints(std::vector <CPointF>& vPtPosDestinedMark, std::vector <ModelBase>& vModelBase, CMachineListContainer* pObjList)
+{
+	vPtPosDestinedMark.resize(0);
+	vModelBase.resize(0);
+
+	POSITION pos;
+	CMachineObj_Comm* pObj;
+	ObjRect objRectTmp;
+	int nLayerMark, nLayerTmp;
+	int nIndexMarkPoint = 0;
+
+	nLayerMark = pObjList->FindLayerByName(LayerName_Mark);
+	if (0 > nLayerMark)
+		return FALSE;
+
+	pos = pObjList->GetObjHeadPosition();
+	while (pos)
+	{
+		pObj = pObjList->GetObjNext(pos);
+		nLayerTmp = pObj->m_ObjByLayer;
+		if (nLayerTmp != nLayerMark)
+			continue;
+
+		//找到一个mark点
+		//生成mark点模板
+		ModelBase* pModel = NULL;
+		if (FALSE == GenMarkPointModel(&pModel, pObj))
+		{
+			continue;
+		}
+		if (NULL != pModel)
+		{
+			vModelBase.push_back(*pModel);
+			delete pModel;
+			pModel = NULL;
+		}
+
+		//获得mark点中心坐标
+		objRectTmp = pObj->GetObjBound();
+		CPointF ptTmp((FLOAT)(objRectTmp.max_x + objRectTmp.min_x) / 2,
+			(FLOAT)(objRectTmp.max_y + objRectTmp.min_y) / 2);
+		vPtPosDestinedMark.push_back(ptTmp);
+
+		nIndexMarkPoint++;
+		if (2 <= nIndexMarkPoint)
+			break;
+	}
+
+	if (2 != nIndexMarkPoint)
+	{
+		AfxMessageBox(_T("请设置至少两个mark点\nMark点类型为圆或十字叉"));
+		return 0;
+	}
+
+	return nIndexMarkPoint;
+}
+BOOL CPreProcess::GenMarkPointModel(ModelBase **ppModel, CMachineObj_Comm* pObj, double fCrossWidth)
+{
+	if (MachineObj_Type_Circle == pObj->GetObjType())
+	{
+		CMachineObjCircle* pObjCircle = (CMachineObjCircle*)pObj;
+		double fRadius = pObjCircle->GetCircleRadius();
+		double fPixelSize = ReadDevCameraPixelSize();
+		CPointF ptCenter(pObjCircle->GetCircleCenter().x, pObjCircle->GetCircleCenter().y);
+
+		*ppModel = ModelFactory::creatModel(ModelType::MT_Circle, fPixelSize, fRadius);
+		(*ppModel)->SetMatchDomain(ptCenter, 2);
+	}
+	else if (MachineObj_Type_Group == pObj->GetObjType())
+	{
+		ObjRect rtBorder = pObj->GetObjBound();
+		double fCrossLength = rtBorder.max_x - rtBorder.min_x;
+		double fPixelSize = ReadDevCameraPixelSize();
+		CPointF ptCenter((rtBorder.max_x + rtBorder.min_x) / 2, (rtBorder.max_y + rtBorder.min_y) / 2);
+
+		*ppModel = ModelFactory::creatModel(ModelType::MT_Cross, fPixelSize, fCrossLength, fCrossWidth);
+		(*ppModel)->SetMatchDomain(ptCenter, 2);
+	}
+	else
+		return FALSE;
+
+	return TRUE;
+}
+int CPreProcess::FindMarkPoints(std::vector <CPointF>& vPtPosRealMark, std::vector <ModelBase>& vModelBase)
+{
+	vPtPosRealMark.clear();
+
+	int nFinded = 0;
+	int nIndex = 0;
+	CString strCaption, strText;
+
+	for (auto valModel : vModelBase)
+	{
+		nIndex++;
+		CPointF ptFinded(0,0);
+		std::vector <CPointF> vPtPos;
+		valModel.LocateModel(vPtPos);
+
+		int nCount = vPtPos.size();
+		if (0 >= nCount)
+		{
+			strText.Format(_T("没有匹配对象"));
+			strCaption.Format(_T("第%d个mark点"), nIndex);
+			::MessageBox(NULL, strText, strCaption, MB_OK);
+		}
+		else if (1 < nCount)
+		{
+			strText.Format(_T("共匹配到%d个对象，请重新设置"), nCount);
+			strCaption.Format(_T("第%d个mark点"), nIndex);
+			::MessageBox(NULL, strText, strCaption, MB_OK);
+		}
+		else
+		{
+			nFinded++;
+			ptFinded = vPtPos.front();
+		}
+		vPtPosRealMark.push_back(ptFinded);
+	}
+
+	return nFinded;
+}
+
+
+BOOL CPreProcess::AutoPreProcess1(CMachineListContainer* pList, BOOL bLocate)
+{
+	if (FALSE == DoSingleGrid(pList))
+		return FALSE;
+
+	//判断是否需要抓靶定位
+	int nCountMarkPoints = 0;
+	std::vector <CPointF> vPtPosDestinedMark;
+	std::vector <CPointF> vPtPosRealMark;
+	std::vector <ModelBase> vModeBase;
+	if (bLocate == FALSE)
+	{
+		nCountMarkPoints = 0;
+		vPtPosDestinedMark.resize(0);
+		vPtPosRealMark.resize(0);
+		vModeBase.resize(0);
+	}
+	else
+	{
+		//抓靶定位流程
+		//读mark层生成mark点理论坐标及其model,只支持两个mark点
+		nCountMarkPoints = GenMarkPoints(vPtPosDestinedMark, vModeBase, pList);
+		if (2 != nCountMarkPoints)
+			return FALSE;
+		//依次抓靶生成mark点实际坐标
+		nCountMarkPoints = FindMarkPoints(vPtPosRealMark, vModeBase);
+		if (2 != nCountMarkPoints)
+			return FALSE;
+	}
+
+	//计算平移旋转
+	DoSingleTrans(pList, nCountMarkPoints, vPtPosDestinedMark, vPtPosRealMark);
 
 	return TRUE;
 }

@@ -13,15 +13,14 @@ HalconModel::HalconModel()
 	m_hvModelScaleMin = DEFAULT_SCALE_MIN;
 	m_hvModelScaleMax = DEFAULT_SCALE_MAX;
 	m_hvModelMinScore = DEFAULT_MIN_SCORE;
-	m_nRgnRowMin = 0;
-	m_nRgnRowMax = 0;
-	m_nRgnColMin = 0;
-	m_nRgnColMax = 0;
 
+	m_ptMatchDomainPos = CPointF(0, 0);
+	m_fMatchDomainSizeFactor = 0;
+
+	m_vPtPosFindedModels.resize(0);
 }
 
-HalconModel::HalconModel(CString strCircle, double fRadius, double fPixelSize, double fScaleMin, double fScaleMax, double fMinScore,
-	int nRgnRowMin, int nRgnRowMax, int nRgnColMin, int nRgnColMax)
+HalconModel::HalconModel(CString strCircle, double fRadius, double fPixelSize)
 {
 	m_strModelType = strCircle;
 	m_hoImg = HObject();
@@ -29,13 +28,12 @@ HalconModel::HalconModel(CString strCircle, double fRadius, double fPixelSize, d
 	m_hoXldModelContourAffine = HObject();
 	m_hvModelOriginRow = 0;
 	m_hvModelOriginColumn = 0;
-	m_hvModelScaleMin = fScaleMin;
-	m_hvModelScaleMax = fScaleMax;
-	m_hvModelMinScore = fMinScore;
-	m_nRgnRowMin = nRgnRowMin;
-	m_nRgnRowMax = nRgnRowMax;
-	m_nRgnColMin = nRgnColMin;
-	m_nRgnColMax = nRgnColMax;
+	m_hvModelScaleMin = DEFAULT_SCALE_MIN;
+	m_hvModelScaleMax = DEFAULT_SCALE_MAX;
+	m_hvModelMinScore = DEFAULT_MIN_SCORE;
+	m_ptMatchDomainPos = CPointF(0, 0);
+	m_fMatchDomainSizeFactor = 0;
+	m_vPtPosFindedModels.resize(0);
 
 
 	{
@@ -59,8 +57,7 @@ HalconModel::HalconModel(CString strCircle, double fRadius, double fPixelSize, d
 
 }
 
-HalconModel::HalconModel(CString strCross, double fLength, double fWidth, double fPixelSize, double fScaleMin, double fScaleMax, double fMinScore,
-	int nRgnRowMin, int nRgnRowMax, int nRgnColMin, int nRgnColMax)
+HalconModel::HalconModel(CString strCross, double fLength, double fWidth, double fPixelSize)
 {
 	m_strModelType = strCross;
 	m_hoImg = HObject();
@@ -68,13 +65,12 @@ HalconModel::HalconModel(CString strCross, double fLength, double fWidth, double
 	m_hoXldModelContourAffine = HObject();
 	m_hvModelOriginRow = 0;
 	m_hvModelOriginColumn = 0;
-	m_hvModelScaleMin = fScaleMin;
-	m_hvModelScaleMax = fScaleMax;
-	m_hvModelMinScore = fMinScore;
-	m_nRgnRowMin = nRgnRowMin;
-	m_nRgnRowMax = nRgnRowMax;
-	m_nRgnColMin = nRgnColMin;
-	m_nRgnColMax = nRgnColMax;
+	m_hvModelScaleMin = DEFAULT_SCALE_MIN;
+	m_hvModelScaleMax = DEFAULT_SCALE_MAX;
+	m_hvModelMinScore = DEFAULT_MIN_SCORE;
+	m_ptMatchDomainPos = CPointF(0, 0);
+	m_fMatchDomainSizeFactor = 0;
+	m_vPtPosFindedModels.resize(0);
 
 	{
 		HObject	ho_Rectangle1, ho_Rectangle2, ho_CrossUnion, ho_CrossUnionCentered;
@@ -101,4 +97,40 @@ HalconModel::HalconModel(CString strCross, double fLength, double fWidth, double
 		ReduceDomain(ho_CrossImage, ho_CrossRegionDilation, &m_hoXldModel);
 
 	}
+}
+
+
+void HalconModel::SetScale(double fScaleMin, double fScaleMax)
+{
+	if (0 >= fScaleMin)
+		fScaleMin = 0.1;
+	if (0 >= fScaleMax)
+		fScaleMin = 0.1;
+
+	if (fScaleMin >= fScaleMax)
+	{
+		fScaleMin = 1;
+		fScaleMax = 1;
+	}
+
+	m_hvModelScaleMin = fScaleMin;
+	m_hvModelScaleMax = fScaleMax;
+}
+void HalconModel::SetMinScore(double fMinScore)
+{
+	if (0 >= fMinScore)
+		fMinScore = 0.1;
+	else if (1 < fMinScore)
+		fMinScore = 1;
+
+	m_hvModelMinScore = fMinScore;
+}
+void HalconModel::SetMatchDomain(double fPosX, double fPosY, double fPixelSize, double fSizeFactor)
+{
+	m_ptMatchDomainPos = CPointF(fPosX / fPixelSize, fPosY);
+
+	if (fSizeFactor < 1)
+		fSizeFactor = 1;
+	m_fMatchDomainSizeFactor = fSizeFactor;
+
 }

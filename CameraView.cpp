@@ -272,7 +272,10 @@ void CCameraView::OnTestFindModel()
 	fMinScore = ReadDevCameraMarkCircleFindMinScore();
 	fScaleMin = ReadDevCameraMarkCircleFindScaleMin();
 	fScaleMax = ReadDevCameraMarkCircleFindScaleMax();
-	HalconModel hoModel(_T("Բ"), fRadius, fPixelSize, fScaleMin, fScaleMax, fMinScore, 0, 0, 0, 0);
+	HalconModel hoModel(_T("Բ"), fRadius, fPixelSize);
+	hoModel.SetScale(fScaleMin, fScaleMax);
+	hoModel.SetMinScore(fMinScore);
+
 	std::vector<CPointF> ptVec;
 	m_pHalconWnd->LocateModel(hoModel, &ptVec);
 }
@@ -365,9 +368,6 @@ void CCameraView::OnTestHalconFindCircleHand()
 	m_pHalconWnd->TestFindCircleHand();
 
 }
-
-
-
 
 
 afx_msg LRESULT CCameraView::OnLocate(WPARAM wParam, LPARAM lParam)

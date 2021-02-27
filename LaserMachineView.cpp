@@ -17,6 +17,8 @@
 #include "CameraView.h"
 #include "XSleep.h"
 #include "PreProcess.h"
+#include "Model.h"
+
 
 
 #ifdef _DEBUG
@@ -179,7 +181,7 @@ void CLaserMachineView::OnInitialUpdate()
 
 	CCameraView* pCameraView = (CCameraView*)
 		((CMainFrame*)(AfxGetApp()->m_pMainWnd))->m_wndSplitter1.GetPane(1, 0);
-	m_hwndCameraView = pCameraView->GetSafeHwnd();
+	m_pHwndHalconWnd = pCameraView->m_pHalconWnd->GetSafeHwnd();
 
 }
 
@@ -834,9 +836,14 @@ void CLaserMachineView::OnSetparaGrid()
 }
 
 
-
 afx_msg LRESULT CLaserMachineView::OnStartMark(WPARAM wParam, LPARAM lParam)
 {
+	//if (NULL == pDevCardMark)
+	//{
+	//	//AfxMessageBox(_T("打标卡未初始化"));
+	//	return 1;
+	//}
+
 	//判断是否抓靶
 	m_bLocate = (BOOL)wParam;
 
@@ -864,6 +871,7 @@ afx_msg LRESULT CLaserMachineView::OnStartMark(WPARAM wParam, LPARAM lParam)
 
 afx_msg LRESULT CLaserMachineView::OnStopMark(WPARAM wParam, LPARAM lParam)
 {
+
 	if (NULL == pDevCardMark)
 	{
 		//AfxMessageBox(_T("打标卡未初始化"));
@@ -972,7 +980,6 @@ void CLaserMachineView::WaitForMarkThreadEnded()
 //ThreadFunc
 UINT CLaserMachineView::MarkProcRun(LPVOID lpParam)
 {
-	
 	CLaserMachineView* pView = (CLaserMachineView*)lpParam;
 	//const HWND hPostDlg = pView->GetSafeHwnd();
 
@@ -982,8 +989,11 @@ UINT CLaserMachineView::MarkProcRun(LPVOID lpParam)
 	BOOL bLocate = pView->m_bLocate;
 	LeaveCriticalSection(&pView->ProcObjListMutex);        // CriticalSect
 
-	//导入对象，判断幅面
 	CPreProcess preProcess;
+	preProcess.AutoPreProcess1(pList, bLocate);
+
+	/*
+	//导入对象，判断幅面
 	if (FALSE == preProcess.DoSingleGrid(pList))
 		return 1;
 
@@ -991,141 +1001,51 @@ UINT CLaserMachineView::MarkProcRun(LPVOID lpParam)
 	int nCountMarkPoints = 0;
 	std::vector <CPointF> vPtPosDestinedMark;
 	std::vector <CPointF> vPtPosRealMark;
-	std::vector <HalconModel> vMarkPointModel;
+	std::vector <ModelBase> vModeBase;
+	//std::vector <HalconModel> vMarkPointModel;
 	if (bLocate == FALSE)
 	{
 		nCountMarkPoints = 0;
 		vPtPosDestinedMark.resize(0);
 		vPtPosRealMark.resize(0);
-		vMarkPointModel.resize(0);
+		vModeBase.resize(0);
+		//vMarkPointModel.resize(0);
 	}
 	else
 	{
 		//抓靶定位流程
-		//读mark层生成mark点理论坐标及其model
-		int nCountMarkPoints;
-		nCountMarkPoints = preProcess.GenMarkPoints(vPtPosDestinedMark, vMarkPointModel, pList);
-		if (0 == nCountMarkPoints)
+		//读mark层生成mark点理论坐标及其model,只支持两个mark点
+		nCountMarkPoints = preProcess.GenMarkPoints(vPtPosDestinedMark, vModeBase, pList);
+		//nCountMarkPoints = preProcess.GenMarkPoints(vPtPosDestinedMark, vMarkPointModel, pList);
+		if (2 != nCountMarkPoints)
 			return 1;
 		//依次抓靶生成mark点实际坐标
+		nCountMarkPoints = preProcess.FindMarkPoints(vPtPosRealMark, vModeBase);
+		if (2 != nCountMarkPoints)
+			return 1;
 	}
 
 	//计算平移旋转
 	preProcess.DoSingleTrans(pList, nCountMarkPoints, vPtPosDestinedMark, vPtPosRealMark);
+	*/
+
+	if (WAIT_OBJECT_0 == WaitForSingleObject((pView->MarkProcStopEvent), 0))
+		return 1;
 
 	//导入对象，开始加工
-	preProcess.WriteEntitiesPerGridToBuffer(0, pDevCardMark, pList);
+	preProcess.WriteEntitiesPerGridToBuffer(0, pList);
 	pDevCardMark->SetPensFromAllLayers(pList);
+
+	if (WAIT_OBJECT_0 == WaitForSingleObject((pView->MarkProcStopEvent), 0))
+		return 1;
+
 	pDevCardMark->StartMarkCardMark();
+
+	if (WAIT_OBJECT_0 == WaitForSingleObject((pView->MarkProcStopEvent), 0))
+		return 1;
+
 	pDevCardMark->WaitForThreadsEnded();
 	return 0;
-
-
-
-	/*
-	//分格
-	CPreProcess preProcess;
-	std::vector<ObjRect> vecGridRect;
-	if (0 < vecGridX.size())
-		preProcess.CalculateGrid(vecGridRect, pListContainerTmp, vecGridX, vecGridY);
-	else
-		preProcess.CalculateGrid(vecGridRect, pListContainerTmp);
-	preProcess.DoGrid(vecGridRect, pListContainerTmp);
-
-	//暂存当前工作台位置
-	double fPosSavedX, fPosSavedY;
-	pDevCardWorktable->GetAbsPosXY(&fPosSavedX, &fPosSavedY);
-
-	//抓标
-	//暂存手动抓标结果
-	int nCountMarkPoints = g_nCountMarkPoints;
-	std::vector <CPointF> vPtPosDestinedMark(g_vPtPosDestinedMark);
-	std::vector <CPointF> vPtPosRealMark(g_vPtPosRealMark);
-	std::vector <HalconModel> vMarkPointModel(g_vMarkPointModel);
-	//准备自动抓标结果
-	if (0 != nCountMarkPoints)
-	{
-		//抓图计算
-		for (int i = 0; i < nCountMarkPoints; i++)
-		{
-			double fPosTmpX, fPosTmpY;
-			pDevCardWorktable->GetAbsPosXY(&fPosTmpX, &fPosTmpY);
-			pDevCardWorktable->PosMoveXY(vPtPosRealMark[i].x - fPosTmpX, vPtPosRealMark[i].y - fPosTmpY, TRUE);
-
-			XSleep(1000);
-
-			std::vector <CPointF> vPtPosFinded;
-			::SendMessage(pMainContorlDlg->m_hwndCameraView, WM_LOCATE, (WPARAM) & (vMarkPointModel[i]), (LPARAM)&vPtPosFinded);
-			//int nFindedMark = pCameraView->m_pHalconWnd->LocateModel(vMarkPointModel[i], &vPtPosFinded);
-			int nFindedMark = vPtPosFinded.size();
-			if (0 >= nFindedMark)
-			{
-				//如果没抓到圆
-				XSleep(1);
-				AfxMessageBox(_T("没有抓到mark点"));
-				return 1;
-			}
-			else if (1 < nFindedMark)
-			{
-				//如果抓到多个圆
-				XSleep(1);
-				AfxMessageBox(_T("抓到多个mark点"));
-				return 1;
-			}
-			else
-			{
-				XSleep(1000);
-				//如果抓到一个
-				//AfxMessageBox(_T("抓到1个mark点"));
-				vPtPosRealMark[i] += vPtPosFinded[0];
-			}
-		}
-	}
-
-	//平移旋转拉伸
-	double ptOrg[2], ptScale[2], fRotateDegree, ptReal[2];
-	preProcess.CalculateTrans(nCountMarkPoints, vPtPosDestinedMark, vPtPosRealMark, vecGridRect, fPosSavedX, fPosSavedY,
-		ptOrg, ptScale, &fRotateDegree, ptReal);
-	preProcess.DoTrans(ptOrg, ptScale, fRotateDegree, ptReal);
-
-
-	//开始加工
-	//写加工参数
-	pDevCardMark->SetPensFromAllLayers(pListContainerTmp);
-
-	//循环遍历每个分格
-	double fGridCenterX, fGridCenterY;
-	double fAbsCurPosX, fAbsCurPosY;
-	for (int nGridIndex = 0; nGridIndex < vecGridRect.size(); nGridIndex++)
-	{
-		if (WAIT_OBJECT_0 == WaitForSingleObject((pMainContorlDlg->MarkProcStopEvent), 0))
-			break;
-
-		//工作平台运动到分格中心
-		preProcess.GetGridCenter(nGridIndex, &fGridCenterX, &fGridCenterY);
-		pDevCardWorktable->GetAbsPosXY(&fAbsCurPosX, &fAbsCurPosY);
-		pDevCardWorktable->PosMoveXY(fGridCenterX - fAbsCurPosX, fGridCenterY - fAbsCurPosY, TRUE);
-		//运动过程中写打标卡缓冲区
-		preProcess.WriteEntitiesPerGridToBuffer(nGridIndex, pDevCardMark, pListContainerTmp);
-		//等待工作台运动完成
-		pDevCardWorktable->WaitForMoveEndedXY();
-		XSleep(1);
-		//出光
-		pDevCardMark->StartMarkCardMark();
-		pDevCardMark->WaitForThreadsEnded();
-	}
-
-	//工作台回原位置
-	pDevCardWorktable->GetAbsPosXY(&fAbsCurPosX, &fAbsCurPosY);
-	pDevCardWorktable->PosMoveXY(fPosSavedX - fAbsCurPosX, fPosSavedY - fAbsCurPosY, TRUE);
-	pDevCardWorktable->WaitForMoveEndedXY();
-
-	pMainContorlDlg->m_bMarkThreadIsRunning = FALSE;
-
-
-	*/
-	//AfxMessageBox(_T("加工完成"));
-	//return 0;
 }
 
 

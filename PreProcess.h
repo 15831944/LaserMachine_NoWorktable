@@ -3,6 +3,7 @@
 #include"DeviceCardMark.h"
 #include "PointF.h"
 #include "HalconModel.h"
+#include "Model.h"
 #include <boost/geometry.hpp>
 #include <boost/geometry/geometries/polygon.hpp>
 #include <boost/geometry/geometries/point_xy.hpp>
@@ -81,10 +82,15 @@ public:
 	void GetGridCenter(int nGridIndex, double* pGridCenterX, double* pGridCenterY);
 
 	//将单个分格中的加工对象写入板卡
-	BOOL WriteEntitiesPerGridToBuffer(int nGridIndex, CDeviceCardMark* pDevCardMark, CMachineListContainer* pObjList = NULL);
+	BOOL WriteEntitiesPerGridToBuffer(int nGridIndex, CMachineListContainer* pObjList = NULL);
 
 	//抓靶相关
 	int GenMarkPoints(std::vector <CPointF> vPtPosDestinedMark, std::vector <HalconModel> vMarkPointModel, CMachineListContainer* pObjList);
+	int GenMarkPoints(std::vector <CPointF>& vPtPosDestinedMark, std::vector <ModelBase>& vModelBase, CMachineListContainer* pObjList);
+	int FindMarkPoints(std::vector <CPointF>& vPtPosRealMark, std::vector <ModelBase>& vModelBase);
+
+	//自动化加工准备
+	BOOL AutoPreProcess1(CMachineListContainer* pList, BOOL bLocate);
 
 //protected:
 	void CutEntityByGrid(VecEntities &vecEntities, std::vector<Polygon_T> &vecPolyGrid);
@@ -98,7 +104,8 @@ public:
 	BOOL WriteEntitiesToBuffer(VecEntities& vecEntities);
 
 	//抓靶相关
-	BOOL GenMarkPointModel(HalconModel* pHalconModel, CMachineObj_Comm* pObj, double fCrossWidthPixel = 10);
+	BOOL GenMarkPointModel(HalconModel* pHalconModel, CMachineObj_Comm* pObj, double fCrossWidth = 10);
+	BOOL GenMarkPointModel(ModelBase **ppModel, CMachineObj_Comm* pObj, double fCrossWidth = 10);
 
 };
 

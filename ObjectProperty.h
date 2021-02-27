@@ -77,10 +77,13 @@ public:
 	afx_msg void OnBnClickedBtnObjEdit();
 	afx_msg void OnBnClickedObjectPropertyBtn1();
 	afx_msg void OnBnClickedObjectPropertyBtn2();
-	afx_msg void OnBnClickedObjectPropertyBtn3();
-
-	
+	afx_msg void OnBnClickedObjectPropertyBtn3();	
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+
+	BOOL m_bLocate;
+	CString m_strBtnMark;
+	afx_msg void OnBnClickedButtonObjectStartMark();
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
 
 

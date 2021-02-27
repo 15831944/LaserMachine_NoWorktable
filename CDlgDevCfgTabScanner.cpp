@@ -363,7 +363,9 @@ void CDlgDevCfgTabScanner::OnBnClickedButtonScannerAutoFindCaliPoint()
 	fMinScore = ReadDevCameraMarkCircleFindMinScore();
 	fScaleMin = ReadDevCameraMarkCircleFindScaleMin();
 	fScaleMax = ReadDevCameraMarkCircleFindScaleMax();
-	HalconModel modelCircle(_T("圆"), fRadius, fPixelSize, fScaleMin, fScaleMax, fMinScore, 0, 0, 0, 0);
+	HalconModel modelCircle(_T("圆"), fRadius, fPixelSize);
+	modelCircle.SetScale(fScaleMin, fScaleMax);
+	modelCircle.SetMinScore(fMinScore);
 
 	CString strTmpWt;
 	double fPosTmpWtX, fPosTmpWtY, fPosTmpWtOrgX, fPosTmpWtOrgY;

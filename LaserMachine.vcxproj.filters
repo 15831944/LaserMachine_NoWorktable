@@ -263,6 +263,9 @@
     <ClInclude Include="DeviceLaserBellin.h">
       <Filter>Devices\头文件</Filter>
     </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LaserMachine.cpp">
@@ -447,6 +450,9 @@
     </ClCompile>
     <ClCompile Include="DeviceLaserBellin.cpp">
       <Filter>Devices\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

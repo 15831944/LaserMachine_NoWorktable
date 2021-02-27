@@ -106,6 +106,9 @@ BEGIN_MESSAGE_MAP(CHalconWnd, CWnd)
 	ON_WM_ERASEBKGND()
 	ON_WM_CLOSE()
 	ON_REGISTERED_MESSAGE(WM_DISP, &CHalconWnd::OnDisp)
+	ON_MESSAGE(WM_GET_IMAGE, &CHalconWnd::OnGetImage)
+	ON_MESSAGE(WM_SHOW_CONTOUR, &CHalconWnd::OnShowContour)
+	ON_MESSAGE(WM_SHOW_TEXT, &CHalconWnd::OnShowText)
 END_MESSAGE_MAP()
 
 
@@ -1453,8 +1456,9 @@ LRESULT CHalconWnd::OnDisp(WPARAM wParam, LPARAM lParam)
 	DispObj(imgCameraImage, m_hWindow);
 	SetColor(m_hWindow, "red");
 	DispObj(m_hoContourMask, m_hWindow);
-	if(m_bShowString)
-		DispText(m_hWindow, m_hvString, "image", m_hvStringRow + 3, m_hvStringColumn + 3, "black", HTuple(), HTuple());
+	ShowStringMask();
+	//if(m_bShowString)
+	//	DispText(m_hWindow, m_hvString, "image", m_hvStringRow + 3, m_hvStringColumn + 3, "black", HTuple(), HTuple());
 	SetColor(m_hWindow, "green");
 
 	//显示十字靶标
@@ -2243,8 +2247,22 @@ BOOL CHalconWnd::SetStringMask(HTuple hvString, HTuple hvRow, HTuple hvColumn)
 
 	return TRUE;
 }
+void CHalconWnd::ShowStringMask()
+{
+	//约定每个对象显示两行信息
+	if (FALSE == m_bShowString)
+		return;
 
-int CHalconWnd::LocateModel(HalconModel modelHalcon, std::vector<CPointF>* vPtPos, BOOL bShowModelCotour, BOOL bShowModelString)
+	HTuple hv_Length;
+	TupleLength(m_hvStringRow, &hv_Length);
+	for (HTuple hv_i = 0; hv_i.Continue(hv_Length - 1, 1); hv_i += 1)
+	{
+		DispText(m_hWindow, m_hvString[hv_i] + "\n" + m_hvString[hv_i+1], "image", m_hvStringRow[hv_i], m_hvStringColumn[hv_i], "black", HTuple(), HTuple());
+	}
+}
+
+
+int CHalconWnd::LocateModel(HalconModel& modelHalcon, std::vector<CPointF>* vPtPos, BOOL bShowModelCotour, BOOL bShowModelString)
 {
 	HObject	hoImageDisplay, hoModelContour, hoModelContourAffine;
 
@@ -2265,6 +2283,9 @@ int CHalconWnd::LocateModel(HalconModel modelHalcon, std::vector<CPointF>* vPtPo
 		hv_ModelOriginRow = modelHalcon.m_hvModelOriginRow;
 		hv_ModelOriginColumn = modelHalcon.m_hvModelOriginColumn;
 		hv_MinScore = modelHalcon.m_hvModelMinScore;
+
+		//是否需要局部抓图
+
 
 		//抓标
 		GetObjClass(hoModelContour, &hv_Class);
@@ -2341,3 +2362,64 @@ int CHalconWnd::LocateModel(HalconModel modelHalcon, std::vector<CPointF>* vPtPo
 	return -1;
 }
 
+
+
+afx_msg LRESULT CHalconWnd::OnGetImage(WPARAM wParam, LPARAM lParam)
+{
+	*(HObject*)wParam = GetImageDisplay();
+
+	return 0;
+}
+
+
+afx_msg LRESULT CHalconWnd::OnShowContour(WPARAM wParam, LPARAM lParam)
+{
+	BOOL bShow = FALSE;
+	bShow = (BOOL)wParam;
+
+	if (FALSE == bShow)
+		ClearContourMask();
+	else
+	{
+		HObject hoContourAffined = *((HObject*)lParam);
+		SetContourMask(hoContourAffined);
+	}
+
+	return 0;
+}
+
+
+afx_msg LRESULT CHalconWnd::OnShowText(WPARAM wParam, LPARAM lParam)
+{
+	BOOL bShow = FALSE;
+	bShow = (BOOL)wParam;
+
+	if (FALSE == bShow)
+		ClearStringMask();
+	else
+	{
+		//解析hvMixedText：如其长度为4N，则String:Row:Col = 2N:N:N
+		HTuple hvMixedText = *((HTuple*)lParam);
+		HTuple hvString, hvRow, hvCol;
+		HTuple hvLength, hvLengthBy4, hvI;
+		
+		TupleLength(hvMixedText, &hvLength);
+		hvLengthBy4 = hvLength / 4;
+		for (hvI = 0; hvI.Continue(2 * hvLengthBy4 - 1, 1); hvI += 1)
+		{
+			TupleConcat(hvString, hvMixedText[hvI], &hvString);
+		}
+		for (hvI = 2 * hvLengthBy4; hvI.Continue(3 * hvLengthBy4 - 1, 1); hvI += 1)
+		{
+			TupleConcat(hvRow, hvMixedText[hvI], &hvRow);
+		}
+		for (hvI = 3 * hvLengthBy4; hvI.Continue(hvLength - 1, 1); hvI += 1)
+		{
+			TupleConcat(hvCol, hvMixedText[hvI], &hvCol);
+		}
+
+		SetStringMask(hvString, hvRow, hvCol);
+	}
+
+	return 0;
+}
