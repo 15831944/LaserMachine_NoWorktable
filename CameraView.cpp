@@ -23,6 +23,7 @@ CCameraView::CCameraView()
 CCameraView::~CCameraView()
 {
 	delete m_pHalconWnd;
+	m_pHalconWnd = NULL;
 }
 
 void CCameraView::PostNcDestroy()

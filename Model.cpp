@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "LaserMachineConst.h"
 #include "Model.h"
 #include "CameraView.h"
 #include "MainFrm.h"
@@ -198,9 +199,13 @@ void  ModelBase::SetImage()
 
 HWND ModelBase::GetHwndShow()
 {
-	CCameraView* pCameraView = (CCameraView*)
-		((CMainFrame*)(AfxGetApp()->m_pMainWnd))->m_wndSplitter1.GetPane(1, 0);
-	return pCameraView->m_pHalconWnd->GetSafeHwnd();
+	HWND hwndShow;
+	::SendMessage(AfxGetApp()->m_pMainWnd->GetSafeHwnd(), WM_GET_CAMERA_HWND, (WPARAM)&hwndShow, NULL);
+	return hwndShow;
+
+	////CCameraView* pCameraView = (CCameraView*)
+	////	((CMainFrame*)(AfxGetApp()->m_pMainWnd))->m_wndSplitter1.GetPane(1, 0);
+	//return pCameraView->m_pHalconWnd->GetSafeHwnd();
 }
 void ModelBase::TransLogicToCamera(HTuple* hvRow, HTuple* hvCol, double const fX, double const fY)
 {

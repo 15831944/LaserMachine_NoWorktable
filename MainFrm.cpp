@@ -41,6 +41,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_COMMAND(IDM_DEVICE_CONFIG, &CMainFrame::OnDeviceConfig)
 	ON_WM_TIMER()
 	ON_WM_CLOSE()
+	ON_MESSAGE(WM_GET_CAMERA_HWND, &CMainFrame::OnGetCameraHwnd)
 END_MESSAGE_MAP()
 
 static UINT indicators[] =
@@ -390,4 +391,16 @@ void CMainFrame::OnClose()
 	}
 
 	CFrameWnd::OnClose();
+}
+
+
+afx_msg LRESULT CMainFrame::OnGetCameraHwnd(WPARAM wParam, LPARAM lParam)
+{
+	CCameraView* pCameraView = (CCameraView*)m_wndSplitter1.GetPane(1, 0);
+	HWND hwndHalconWnd = pCameraView->m_pHalconWnd->GetSafeHwnd();
+
+	HWND *pHwnd = (HWND*)wParam;
+	*pHwnd = hwndHalconWnd;
+
+	return 0;
 }

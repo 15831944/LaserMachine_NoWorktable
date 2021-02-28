@@ -982,8 +982,8 @@ UINT CLaserMachineView::MarkProcRun(LPVOID lpParam)
 {
 	CLaserMachineView* pView = (CLaserMachineView*)lpParam;
 	//const HWND hPostDlg = pView->GetSafeHwnd();
-
-	//读对象链表
+	
+		//读对象链表
 	EnterCriticalSection(&pView->ProcObjListMutex);        // CriticalSect
 	CMachineListContainer* pList = pView->m_pLaserObjList;
 	BOOL bLocate = pView->m_bLocate;
