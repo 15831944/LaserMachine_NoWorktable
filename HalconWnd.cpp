@@ -1261,6 +1261,10 @@ UINT CHalconWnd::ImgAcqRun(LPVOID lpParam)
 		if (TRUE == g_bCameraSettingChanged)
 		{
 			//设置采集图像参数
+			pHalconWnd->m_nImgReverse = ReadDevCameraReverse();
+			pHalconWnd->m_nImgBrightness = ReadDevCameraBrightness();
+			pHalconWnd->m_nImgContrast = ReadDevCameraContrast();
+
 			int nImgMirrorXTmp, nImgMirrorYTmp, nImgExposureTmp, nImgGainTmp;
 			nImgMirrorXTmp = ReadDevCameraMirrorX();
 			nImgMirrorYTmp = ReadDevCameraMirrorY();

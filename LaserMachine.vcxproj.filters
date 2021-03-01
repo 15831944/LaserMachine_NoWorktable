@@ -170,9 +170,6 @@
     <ClInclude Include="DeviceCardWorktable.h">
       <Filter>Devices\头文件</Filter>
     </ClInclude>
-    <ClInclude Include="DeviceCardWorktableMPC2810.h">
-      <Filter>Devices\头文件</Filter>
-    </ClInclude>
     <ClInclude Include="CDlgDevCfgTabWorktable.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -368,9 +365,6 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DeviceCardWorktable.cpp">
-      <Filter>Devices\源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="DeviceCardWorktableMPC2810.cpp">
       <Filter>Devices\源文件</Filter>
     </ClCompile>
     <ClCompile Include="CDlgDevCfgTabWorktable.cpp">

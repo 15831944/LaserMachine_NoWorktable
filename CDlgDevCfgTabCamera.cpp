@@ -7,6 +7,7 @@
 #include "CDlgDevCfgTabCamera.h"
 #include "afxdialogex.h"
 #include "DeviceCamera.h"
+#include "Model.h"
 
 
 //相机硬件配置读写
@@ -198,6 +199,32 @@ double ReadDevCameraPixelSize()
 	GetPrivateProfileString(_T("DeviceCamera"), _T("CAMERA_PIXEL_SIZE"), _T("0"), strTmp.GetBuffer(MAX_DOUBLE_PRECISION), MAX_DOUBLE_PRECISION, CONFIG_INI_PATH);
 	return (double)_ttof(strTmp);
 }
+
+void SetDevCameraMarkCrossLength(double fCameraMarkCrossLength)
+{
+	CString strTmp;
+	strTmp.Format(_T("%lf"), fCameraMarkCrossLength);
+	WritePrivateProfileString(_T("DeviceCamera"), _T("CAMERA_MARK_CROSS_LENGTH"), strTmp, CONFIG_INI_PATH);
+}
+double ReadDevCameraMarkCrossLength()
+{
+	CString strTmp;
+	GetPrivateProfileString(_T("DeviceCamera"), _T("CAMERA_MARK_CROSS_LENGTH"), _T("5"), strTmp.GetBuffer(MAX_DOUBLE_PRECISION), MAX_DOUBLE_PRECISION, CONFIG_INI_PATH);
+	return (double)_ttof(strTmp);
+}
+void SetDevCameraMarkCrossWidth(double fCameraMarkCrossWidth)
+{
+	CString strTmp;
+	strTmp.Format(_T("%lf"), fCameraMarkCrossWidth);
+	WritePrivateProfileString(_T("DeviceCamera"), _T("CAMERA_MARK_CROSS_WIDTH"), strTmp, CONFIG_INI_PATH);
+}
+double ReadDevCameraMarkCrossWidth()
+{
+	CString strTmp;
+	GetPrivateProfileString(_T("DeviceCamera"), _T("CAMERA_MARK_CROSS_WIDTH"), _T("1"), strTmp.GetBuffer(MAX_DOUBLE_PRECISION), MAX_DOUBLE_PRECISION, CONFIG_INI_PATH);
+	return (double)_ttof(strTmp);
+}
+
 void SetDevCameraMarkCircleRadius(double fCameraMarkCircleRadius)
 {
 	CString strTmp;
@@ -254,6 +281,8 @@ IMPLEMENT_DYNAMIC(CDlgDevCfgTabCamera, CDialogEx)
 
 CDlgDevCfgTabCamera::CDlgDevCfgTabCamera(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_DEVICE_CONFIG_TAB_CAMERA, pParent)
+	, m_fMarkRadius(0.5)
+	, m_fMarkDistance(10)
 {
 
 }
@@ -276,6 +305,10 @@ void CDlgDevCfgTabCamera::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_CAMERA_POS_Y, m_fCameraPosY);
 	DDX_Text(pDX, IDC_EDIT_CAMERA_PIXEL_SIZE, m_fCameraPixelSize);
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Text(pDX, IDC_EDIT_CAMERA_MARK_RADIUS, m_fMarkRadius);
+	DDV_MinMaxDouble(pDX, m_fMarkRadius, 0, DBL_MAX);
+	DDX_Text(pDX, IDC_EDIT_CAMERA_MARK_DISTANCE, m_fMarkDistance);
+	DDV_MinMaxDouble(pDX, m_fMarkDistance, 0, DBL_MAX);
 }
 
 
@@ -289,6 +322,7 @@ BEGIN_MESSAGE_MAP(CDlgDevCfgTabCamera, CDialogEx)
 	ON_EN_CHANGE(IDC_EDIT_CAMERA_EXPOSURE, &CDlgDevCfgTabCamera::OnEnChangeEditCameraExposure)
 	ON_NOTIFY(NM_CUSTOMDRAW, IDC_SLIDER_CAMERA_GAIN, &CDlgDevCfgTabCamera::OnNMCustomdrawSliderCameraGain)
 	ON_EN_CHANGE(IDC_EDIT_CAMERA_GAIN, &CDlgDevCfgTabCamera::OnEnChangeEditCameraGain)
+	ON_BN_CLICKED(IDC_BUTTON_CAMERA_CAL_PIXEL_SIZE, &CDlgDevCfgTabCamera::OnBnClickedButtonCameraCalPixelSize)
 END_MESSAGE_MAP()
 
 
@@ -508,4 +542,42 @@ void CDlgDevCfgTabCamera::OnEnChangeEditCameraGain()
 
 
 
+void CDlgDevCfgTabCamera::OnBnClickedButtonCameraCalPixelSize()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	UpdateData(TRUE);
 
+	double fPixelSize, fRadius, fDistance;
+	fPixelSize = m_fCameraPixelSize;
+	fRadius = m_fMarkRadius;
+	fDistance = m_fMarkDistance;
+
+	std::vector<CPointF> ptPos;
+	ModelBase* pModel = ModelFactory::creatModel(ModelType::MT_Circle, fPixelSize, fRadius);
+	pModel->SetScale(0.95, 1.05);
+	pModel->SetMinScore(0.9);
+	pModel->LocateModel(ptPos);
+	
+	if (2 == ptPos.size())
+	{
+		double fDistanceCal, fDistanceCalX, fDistanceCalY;
+		CPointF pt1, pt2, ptDistance;
+		pt1 = ptPos[0];
+		pt2 = ptPos[1];
+
+		fDistanceCalX = abs(pt1.x - pt2.x);
+		fDistanceCalY = abs(pt1.y - pt2.y);
+		fDistanceCal = sqrt(pow(fDistanceCalX, 2) + pow(fDistanceCalY, 2));
+
+		m_fCameraPixelSize *= fDistance / fDistanceCal;
+		UpdateData(FALSE);
+	}
+	else
+		AfxMessageBox(_T("没有找到两个标记圆"));
+	
+	
+	
+	delete pModel;
+	pModel = NULL;
+
+}

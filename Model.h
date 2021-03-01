@@ -7,10 +7,10 @@
 #include<HALCONCpp/HDevThread.h>
 using namespace HalconCpp;
 
-#ifndef DEFAULT_VALUE
-#define DEFAULT_SCALE_MIN 0.9
-#define DEFAULT_SCALE_MAX 1.1
-#define DEFAULT_MIN_SCORE 0.7
+#ifndef DEFAULT_MODEL_PARAM
+#define DEFAULT_SCALE_MIN 0.95
+#define DEFAULT_SCALE_MAX 1.05
+#define DEFAULT_MIN_SCORE 0.8
 #endif
 
 enum class ModelType { MT_Circle, MT_Cross };
@@ -21,12 +21,15 @@ public:
 	ModelBase();
     virtual ~ModelBase() {}
 
-	int LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour = TRUE, BOOL bShowText = TRUE);
+	int LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour = TRUE, BOOL bShowText = TRUE,
+					BOOL bSort = FALSE, int const nSortRow = 0, int const nSortColumn = 0);
 
 	void SetImage(HObject const hoImg);
 	void SetImage();
 
-	void SetMatchDomain(CPointF const ptPos, double const fSizeFactor);
+	void SetScale(double fScaleMin, double fScaleMax);
+	void SetMinScore(double fMinScore);
+	void SetMatchDomain(CPointF const ptPos, double fSizeFactor);
 	void GetMatchDomain(CPointF& ptPos, double& fSizeFactor);
 	void SetMatchedPos(std::vector <CPointF> const vPtPos);
 	void GetMatchedPos(std::vector <CPointF>& vPtPos);
@@ -36,6 +39,7 @@ protected:
 	void TransLogicToCamera(HTuple *hvRow, HTuple *hvCol, double const fX, double const fY);
 	void TransCameraToLogic(double *fX, double *fY, HTuple const hvRow, HTuple const hvCol);
 	void TransCameraToLogic(HTuple* hvX, HTuple* hvY, HTuple const hvRow, HTuple const hvCol);
+	void SortMtatchResult(HTuple* hvRow, HTuple* hvCol, HTuple* hvAngle, HTuple* hvScale, HTuple* hvScore, int const nCountRow, int const cCountCol);
 
 protected:
 	ModelType m_eModelType;					//ƒ£∞Â¿‡–Õ

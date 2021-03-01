@@ -36,6 +36,10 @@ extern void SetDevCameraPosY(double fCameraPos);
 extern double ReadDevCameraPosY();
 extern void SetDevCameraPixelSize(double fCameraPixelSize);
 extern double ReadDevCameraPixelSize();
+extern void SetDevCameraMarkCrossLength(double fCameraMarkCrossLength);
+extern double ReadDevCameraMarkCrossLength();
+extern void SetDevCameraMarkCrossWidth(double fCameraMarkCrossWidth);
+extern double ReadDevCameraMarkCrossWidth();
 extern void SetDevCameraMarkCircleRadius(double fCameraMarkCircleRadius);
 extern double ReadDevCameraMarkCircleRadius();
 extern void SetDevCameraMarkCircleFindScaleMin(double fCameraMarkCircleFindScaleMin);
@@ -109,4 +113,8 @@ public:
 	afx_msg void OnEnChangeEditCameraExposure();
 	afx_msg void OnNMCustomdrawSliderCameraGain(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnEnChangeEditCameraGain();
+	afx_msg void OnBnClickedButtonCameraCalPixelSize();
+protected:
+	double m_fMarkRadius;
+	double m_fMarkDistance;
 };

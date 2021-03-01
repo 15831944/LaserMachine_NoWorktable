@@ -990,44 +990,8 @@ UINT CLaserMachineView::MarkProcRun(LPVOID lpParam)
 	LeaveCriticalSection(&pView->ProcObjListMutex);        // CriticalSect
 
 	CPreProcess preProcess;
-	preProcess.AutoPreProcess1(pList, bLocate);
-
-	/*
-	//导入对象，判断幅面
-	if (FALSE == preProcess.DoSingleGrid(pList))
+	if (FALSE == preProcess.AutoPreProcess1(pList, bLocate))
 		return 1;
-
-	//判断是否需要抓靶定位
-	int nCountMarkPoints = 0;
-	std::vector <CPointF> vPtPosDestinedMark;
-	std::vector <CPointF> vPtPosRealMark;
-	std::vector <ModelBase> vModeBase;
-	//std::vector <HalconModel> vMarkPointModel;
-	if (bLocate == FALSE)
-	{
-		nCountMarkPoints = 0;
-		vPtPosDestinedMark.resize(0);
-		vPtPosRealMark.resize(0);
-		vModeBase.resize(0);
-		//vMarkPointModel.resize(0);
-	}
-	else
-	{
-		//抓靶定位流程
-		//读mark层生成mark点理论坐标及其model,只支持两个mark点
-		nCountMarkPoints = preProcess.GenMarkPoints(vPtPosDestinedMark, vModeBase, pList);
-		//nCountMarkPoints = preProcess.GenMarkPoints(vPtPosDestinedMark, vMarkPointModel, pList);
-		if (2 != nCountMarkPoints)
-			return 1;
-		//依次抓靶生成mark点实际坐标
-		nCountMarkPoints = preProcess.FindMarkPoints(vPtPosRealMark, vModeBase);
-		if (2 != nCountMarkPoints)
-			return 1;
-	}
-
-	//计算平移旋转
-	preProcess.DoSingleTrans(pList, nCountMarkPoints, vPtPosDestinedMark, vPtPosRealMark);
-	*/
 
 	if (WAIT_OBJECT_0 == WaitForSingleObject((pView->MarkProcStopEvent), 0))
 		return 1;

@@ -7,9 +7,9 @@
 #include<HALCONCpp/HDevThread.h>
 
 #ifndef DEFAULT_VALUE
-#define DEFAULT_SCALE_MIN 0.9
-#define DEFAULT_SCALE_MAX 1.1
-#define DEFAULT_MIN_SCORE 0.7
+#define DEFAULT_SCALE_MIN 0.95
+#define DEFAULT_SCALE_MAX 1.05
+#define DEFAULT_MIN_SCORE 0.8
 #endif
 
 using namespace HalconCpp;

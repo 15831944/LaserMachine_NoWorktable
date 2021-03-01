@@ -15,6 +15,7 @@
 #include "CDlgDevCfgTabCamera.h"
 #include "XSleep.h"
 #include "HalconModel.h"
+#include "Model.h"
 
 void SetScannerLenRegion(double fScannerLenRegion)
 {
@@ -167,6 +168,7 @@ BEGIN_MESSAGE_MAP(CDlgDevCfgTabScanner, CDialogEx)
 	ON_BN_CLICKED(IDC_CHECKIDC_SCANNER_INVERT_X, &CDlgDevCfgTabScanner::OnBnClickedCheckidcScannerInvertX)
 	ON_BN_CLICKED(IDC_CHECKIDC_SCANNER_INVERT_Y, &CDlgDevCfgTabScanner::OnBnClickedCheckidcScannerInvertY)
 	ON_EN_CHANGE(IDC_EDIT_SCANNER_LEN_REGION, &CDlgDevCfgTabScanner::OnEnChangeEditScannerLenRegion)
+	ON_BN_CLICKED(IDC_BUTTON_SCANNER_FIND_ALL_CALI_POINTS, &CDlgDevCfgTabScanner::OnBnClickedButtonScannerFindAllCaliPoints)
 END_MESSAGE_MAP()
 
 
@@ -238,8 +240,6 @@ void CDlgDevCfgTabScanner::OnBnClickedButtonShowDlgCali()
 	strTmp.Format(_T("%e"), m_fLenRegion);
 	WritePrivateProfileString(_T("default"), _T("LEN_WORKSIZE"), strTmp, _T("./binMark/config/LmcPars.cfg"));
 	WritePrivateProfileString(_T("CalCoefs"), _T("WorkSize"), strTmp, _T("./binMark/YuanluCor.cor"));
-
-
 
 
 	HINSTANCE m_hMarkDll = NULL;
@@ -696,4 +696,75 @@ void CDlgDevCfgTabScanner::OnEnChangeEditScannerLenRegion()
 	//WritePrivateProfileString(_T("CalCoefs"), _T("WorkSize"), strTmp, _T("./binMark/YuanluCor.cor"));
 
 
+}
+
+
+void CDlgDevCfgTabScanner::OnBnClickedButtonScannerFindAllCaliPoints()
+{
+	// TODO: 在此添加控件通知处理程序代码
+
+	//判断相机是否打开
+	CCameraView* pCameraView = (CCameraView*)
+		((CMainFrame*)(AfxGetApp()->m_pMainWnd))->m_wndSplitter1.GetPane(1, 0);
+	if (NULL == pCameraView)
+		return;
+	if (FALSE == pCameraView->m_pHalconWnd->m_bThreadsAreRunning)
+	{
+		AfxMessageBox(_T("请先打开相机"));
+		return;
+	}
+
+	//判断打点矩阵
+	const int nCtMatrix = GetCountMatrixCaliPointFromIndex();
+	if (1 >= nCtMatrix)
+	{
+		AfxMessageBox(_T("请设置正确的Mark点矩阵"));
+		return;
+	}
+	//生成目标点坐标矩阵
+	const double fStepMatrix = m_fCaliRegion / ((double)nCtMatrix - 1);		//网格点间距
+	std::vector <CPointF> vPtPosMatrixDext;
+	const int nNumMatrix = nCtMatrix / 2;									//网格点坐标标识
+	for (int iY = nNumMatrix; iY >= -nNumMatrix; iY--)						//由上到下
+	{
+		for (int iX = -nNumMatrix; iX <= nNumMatrix; iX++)					//由左到右
+		{
+			TRACE("(%d, %d)\n", iX, iY);
+			vPtPosMatrixDext.push_back(CPointF((FLOAT)fStepMatrix * iX, (FLOAT)fStepMatrix * iY));
+		}
+	}
+	//生成定位圆模板
+	double fRadius, fPixelSize, fScaleMin, fScaleMax, fMinScore;
+	fRadius = ReadDevCameraMarkCircleRadius();
+	fPixelSize = ReadDevCameraPixelSize();
+	fMinScore = ReadDevCameraMarkCircleFindMinScore();
+	fScaleMin = ReadDevCameraMarkCircleFindScaleMin();
+	fScaleMax = ReadDevCameraMarkCircleFindScaleMax();
+	ModelBase* pModel = ModelFactory::creatModel(ModelType::MT_Circle, fPixelSize, fRadius);
+	pModel->SetMinScore(fMinScore);
+	pModel->SetScale(fScaleMin, fScaleMax);
+
+	//自动抓标循环
+	std::vector <CPointF> vPtPosMatrixDelta, vPtPosMatrixReal;
+	pModel->LocateModel(vPtPosMatrixReal, FALSE, FALSE, TRUE, nCtMatrix, nCtMatrix);
+	if ((size_t)nCtMatrix * nCtMatrix != vPtPosMatrixReal.size())
+	{
+		delete pModel;
+		pModel = NULL;
+		AfxMessageBox(_T("没有找到所有mark点"));
+		return;
+	}
+	for (int i = 0; i < nCtMatrix * nCtMatrix; i++)
+	{
+		CPointF ptDelta;
+		ptDelta = vPtPosMatrixReal[i] - vPtPosMatrixDext[i];
+		vPtPosMatrixDelta.push_back(ptDelta);
+	}
+
+	//生成.txt corReal或corDelta
+	WriteTxtCor(_T("Delta"), &vPtPosMatrixDelta);
+	WriteTxtCor(_T("Real"), &vPtPosMatrixReal);
+
+	delete pModel;
+	pModel = NULL;
 }

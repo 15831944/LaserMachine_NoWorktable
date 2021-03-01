@@ -73,4 +73,5 @@ protected:
 
 public:
 	afx_msg void OnEnChangeEditScannerLenRegion();
+	afx_msg void OnBnClickedButtonScannerFindAllCaliPoints();
 };

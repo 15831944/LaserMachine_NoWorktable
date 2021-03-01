@@ -128,7 +128,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>halcon.lib;halconc.lib;halconcpp.lib;GxIAPICPP.lib;mpc2810.lib</AdditionalDependencies>
+      <AdditionalDependencies>halcon.lib;halconc.lib;halconcpp.lib;GxIAPICPP.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)MPC2810\lib;$(SolutionDir)Halcon\lib\x64-win64;$(SolutionDir)Daheng\lib\x64;$(LibraryPath)</AdditionalLibraryDirectories>
     </Link>
     <Midl>
@@ -242,7 +242,6 @@
     <ClInclude Include="DeviceCardMark.h" />
     <ClInclude Include="DeviceCardMarkBSL.h" />
     <ClInclude Include="DeviceCardWorktable.h" />
-    <ClInclude Include="DeviceCardWorktableMPC2810.h" />
     <ClInclude Include="DlgSetParaCamera.h" />
     <ClInclude Include="HalconWnd.h" />
     <ClInclude Include="LaserMachine.h" />
@@ -310,7 +309,6 @@
     <ClCompile Include="DeviceCardMark.cpp" />
     <ClCompile Include="DeviceCardMarkBSL.cpp" />
     <ClCompile Include="DeviceCardWorktable.cpp" />
-    <ClCompile Include="DeviceCardWorktableMPC2810.cpp" />
     <ClCompile Include="DlgSetParaCamera.cpp" />
     <ClCompile Include="HalconWnd.cpp" />
     <ClCompile Include="LaserMachine.cpp" />

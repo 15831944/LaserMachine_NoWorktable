@@ -7,7 +7,7 @@
 #include "afxdialogex.h"
 #include "CDlgDevCfgTabCamera.h"
 
-BOOL g_bCameraSettingChanged = true;
+BOOL g_bCameraSettingChanged = TRUE;
 
 // CDlgSetParaCamera 对话框
 
@@ -15,6 +15,9 @@ IMPLEMENT_DYNAMIC(CDlgSetParaCamera, CDialog)
 
 CDlgSetParaCamera::CDlgSetParaCamera(CWnd* pParent /*=nullptr*/)
 	: CDialog(IDD_SETPARA_CAMERA, pParent)
+	, m_fCameraMarkCircleRadius(1)
+	, m_fCameraMarkCrossLength(5)
+	, m_fCameraMarkCrossWidth(1)
 {
 
 }
@@ -34,7 +37,9 @@ void CDlgSetParaCamera::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_CHECK1_CAMERA_MIRROR_Y, m_nCameraMirrorY);
 	DDX_Text(pDX, IDC_EDIT1_CAMERA_MOVE_UNIT, m_fCameraMoveUnit);
 	DDX_Text(pDX, IDC_EDIT1_CAMERA_MARK_CIRCLE_RADIUS, m_fCameraMarkCircleRadius);
-	
+	DDX_Text(pDX, IDC_EDIT_CAMERA_MARK_CROSS_LENGTH, m_fCameraMarkCrossLength);
+	DDX_Text(pDX, IDC_EDIT_CAMERA_MARK_CROSS_WIDTH, m_fCameraMarkCrossWidth);
+
 	CDialog::DoDataExchange(pDX);
 }
 
@@ -54,6 +59,8 @@ BEGIN_MESSAGE_MAP(CDlgSetParaCamera, CDialog)
 	ON_EN_CHANGE(IDC_EDIT1_CAMERA_GAIN, &CDlgSetParaCamera::OnEnChangeEdit1CameraGain)
 	ON_EN_CHANGE(IDC_EDIT1_CAMERA_MOVE_UNIT, &CDlgSetParaCamera::OnEnChangeEdit1CameraMoveUnit)
 	ON_EN_CHANGE(IDC_EDIT1_CAMERA_MARK_CIRCLE_RADIUS, &CDlgSetParaCamera::OnEnChangeEdit1CameraMarkCircleRadius)
+	ON_EN_CHANGE(IDC_EDIT_CAMERA_MARK_CROSS_LENGTH, &CDlgSetParaCamera::OnEnChangeEditCameraMarkCrossLength)
+	ON_EN_CHANGE(IDC_EDIT_CAMERA_MARK_CROSS_WIDTH, &CDlgSetParaCamera::OnEnChangeEditCameraMarkCrossWidth)
 END_MESSAGE_MAP()
 
 
@@ -98,6 +105,9 @@ BOOL CDlgSetParaCamera::OnInitDialog()
 	m_fCameraMoveUnit = ReadDevCameraMoveUnit();
 	//mark圆半径
 	m_fCameraMarkCircleRadius = ReadDevCameraMarkCircleRadius();
+	//mark十字叉长宽
+	m_fCameraMarkCrossLength = ReadDevCameraMarkCrossLength();
+	m_fCameraMarkCrossWidth = ReadDevCameraMarkCrossWidth();
 
 	UpdateData(FALSE);
 
@@ -339,4 +349,31 @@ void CDlgSetParaCamera::OnEnChangeEdit1CameraMarkCircleRadius()
 	UpdateData(TRUE);
 	SetDevCameraMarkCircleRadius(m_fCameraMarkCircleRadius);
 
+}
+
+
+void CDlgSetParaCamera::OnEnChangeEditCameraMarkCrossLength()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CDialog::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	// TODO:  在此添加控件通知处理程序代码
+	UpdateData(TRUE);
+	SetDevCameraMarkCrossLength(m_fCameraMarkCrossLength);
+
+}
+
+
+void CDlgSetParaCamera::OnEnChangeEditCameraMarkCrossWidth()
+{
+	// TODO:  如果该控件是 RICHEDIT 控件，它将不
+	// 发送此通知，除非重写 CDialog::OnInitDialog()
+	// 函数并调用 CRichEditCtrl().SetEventMask()，
+	// 同时将 ENM_CHANGE 标志“或”运算到掩码中。
+
+	// TODO:  在此添加控件通知处理程序代码
+	UpdateData(TRUE);
+	SetDevCameraMarkCrossWidth(m_fCameraMarkCrossWidth);
 }

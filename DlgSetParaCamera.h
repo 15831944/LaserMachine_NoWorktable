@@ -63,8 +63,14 @@ public:
 	//移动步长
 	double m_fCameraMoveUnit;
 	//Mark圆半径
+protected:
 	double m_fCameraMarkCircleRadius;
+	double m_fCameraMarkCrossLength;
+	double m_fCameraMarkCrossWidth;
 
 	afx_msg void OnEnChangeEdit1CameraMoveUnit();
 	afx_msg void OnEnChangeEdit1CameraMarkCircleRadius();
+public:
+	afx_msg void OnEnChangeEditCameraMarkCrossLength();
+	afx_msg void OnEnChangeEditCameraMarkCrossWidth();
 };

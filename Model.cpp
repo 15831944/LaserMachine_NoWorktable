@@ -21,7 +21,8 @@ ModelBase::ModelBase()
 
 }
 
-int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOOL bShowText)
+int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOOL bShowText,
+							BOOL bSort, int const nSortRow, int const nSortColumn)
 {
 	HObject	hoImageDisplay, hoModel, hoModelContour, hoModelContourAffine, hoMatchRegion;
 
@@ -39,7 +40,7 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOO
 		::SendMessage(GetHwndShow(), WM_SHOW_CONTOUR, FALSE, NULL);
 
 		//HObject hoReadImg;
-		//ReadImage(&hoReadImg, "D://YuanLu//4. Halcon//CCD Sample//xxx.png");
+		//ReadImage(&hoReadImg, "D://YuanLu//4. Halcon//CCD Sample//imgCameraImage6.bmp");
 		//SetImage(hoReadImg);
 		SetImage();
 
@@ -91,13 +92,12 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOO
 				GenRectangle2(&hoMatchRegion, hv_RgnRow, hv_RgnCol, 0, hv_RgnWidth / 2, hv_RgnHeight / 2);
 				ReduceDomain(hoImageDisplay, hoMatchRegion, &hoImageDisplay);
 			}
-
 			CreateScaledShapeModelXld(hoModel, "auto", -0.39, 0.79, "auto", hv_ScaleMin, hv_ScaleMax,
 				"auto", "auto", "ignore_local_polarity", 5, &hv_ModelID);
 		}
 		SetShapeModelOrigin(hv_ModelID, hv_ModelOriginRow, hv_ModelOriginColumn);
 		GetShapeModelContours(&hoModelContour, hv_ModelID, 1);
-		FindScaledShapeModel(hoImageDisplay, hv_ModelID, -0.39, 0.79, hv_ScaleMin, hv_ScaleMax, hv_MinScore, 0, 0.1,
+		FindScaledShapeModel(hoImageDisplay, hv_ModelID, -0.39, 0.79, hv_ScaleMin, hv_ScaleMax, hv_MinScore, 0, 0.2,
 			"least_squares", 0, 0.9, &hv_Row, &hv_Column, &hv_Angle, &hv_Scale, &hv_Score);
 		ClearShapeModel(hv_ModelID);
 
@@ -108,6 +108,18 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOO
 			vPtPos.clear();
 			SetMatchedPos(vPtPos);
 			return 0;
+		}
+
+		//如果需要排序
+		if (TRUE == bSort)
+		{
+			if (nSortRow * nSortColumn != hv_Length.I())
+			{
+				vPtPos.clear();
+				SetMatchedPos(vPtPos);
+				return 0;
+			}
+			SortMtatchResult(&hv_Row, &hv_Column, &hv_Angle, &hv_Scale, &hv_Score, nSortRow, nSortColumn);
 		}
 
 		//如果找到一个或多个
@@ -121,7 +133,6 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOO
 			//hv_PosX = (hv_Column[hv_i] - hv_ImgWidth / 2) * (HTuple)m_fPixelSize;
 			//hv_PosY = (hv_Row[hv_i] - hv_ImgHeight / 2) * (HTuple)m_fPixelSize;
 			//hv_PosY = -hv_PosY;
-
 			vPtPos.push_back(CPointF(hv_PosX.D(), hv_PosY.D()));
 
 			//显示信息
@@ -164,8 +175,32 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOO
 
 }
 
+void ModelBase::SetMinScore(double fMinScore)
+{
+	if (0 >= fMinScore)
+		fMinScore = 0.1;
+	else if (1 < fMinScore)
+		fMinScore = 1;
 
-void ModelBase::SetMatchDomain(CPointF const ptPos, double const fSizeFactor)
+	m_fModelMinScore = fMinScore;
+}
+void ModelBase::SetScale(double fScaleMin, double fScaleMax)
+{
+	if (0 >= fScaleMin)
+		fScaleMin = 0.1;
+	if (0 >= fScaleMax)
+		fScaleMin = 0.1;
+
+	if (fScaleMin >= fScaleMax)
+	{
+		fScaleMin = 1;
+		fScaleMax = 1;
+	}
+
+	m_fModelScaleMin = fScaleMin;
+	m_fModelScaleMax = fScaleMax;
+}
+void ModelBase::SetMatchDomain(CPointF const ptPos, double fSizeFactor)
 {
 	m_ptMatchDomainPos = ptPos;
 	m_fMatchDomainSizeFactor = fSizeFactor;
@@ -293,6 +328,94 @@ void ModelBase::TransCameraToLogic(HTuple* hvX, HTuple* hvY, HTuple const hvRow,
 		if ((int)exception.ErrorCode() < 0)
 			throw exception;
 	}
+}
+void ModelBase::SortMtatchResult(HTuple* hvRow, HTuple* hvCol, HTuple* hvAngle, HTuple* hvScale, HTuple* hvScore, int const nCountRow, int const nCountCol)
+{
+	HTuple hvOrgRow, hvOrgCol, hvOrgAngle, hvOrgScale, hOrgScore;
+	HTuple hvSortRow, hvSortCol, hvSortAngle, hvSortScale, hvSortScore;
+	HTuple hvSortIndex, hvIndexRow, hvIndexCol, hvLength, hvIndexColLength;
+	
+	try
+	{
+		hvOrgRow = *hvRow;
+		hvOrgCol = *hvCol;
+		hvOrgAngle = *hvAngle;
+		hvOrgScale = *hvScale;
+		hOrgScore = *hvScore;
+		TupleLength(hvOrgRow, &hvLength);
+		if (nCountRow * nCountCol != hvLength.I())
+			return;
+
+		hvSortIndex = HTuple();
+		hvSortRow = HTuple();
+		hvSortCol = HTuple();
+		hvSortAngle = HTuple();
+		hvSortScale = HTuple();
+		hvSortScore = HTuple();
+		
+		TupleSortIndex(hvOrgRow, &hvIndexRow);
+		TupleSortIndex(hvOrgCol, &hvIndexCol);
+		TupleLength(hvIndexCol, &hvIndexColLength);
+
+		//遍历每一行
+		for (HTuple hv_iRow = 0; hv_iRow < hvLength; hv_iRow += nCountCol)
+		{
+			//遍历每一列
+			for (HTuple hv_iCol = 0; hv_iCol < hvIndexColLength; hv_iCol += 1)
+			{
+				//遍历某行的每一个
+				for (HTuple hv_ii = hv_iRow; hv_ii < hv_iRow + nCountCol; hv_ii += 1)
+				{
+					//如果找到了
+					if (hvIndexCol[hv_iCol] == hvIndexRow[hv_ii])
+					{
+						TupleConcat(hvSortIndex, hvIndexRow[hv_ii], &hvSortIndex);
+						TupleRemove(hvIndexCol, hv_iCol, &hvIndexCol);
+						hv_iCol -= 1;
+						hvIndexColLength -= 1;
+						break;
+					}
+				}
+			}
+		}
+
+		//std::vector<int> vecIndex;
+		//std::vector<double> vecRow, vecCol, vecScore;
+		//std::vector<double> vecSortRow, vecSortCol, vecSortScore;
+		for (HTuple hv_i = 0; hv_i < hvLength; hv_i += 1)
+		{
+			TupleConcat(hvSortRow, hvOrgRow[(HTuple)hvSortIndex[hv_i]], &hvSortRow);
+			TupleConcat(hvSortCol, hvOrgCol[(HTuple)hvSortIndex[hv_i]], &hvSortCol);
+			TupleConcat(hvSortAngle, hvOrgAngle[(HTuple)hvSortIndex[hv_i]], &hvSortAngle);
+			TupleConcat(hvSortScale, hvOrgScale[(HTuple)hvSortIndex[hv_i]], &hvSortScale);
+			TupleConcat(hvSortScore, hOrgScore[(HTuple)hvSortIndex[hv_i]], &hvSortScore);
+
+			//vecSortRow.push_back(hvOrgRow[(HTuple)hvSortIndex[hv_i]].D());
+			//vecSortCol.push_back(hvOrgCol[(HTuple)hvSortIndex[hv_i]].D());
+			//vecSortScore.push_back(hOrgScore[(HTuple)hvSortIndex[hv_i]].D());
+
+			//vecRow.push_back(hvOrgRow[hv_i].D());
+			//vecCol.push_back(hvOrgCol[hv_i].D());
+			//vecScore.push_back(hOrgScore[hv_i].D());
+
+			//vecIndex.push_back(hvSortIndex[hv_i].I());
+
+		}
+
+		*hvRow = hvSortRow;
+		*hvCol = hvSortCol;
+		*hvAngle = hvSortAngle;
+		*hvScale = hvSortScale;
+		*hvScore = hvSortScore;
+	}
+	catch (HException& exception)
+	{
+		AfxMessageBox((HString)exception.ProcName() + (CString)_T("\n") + (HString)exception.ErrorMessage());
+		//TRACE((HString)exception.ProcName() + (CString)_T("\n") + (HString)exception.ErrorMessage());
+		if ((int)exception.ErrorCode() < 0)
+			throw exception;
+	}
+
 }
 
 

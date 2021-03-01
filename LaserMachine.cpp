@@ -11,7 +11,8 @@
 #include "LaserMachineDoc.h"
 #include "LaserMachineView.h"
 #include "DeviceCardMarkBSL.h"
-#include "DeviceCardWorktableMPC2810.h"
+//#include "DeviceCardWorktableMPC2810.h"
+#include "DeviceCardWorktable.h"
 #include "CameraPosition.h"
 #include "DeviceLaserBellin.h"
 #include "CDlgDevCfgTabLaser.h"
@@ -115,9 +116,9 @@ BOOL CLaserMachineApp::InitInstance()
 	case WORKTABLE_NAME::WORKTABLE_NONE:
 		pDevCardWorktable = NULL;
 		break;
-	case WORKTABLE_NAME::WORKTABLE_MPC2810:
-		pDevCardWorktable = new CDeviceCardWorktableMPC2810;
-		break;
+	//case WORKTABLE_NAME::WORKTABLE_MPC2810:
+	//	pDevCardWorktable = new CDeviceCardWorktableMPC2810;
+	//	break;
 	default:
 		pDevCardWorktable = NULL;
 		break;
@@ -326,3 +327,5 @@ void CAboutDlg::OnBnClickedOk()
 //{
 //	return 0;
 //}
+
+
