@@ -746,7 +746,7 @@ void CDlgDevCfgTabScanner::OnBnClickedButtonScannerFindAllCaliPoints()
 
 	//自动抓标循环
 	std::vector <CPointF> vPtPosMatrixDelta, vPtPosMatrixReal;
-	pModel->LocateModel(vPtPosMatrixReal, FALSE, FALSE, TRUE, nCtMatrix, nCtMatrix);
+	pModel->LocateModel(vPtPosMatrixReal, TRUE, TRUE, TRUE, nCtMatrix, nCtMatrix);
 	if ((size_t)nCtMatrix * nCtMatrix != vPtPosMatrixReal.size())
 	{
 		delete pModel;
@@ -754,11 +754,15 @@ void CDlgDevCfgTabScanner::OnBnClickedButtonScannerFindAllCaliPoints()
 		AfxMessageBox(_T("没有找到所有mark点"));
 		return;
 	}
+
+	//根据抓标结果生成目标点阵
+	CPointF ptCameraPos;
+	ptCameraPos.x = ReadDevCameraPosX();
+	ptCameraPos.y = ReadDevCameraPosY();
 	for (int i = 0; i < nCtMatrix * nCtMatrix; i++)
 	{
-		CPointF ptDelta;
-		ptDelta = vPtPosMatrixReal[i] - vPtPosMatrixDext[i];
-		vPtPosMatrixDelta.push_back(ptDelta);
+		vPtPosMatrixReal[i] += ptCameraPos;
+		vPtPosMatrixDelta.push_back(vPtPosMatrixReal[i] - vPtPosMatrixDext[i]);
 	}
 
 	//生成.txt corReal或corDelta

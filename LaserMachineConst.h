@@ -6,9 +6,9 @@
 //窗口位置尺寸
 #define	MainWindowsWidth		1680
 #define MainWindowsHight		1050
-#define ControlWindowsWidth		260
-#define ObPrtyWindowsWidth		300
-#define CamPosWindowsWidth		300
+#define ControlWindowsWidth		0
+#define ObPrtyWindowsWidth		305
+#define CamPosWindowsWidth		305
 
 #define MultipeScroll			1.2		//鼠标滚轮缩放倍率
 #define MultipeScrollMin		0.0001	//鼠标滚轮缩放倍率

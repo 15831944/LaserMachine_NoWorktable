@@ -117,4 +117,6 @@ public:
 protected:
 	double m_fMarkRadius;
 	double m_fMarkDistance;
+public:
+	afx_msg void OnBnClickedButtonCameraCaliCameraCenter();
 };

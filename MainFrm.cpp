@@ -132,7 +132,7 @@ BOOL CMainFrame::OnCreateClient(LPCREATESTRUCT /*lpcs*/,
 	if (!m_wndSplitter.CreateView(0, 2, RUNTIME_CLASS(CObjectProperty),
 		CSize(0, 0), pContext))
 		return FALSE;
-	m_bObPrtyWindows_Hide = true;
+	m_bObPrtyWindows_Hide = false;
 
 	//相机定位设置窗口,位于主窗口右侧,固定宽度,可关闭和打开.默认关闭
 	if (!m_wndSplitter.CreateView(0, 3, RUNTIME_CLASS(CCameraPosition),

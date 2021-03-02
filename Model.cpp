@@ -40,7 +40,7 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOO
 		::SendMessage(GetHwndShow(), WM_SHOW_CONTOUR, FALSE, NULL);
 
 		//HObject hoReadImg;
-		//ReadImage(&hoReadImg, "D://YuanLu//4. Halcon//CCD Sample//imgCameraImage6.bmp");
+		//ReadImage(&hoReadImg, "D://YuanLu//4. Halcon//CCD Sample//2021-03-02_15_08_16_363.bmp");
 		//SetImage(hoReadImg);
 		SetImage();
 
@@ -59,7 +59,7 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOO
 		if (hv_Class == HTuple("image"))
 		{
 			//设置局部抓图参数
-			if (CPointF(0, 0) != m_ptMatchDomainPos && 0 != m_fMatchDomainSizeFactor)
+			if (0 != m_fMatchDomainSizeFactor)
 			{			
 				HTuple hv_RgnRow, hv_RgnCol, hv_RgnWidth, hv_RgnHeight;
 
@@ -76,7 +76,7 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOO
 		}
 		else
 		{
-			if (CPointF(0, 0) != m_ptMatchDomainPos && 0 != m_fMatchDomainSizeFactor)
+			if (0 != m_fMatchDomainSizeFactor)
 			{
 				HTuple hv_RgnRow, hv_RgnCol, hv_RgnWidth, hv_RgnHeight;
 				HTuple hv_RgnRow1, hv_RgnCol1, hv_RgnRow2, hv_RgnCol2;
@@ -152,6 +152,15 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOO
 			}
 		}
 
+		////CString strCS;
+		////strCS = (HString)hv_String[0].S();
+		//HString strHS = (hv_String.TupleConcat(hv_Row)).TupleConcat(hv_Column);
+		//HTuple hsLength;
+		//TupleLength(strHS, &hsLength);
+
+		//char* pChText = new char[255];
+		//memset(pChText, 0x00, 255);
+		//sprintf_s(pChText, 255, "%s", hv_String[0].S().Text());
 
 		if (bShowText)
 			::SendMessage(GetHwndShow(), WM_SHOW_TEXT, TRUE, (LPARAM)&((hv_String.TupleConcat(hv_Row)).TupleConcat(hv_Column)));

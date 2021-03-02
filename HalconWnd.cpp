@@ -2261,7 +2261,7 @@ void CHalconWnd::ShowStringMask()
 	TupleLength(m_hvStringRow, &hv_Length);
 	for (HTuple hv_i = 0; hv_i.Continue(hv_Length - 1, 1); hv_i += 1)
 	{
-		DispText(m_hWindow, m_hvString[hv_i] + "\n" + m_hvString[hv_i+1], "image", m_hvStringRow[hv_i], m_hvStringColumn[hv_i], "black", HTuple(), HTuple());
+		DispText(m_hWindow, m_hvString[hv_i * 2] + "\n" + m_hvString[hv_i * 2 + 1], "image", m_hvStringRow[hv_i], m_hvStringColumn[hv_i], "black", HTuple(), HTuple());
 	}
 }
 
@@ -2407,6 +2407,9 @@ afx_msg LRESULT CHalconWnd::OnShowText(WPARAM wParam, LPARAM lParam)
 		HTuple hvString, hvRow, hvCol;
 		HTuple hvLength, hvLengthBy4, hvI;
 		
+		hvString = HTuple();
+		hvRow = HTuple();
+		hvCol = HTuple();
 		TupleLength(hvMixedText, &hvLength);
 		hvLengthBy4 = hvLength / 4;
 		for (hvI = 0; hvI.Continue(2 * hvLengthBy4 - 1, 1); hvI += 1)

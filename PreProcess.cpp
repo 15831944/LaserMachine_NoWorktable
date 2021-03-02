@@ -118,6 +118,7 @@ BOOL CPreProcess::DoSingleGrid(CMachineListContainer* pObjList)
 	ObjRect rtBorder = pObjList->GetObjBound();
 	double fScannerRegion;
 	fScannerRegion = ReadScannerCaliRegion();
+	fScannerRegion *= 1.05;
 
 	if (rtBorder.max_x - rtBorder.min_x > fScannerRegion || rtBorder.max_y - rtBorder.min_y > fScannerRegion)
 	{
