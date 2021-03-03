@@ -287,6 +287,7 @@ public:
 	BOOL SetStringMask(HTuple hvString, HTuple hvRow, HTuple hvColumn);
 	void ShowStringMask();
 	int LocateModel(HalconModel& modelHalcon, std::vector<CPointF>* vPtPos, BOOL bShowModelCotour = TRUE, BOOL bShowModelString = TRUE);
+	BOOL ShowDxfContour(CString strPath);
 	///////////////////////////////与外界交互读图,定位，显示////////////////////////////
 
 

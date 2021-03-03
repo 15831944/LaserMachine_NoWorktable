@@ -2430,3 +2430,47 @@ afx_msg LRESULT CHalconWnd::OnShowText(WPARAM wParam, LPARAM lParam)
 
 	return 0;
 }
+
+
+BOOL CHalconWnd::ShowDxfContour(CString strPath)
+{
+	HObject hoConntour, hoConntourScale, hoConntourRgn, hoConntourRealSize;
+	HTuple hv_DxfStatus;
+	HTuple hv_HomMat2DIdentity, hv_HomMat2DScale, hv_Scale;
+	HTuple hv_Area, hv_RowCenter, hv_ColumnCenter;
+	HTuple hv_Height, hv_Width, hv_HomMat2D;
+	HTuple hv_CameraX, hv_CameraY;
+	try
+	{
+		ReadContourXldDxf(&hoConntour, (HString)strPath, HTuple(), HTuple(), &hv_DxfStatus);
+		hv_Width = m_nImageWidth;
+		hv_Height = m_nImageHeight;
+		hv_Scale = 1 / ReadDevCameraPixelSize();
+		hv_CameraX = ReadDevCameraPosX();
+		hv_CameraY = ReadDevCameraPosY();
+		hv_CameraX *= hv_Scale;
+		hv_CameraY *= hv_Scale;
+		hv_CameraY = -hv_CameraY;
+		HomMat2dIdentity(&hv_HomMat2DIdentity);
+		HomMat2dScale(hv_HomMat2DIdentity, hv_Scale, hv_Scale, 0, 0, &hv_HomMat2DScale);
+		AffineTransContourXld(hoConntour, &hoConntourScale, hv_HomMat2DScale);
+		GenRegionContourXld(hoConntourScale, &hoConntourRgn, "filled");
+		Union1(hoConntourRgn, &hoConntourRgn);
+		AreaCenter(hoConntourRgn, &hv_Area, &hv_RowCenter, &hv_ColumnCenter);
+		HomMat2dTranslate(hv_HomMat2DScale, hv_Height / 2 - hv_RowCenter - hv_CameraY, hv_Width / 2 - hv_ColumnCenter - hv_CameraX, &hv_HomMat2D);
+		AffineTransContourXld(hoConntour, &hoConntourRealSize, hv_HomMat2D);
+		SetContourMask(hoConntourRealSize);
+	}
+	catch (HException& exception)
+	{
+		AfxMessageBox((HString)exception.ProcName() + (CString)_T("\n") + (HString)exception.ErrorMessage());
+		TRACE((HString)exception.ProcName() + (CString)_T("\n") + (HString)exception.ErrorMessage());
+
+		if ((int)exception.ErrorCode() < 0)
+			throw exception;
+
+		return FALSE;
+	}
+
+	return TRUE;
+}

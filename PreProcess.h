@@ -104,8 +104,8 @@ public:
 	BOOL WriteEntitiesToBuffer(VecEntities& vecEntities);
 
 	//×¥°ÐÏà¹Ø
-	BOOL GenMarkPointModel(HalconModel* pHalconModel, CMachineObj_Comm* pObj, double fCrossWidth = 10);
-	BOOL GenMarkPointModel(ModelBase **ppModel, CMachineObj_Comm* pObj, double fCrossWidth = 10);
+	BOOL GenMarkPointModel(HalconModel* pHalconModel, CMachineObj_Comm* pObj, double fCrossWidth = 0.25);
+	BOOL GenMarkPointModel(ModelBase **ppModel, CMachineObj_Comm* pObj, CMachineListContainer* pList);
 
 };
 

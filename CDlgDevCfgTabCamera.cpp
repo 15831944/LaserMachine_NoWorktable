@@ -198,7 +198,7 @@ void SetDevCameraPixelSize(double fCameraPixelSize)
 double ReadDevCameraPixelSize()
 {
 	CString strTmp;
-	GetPrivateProfileString(_T("DeviceCamera"), _T("CAMERA_PIXEL_SIZE"), _T("0"), strTmp.GetBuffer(MAX_DOUBLE_PRECISION), MAX_DOUBLE_PRECISION, CONFIG_INI_PATH);
+	GetPrivateProfileString(_T("DeviceCamera"), _T("CAMERA_PIXEL_SIZE"), _T("1"), strTmp.GetBuffer(MAX_DOUBLE_PRECISION), MAX_DOUBLE_PRECISION, CONFIG_INI_PATH);
 	return (double)_ttof(strTmp);
 }
 

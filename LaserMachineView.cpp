@@ -18,6 +18,7 @@
 #include "XSleep.h"
 #include "PreProcess.h"
 #include "Model.h"
+#include "CDlgDevCfgTabCamera.h"
 
 
 
@@ -838,11 +839,12 @@ void CLaserMachineView::OnSetparaGrid()
 
 afx_msg LRESULT CLaserMachineView::OnStartMark(WPARAM wParam, LPARAM lParam)
 {
-	//if (NULL == pDevCardMark)
-	//{
-	//	//AfxMessageBox(_T("打标卡未初始化"));
-	//	return 1;
-	//}
+
+	if (NULL == pDevCardMark)
+	{
+		AfxMessageBox(_T("打标卡未初始化"));
+		return 1;
+	}
 
 	//判断是否抓靶
 	m_bLocate = (BOOL)wParam;

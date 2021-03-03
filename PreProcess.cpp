@@ -1491,7 +1491,7 @@ int CPreProcess::GenMarkPoints(std::vector <CPointF>& vPtPosDestinedMark, std::v
 		//找到一个mark点
 		//生成mark点模板
 		ModelBase* pModel = NULL;
-		if (FALSE == GenMarkPointModel(&pModel, pObj))
+		if (FALSE == GenMarkPointModel(&pModel, pObj, pObjList))
 		{
 			continue;
 		}
@@ -1521,27 +1521,32 @@ int CPreProcess::GenMarkPoints(std::vector <CPointF>& vPtPosDestinedMark, std::v
 
 	return nIndexMarkPoint;
 }
-BOOL CPreProcess::GenMarkPointModel(ModelBase **ppModel, CMachineObj_Comm* pObj, double fCrossWidth)
+BOOL CPreProcess::GenMarkPointModel(ModelBase **ppModel, CMachineObj_Comm* pObj, CMachineListContainer* pList)
 {
+	double fPixelSize = ReadDevCameraPixelSize();
+	double fCameraPosX = ReadDevCameraPosX();
+	double fCameraPosY = ReadDevCameraPosY();
+	CPointF ptCameraPos(fCameraPosX, fCameraPosY);
+	ObjRect rtListBorder = pList->GetObjBound();
+	CPointF ptListCenter((rtListBorder.max_x + rtListBorder.min_x) / 2, (rtListBorder.max_y + rtListBorder.min_y) / 2);
+
 	if (MachineObj_Type_Circle == pObj->GetObjType())
 	{
 		CMachineObjCircle* pObjCircle = (CMachineObjCircle*)pObj;
 		double fRadius = pObjCircle->GetCircleRadius();
-		double fPixelSize = ReadDevCameraPixelSize();
-		CPointF ptCenter(pObjCircle->GetCircleCenter().x, pObjCircle->GetCircleCenter().y);
+		CPointF ptObjCenter(pObjCircle->GetCircleCenter().x, pObjCircle->GetCircleCenter().y);
 
 		*ppModel = ModelFactory::creatModel(ModelType::MT_Circle, fPixelSize, fRadius);
-		(*ppModel)->SetMatchDomain(ptCenter, 2);
+		(*ppModel)->SetMatchDomain(ptObjCenter - ptListCenter + ptCameraPos, 4);
 	}
 	else if (MachineObj_Type_Group == pObj->GetObjType())
 	{
-		ObjRect rtBorder = pObj->GetObjBound();
-		double fCrossLength = rtBorder.max_x - rtBorder.min_x;
-		double fPixelSize = ReadDevCameraPixelSize();
-		CPointF ptCenter((rtBorder.max_x + rtBorder.min_x) / 2, (rtBorder.max_y + rtBorder.min_y) / 2);
+		ObjRect rtObjBorder = pObj->GetObjBound();
+		double fCrossLength = rtObjBorder.max_x - rtObjBorder.min_x;
+		CPointF ptObjCenter((rtObjBorder.max_x + rtObjBorder.min_x) / 2, (rtObjBorder.max_y + rtObjBorder.min_y) / 2);
 
-		*ppModel = ModelFactory::creatModel(ModelType::MT_Cross, fPixelSize, fCrossLength, fCrossWidth);
-		(*ppModel)->SetMatchDomain(ptCenter, 2);
+		*ppModel = ModelFactory::creatModel(ModelType::MT_Cross, fPixelSize, fCrossLength, 0.25);
+		(*ppModel)->SetMatchDomain(ptObjCenter - ptListCenter + ptCameraPos, 4);
 	}
 	else
 		return FALSE;
@@ -1562,6 +1567,7 @@ int CPreProcess::FindMarkPoints(std::vector <CPointF>& vPtPosRealMark, std::vect
 		CPointF ptFinded(0,0);
 		std::vector <CPointF> vPtPos;
 		valModel.LocateModel(vPtPos);
+
 
 		int nCount = vPtPos.size();
 		if (0 >= nCount)

@@ -11,6 +11,7 @@
 #include "CDlgDevCfgTabCamera.h"
 #include "XSleep.h"
 #include "Model.h"
+#include "LaserMachineDoc.h"
 
 // CCameraView
 
@@ -67,6 +68,7 @@ BEGIN_MESSAGE_MAP(CCameraView, CScrollView)
 	ON_MESSAGE(WM_LOCATE, &CCameraView::OnLocate)
 	ON_COMMAND(IDM_CAMERA_AUTO_MATCH_CROSS, &CCameraView::OnCameraAutoMatchCross)
 	ON_COMMAND(IDM_CAMERA_AUTO_MATCH_CIRCLE, &CCameraView::OnCameraAutoMatchCircle)
+	ON_COMMAND(IDM_CAMERA_SHOW_DXF, &CCameraView::OnCameraShowDxf)
 END_MESSAGE_MAP()
 
 
@@ -392,7 +394,7 @@ afx_msg LRESULT CCameraView::OnLocate(WPARAM wParam, LPARAM lParam)
 
 void CCameraView::OnCameraAutoMatchCross()
 {
-	// TODO: 在此添加命令处理程序代码
+	//TODO: 在此添加命令处理程序代码
 	if (FALSE == m_pHalconWnd->m_bThreadsAreRunning)
 	{
 		AfxMessageBox(_T("请先打开相机"));
@@ -413,6 +415,8 @@ void CCameraView::OnCameraAutoMatchCross()
 
 	std::vector<CPointF> vecPtPos;
 	pModel->LocateModel(vecPtPos);
+	delete pModel;
+	pModel = NULL;
 }
 
 
@@ -438,5 +442,25 @@ void CCameraView::OnCameraAutoMatchCircle()
 
 	std::vector<CPointF> vecPtPos;
 	pModel->LocateModel(vecPtPos);
+	delete pModel;
+	pModel = NULL;
+}
 
+
+void CCameraView::OnCameraShowDxf()
+{
+	// TODO: 在此添加命令处理程序代码
+	CLaserMachineDoc* pDoc = (CLaserMachineDoc*)((CMainFrame*)(AfxGetApp()->m_pMainWnd))->GetActiveDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return;
+
+	CString strPath;
+	strPath = pDoc->GetPathName();
+	strPath = strPath.Left(strPath.ReverseFind('.'));
+
+	if (strPath.IsEmpty())
+		return;
+
+	m_pHalconWnd->ShowDxfContour(strPath);
 }

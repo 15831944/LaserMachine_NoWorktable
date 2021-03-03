@@ -196,6 +196,8 @@ BEGIN
         MENUITEM "自动抓十字",                       IDM_CAMERA_AUTO_MATCH_CROSS
         MENUITEM "自动抓圆",                        IDM_CAMERA_AUTO_MATCH_CIRCLE
         MENUITEM "手动抓圆",                        ID_TEST_HALCON_FIND_CIRCLE_HAND
+        MENUITEM SEPARATOR
+        MENUITEM "显示DXF",                       32810
     END
 END
 

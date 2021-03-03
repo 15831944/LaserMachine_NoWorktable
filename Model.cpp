@@ -40,7 +40,7 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOO
 		::SendMessage(GetHwndShow(), WM_SHOW_CONTOUR, FALSE, NULL);
 
 		//HObject hoReadImg;
-		//ReadImage(&hoReadImg, "D://YuanLu//4. Halcon//CCD Sample//2021-03-02_15_08_16_363.bmp");
+		//ReadImage(&hoReadImg, "D://YuanLu//4. Halcon//CCD Sample//2021-03-03_14_23_56_201.bmp");
 		//SetImage(hoReadImg);
 		SetImage();
 
@@ -151,16 +151,6 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOO
 				ConcatObj(m_hoContourAffine, hoModelContourAffine, &m_hoContourAffine);
 			}
 		}
-
-		////CString strCS;
-		////strCS = (HString)hv_String[0].S();
-		//HString strHS = (hv_String.TupleConcat(hv_Row)).TupleConcat(hv_Column);
-		//HTuple hsLength;
-		//TupleLength(strHS, &hsLength);
-
-		//char* pChText = new char[255];
-		//memset(pChText, 0x00, 255);
-		//sprintf_s(pChText, 255, "%s", hv_String[0].S().Text());
 
 		if (bShowText)
 			::SendMessage(GetHwndShow(), WM_SHOW_TEXT, TRUE, (LPARAM)&((hv_String.TupleConcat(hv_Row)).TupleConcat(hv_Column)));
