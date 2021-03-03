@@ -643,10 +643,11 @@ void CPreProcess::GetGridCenter(int nGridIndex, double* pGridCenterX, double* pG
 
 BOOL CPreProcess::WriteEntitiesPerGridToBuffer(int nGridIndex, CMachineListContainer* pObjList)
 {
-
+	//debug333
 	if (NULL == pDevCardMark)
 		return FALSE;
 
+	//debug333
 	//先清空打标卡缓冲区
 	if (!pDevCardMark->DeleteALLEntities())
 		return FALSE;
@@ -804,14 +805,17 @@ BOOL CPreProcess::WriteEntitiesToBuffer(VecEntities& vecEntities)
 				ptBuf[i][1] = line[i].y();
 			}
 
+			//debug333
 			//将对象写入板卡缓冲区
 			if (FALSE == pDevCardMark->AddEntityLines(nCountPt, ptBuf, nPenNo))
 			{
 				//AfxMessageBox(_T("切割模式return flase"));
 				delete[] ptBuf;
+				ptBuf = NULL;
 				return FALSE;
 			}
 			delete[] ptBuf;
+			ptBuf = NULL;
 		}
 	}
 	return TRUE;
@@ -1031,8 +1035,8 @@ void CPreProcess::LoadMachineObjList(VecEntities& vecEntities, CMachineListConta
 
 void CPreProcess::LoadMachineObj(VecEntities& vecEntities, CMachineObj_Comm* pObj)
 {
-	//滤过mark层
-	if (LayerNum_Mark == pObj->m_ObjByLayer)
+	//滤过不加工的层
+	if (LayerNum_Default > pObj->m_ObjByLayer)
 		return;
 
 	//提前初始化供case MachineObj_Type_Polyline使用

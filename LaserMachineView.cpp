@@ -983,7 +983,7 @@ UINT CLaserMachineView::MarkProcRun(LPVOID lpParam)
 	CLaserMachineView* pView = (CLaserMachineView*)lpParam;
 	//const HWND hPostDlg = pView->GetSafeHwnd();
 	
-		//读对象链表
+	//读对象链表
 	EnterCriticalSection(&pView->ProcObjListMutex);        // CriticalSect
 	CMachineListContainer* pList = pView->m_pLaserObjList;
 	BOOL bLocate = pView->m_bLocate;
@@ -993,11 +993,17 @@ UINT CLaserMachineView::MarkProcRun(LPVOID lpParam)
 	if (FALSE == preProcess.AutoPreProcess1(pList, bLocate))
 		return 1;
 
+
 	if (WAIT_OBJECT_0 == WaitForSingleObject((pView->MarkProcStopEvent), 0))
 		return 1;
 
 	//导入对象，开始加工
 	preProcess.WriteEntitiesPerGridToBuffer(0, pList);
+
+	////debug333
+	//MessageBoxTimeout(NULL, _T("Done"), _T("提示"), MB_OK, 0, 1000);
+	//return 0;
+
 	pDevCardMark->SetPensFromAllLayers(pList);
 
 	if (WAIT_OBJECT_0 == WaitForSingleObject((pView->MarkProcStopEvent), 0))

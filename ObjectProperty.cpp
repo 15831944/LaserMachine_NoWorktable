@@ -15,6 +15,13 @@ IMPLEMENT_DYNCREATE(CObjectProperty, CFormView)
 
 CObjectProperty::CObjectProperty()
 	: CFormView(CObjectProperty::IDD)
+	, m_LaserOnDelay(gLaserOnDelay)
+	, m_LaserOffDelay(gLaserOffDelay)
+	, m_BeforMarkDelay(gBeforMarkDelay)
+	, m_AfterMarkDelay(gAfterMarkDelay)
+	, m_PolylineDelay(gPolylineDelay)
+	, m_Rise_Lenth_Step(0)
+	, m_WaitTime(0)
 {
 	m_Init_Flag = FALSE;
 	m_bLocate = FALSE;
