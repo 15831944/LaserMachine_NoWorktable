@@ -436,7 +436,7 @@ BOOL CDeviceCardMarkBSL::SetPensFromAllLayers(CMachineListContainer* pObjList)
 		penParaTmp.nLaserOffTC = gLaserOffDelay;									//激光关闭延时us 
 		penParaTmp.nEndTC = gAfterMarkDelay;										//结束延时us
 		penParaTmp.nPolyTC = gPolylineDelay;										//拐角延时us	
-		penParaTmp.nJumpPosTC = gBeforMarkDelay;									//标刻后延时
+		penParaTmp.nJumpPosTC = gBeforMarkDelay;									//标刻后延时/跳转延时
 
 		//将penPara写入卡中
 		BSL_SetPenParam func = (BSL_SetPenParam)::GetProcAddress(m_hMarkDll, "SetPenParam");

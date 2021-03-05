@@ -35,19 +35,36 @@ typedef struct TagObjVPoint
 // 加工参数
 typedef struct TagProcessPara
 {
-	BYTE  Times;		//加工次数
+	UINT  Times;		//加工次数
 	float Speed;		//加工速度 单位mm/s
 	float Power;		//激光功率 0-100%
 	UINT  Frequncy;		//频率 单位Hz
 	float PulseWidth;	//脉宽 单位us
-	TagProcessPara() :Times(0), Speed(0), Power(0), Frequncy(0), PulseWidth(0){}
-	TagProcessPara(BYTE  Times, float Speed, float Power,
-		UINT  Frequncy, float PulseWidth) :Times(Times), Speed(Speed), Power(Power),
-		Frequncy(Frequncy), PulseWidth(PulseWidth){}
+	float LaserOnDelay;		//开光延时
+	float LaserOffDelay;	//关光延时
+	float BeforMarkDelay;	//标记前延时
+	float AfterMarkDelay;	//标记后延时
+	float PolylineDelay;	//拐角延时
+	TagProcessPara() :Times(0), Speed(0), Power(0), Frequncy(0), PulseWidth(0),
+		LaserOnDelay(0), LaserOffDelay(0), BeforMarkDelay(0), AfterMarkDelay(0),
+		PolylineDelay(0){}
+	TagProcessPara(UINT  Times, float Speed, float Power, UINT  Frequncy,
+		float PulseWidth, float LaserOnDelay, float LaserOffDelay,
+		float BeforMarkDelay, float AfterMarkDelay, float PolylineDelay) :Times(Times),
+		Speed(Speed), Power(Power), Frequncy(Frequncy), PulseWidth(PulseWidth),
+		LaserOnDelay(LaserOnDelay), LaserOffDelay(LaserOffDelay), BeforMarkDelay(BeforMarkDelay),
+		AfterMarkDelay(AfterMarkDelay), PolylineDelay(PolylineDelay){}
 } ProcessPara;
 
 // 弧线加工方向
 typedef enum TagObjDir { CW = 0, CCW = 1 } ObjDir;
+
+// 对象状态
+#define	IsObjNormal		0	//正常
+#define IsObjSel		1	//选中
+#define IsObjChange		2	//已经改变
+#define	IsObjLocked		4	//锁定
+#define IsObjClosed		8	//关闭
 
 //* 自定义加工对象类型ID *
 #define  MachineObj_Type_Invaild		0xffff			//无效对象
@@ -74,6 +91,7 @@ typedef enum TagObjDir { CW = 0, CCW = 1 } ObjDir;
 #define  LayerNum_Reserve1				3				//保留1
 #define  LayerNum_Reserve2				4				//保留2
 #define  LayerNum_Default				5				//缺省图层为层5,加工物件的起始层
+
 
 //* 图形显示用画笔颜色 *
 #define	 PenColor_Sel			RGB(255, 0, 0)		//红画笔-用于显示选中对象
@@ -103,3 +121,4 @@ typedef enum TagObjDir { CW = 0, CCW = 1 } ObjDir;
 #define filesendflag	0x01300406c5e87632
 
 #define Zero			0.000000001
+

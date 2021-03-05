@@ -19,6 +19,11 @@ using namespace HalconCpp;
 #define WM_SHOW_CONTOUR WM_USER + 211
 #define WM_SHOW_TEXT WM_USER + 212
 
+//Dxf相机窗口旋转，偏移
+extern CPointF g_ptDxfTranslate;
+extern double g_fDxfRotate;
+
+
 ////////////////////////////////////////////////////////////////
 //multiThread
 #define MAX_BUFFERS 3
@@ -283,11 +288,12 @@ public:
 	HImage GetImageDisplay();
 	BOOL ClearContourMask();
 	BOOL SetContourMask(HObject hoContour);
+	BOOL MoveContourMask(HTuple hvTransX, HTuple hvTransY, HTuple hvRotate);
 	BOOL ClearStringMask();
+	BOOL ShowDxfContourMask(CString strPath);
 	BOOL SetStringMask(HTuple hvString, HTuple hvRow, HTuple hvColumn);
 	void ShowStringMask();
 	int LocateModel(HalconModel& modelHalcon, std::vector<CPointF>* vPtPos, BOOL bShowModelCotour = TRUE, BOOL bShowModelString = TRUE);
-	BOOL ShowDxfContour(CString strPath);
 	///////////////////////////////与外界交互读图,定位，显示////////////////////////////
 
 

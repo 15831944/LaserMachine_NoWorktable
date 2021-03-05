@@ -2,6 +2,7 @@
 #include "PreProcess.h"
 #include "CDlgDevCfgTabCamera.h"
 #include "CDlgDevCfgTabScanner.h"
+#include "CameraView.h"
 #include <math.h>
 
 CPreProcess::CPreProcess()
@@ -476,14 +477,23 @@ void CPreProcess::CalculateSingleTrans(CMachineListContainer* pObjList, int nCou
 	//计算平移旋转拉伸
 	if (0 == nCountMark)
 	{
-		//无mark点 以图中分格左下角+当前位置振镜中心为原点
-		ptOrg[0] = (rtBound.max_x - rtBound.min_x) / 2;
-		ptOrg[1] = (rtBound.max_y - rtBound.min_y) / 2;
+		//无mark点 以链表外框中心为锚点，以相机视角dxf位置计算旋转偏移
+		ptOrg[0] = (rtBound.max_x + rtBound.min_x) / 2;
+		ptOrg[1] = (rtBound.max_y + rtBound.min_y) / 2;
 		ptScale[0] = 1;
 		ptScale[1] = 1;
-		*fRotateDegree = 0;
-		ptReal[0] = 0;
-		ptReal[1] = 0;
+		*fRotateDegree = -g_fDxfRotate;		//ccw to cw
+		ptReal[0] = g_ptDxfTranslate.x;
+		ptReal[1] = g_ptDxfTranslate.y;
+		////无mark点 以图中分格左下角+当前位置振镜中心为原点
+		//ptOrg[0] = (rtBound.max_x - rtBound.min_x) / 2;
+		//ptOrg[1] = (rtBound.max_y - rtBound.min_y) / 2;
+		//ptScale[0] = 1;
+		//ptScale[1] = 1;
+		//*fRotateDegree = 0;
+		//ptReal[0] = 0;
+		//ptReal[1] = 0;
+
 	}
 	else
 	{
@@ -583,9 +593,11 @@ void CPreProcess::DoTrans(double ptOrg[2], double ptScale[2], double fRotateDegr
 		bg::transform(polyTranslate, polyScale, scale);
 		bgt::rotate_transformer<boost::geometry::degree, double, 2, 2> rotate(fRotateDegree);
 		bg::transform(polyScale, polyRotate, rotate);
-		bgt::translate_transformer<double, 2, 2> translateReal(ptReal[0], ptReal[1]);
-		bg::transform(polyRotate, polyReal, translateReal);
-		prcEntPerGridTmp.polyGrid = polyReal;
+		//grid不平移， 相当于图平移
+		prcEntPerGridTmp.polyGrid = polyRotate;
+		//bgt::translate_transformer<double, 2, 2> translateReal(ptReal[0], ptReal[1]);
+		//bg::transform(polyRotate, polyReal, translateReal);
+		//prcEntPerGridTmp.polyGrid = polyReal;
 
 		//对每个grid中的对象操作
 		for (auto valEnt : vecEntTmp)
@@ -1626,6 +1638,7 @@ BOOL CPreProcess::AutoPreProcess1(CMachineListContainer* pList, BOOL bLocate)
 
 	//计算平移旋转
 	DoSingleTrans(pList, nCountMarkPoints, vPtPosDestinedMark, vPtPosRealMark);
+
 
 	return TRUE;
 }

@@ -20,6 +20,10 @@ static char THIS_FILE[] = __FILE__;
 HObject g_hoModelCircleImage;
 HTuple	g_hvCircleRadiusPixel = 0;
 
+//Dxf相机窗口旋转，偏移
+CPointF g_ptDxfTranslate = CPointF();
+double g_fDxfRotate = 0;
+
 // Helper function to get client rect with possible
 // modification by adding scrollbar width/height.
 static void GetClientRectSB(CWnd* pWnd, CRect& rect)
@@ -959,6 +963,8 @@ void CHalconWnd::OnCloseCamera()
 		ClearStringMask();
 		SetEvent(fgStopEvent);
 		m_bThreadsAreRunning = FALSE;
+		g_ptDxfTranslate = CPointF();
+		g_fDxfRotate = 0;
 	}
 }
 
@@ -2234,6 +2240,68 @@ BOOL CHalconWnd::SetContourMask(HObject hoContour)
 	m_hoContourMask = hoContour;
 	return TRUE;
 }
+BOOL CHalconWnd::MoveContourMask(HTuple hvTransX, HTuple hvTransY, HTuple hvRotate)
+{
+	HTuple hv_Width, hv_Height, hv_CameraX, hv_CameraY, hv_PixelSize;
+	HTuple hv_RowCenter, hv_ColumnCenter;
+	HTuple hv_HomMat2D, hv_HomMat2DTranslate, hv_HomMat2DRotate, hv_HomMat2DTrans;
+	HTuple hv_PosX, hv_PosY;
+	HTuple hv_TransPixelX, hv_TransPixelY;
+	HTuple hv_RowOrg, hv_ColumnOrg, hv_AngleOrg;
+	try
+	{
+		if (IsXldEmpty(&m_hoContourMask))
+			return FALSE;
+
+		hv_Width = m_nImageWidth;
+		hv_Height = m_nImageHeight;
+		hv_PixelSize = ReadDevCameraPixelSize();
+		hv_CameraX = ReadDevCameraPosX();
+		hv_CameraY = ReadDevCameraPosY();
+		hv_CameraX = hv_CameraX / hv_PixelSize;
+		hv_CameraY = hv_CameraY / hv_PixelSize;
+		hv_CameraY = -hv_CameraY;
+		hv_RowCenter = hv_Height / 2 - hv_CameraY;
+		hv_ColumnCenter = hv_Width / 2 - hv_CameraX;
+
+		hv_PosX = g_ptDxfTranslate.x;
+		hv_PosY = g_ptDxfTranslate.y;
+		hv_PosX = hv_PosX / hv_PixelSize;
+		hv_PosY = hv_PosY / hv_PixelSize;
+		hv_PosY = -hv_PosY;
+		hv_RowOrg = hv_RowCenter + hv_PosY;
+		hv_ColumnOrg = hv_ColumnCenter + hv_PosX;
+		hv_AngleOrg = 0;
+
+		hv_TransPixelX = hvTransX / hv_PixelSize;
+		hv_TransPixelY = hvTransY / hv_PixelSize;
+		hv_TransPixelY = -hv_TransPixelY;
+
+		VectorAngleToRigid(hv_RowOrg, hv_ColumnOrg, hv_AngleOrg.TupleRad(), hv_RowOrg + hv_TransPixelY, hv_ColumnOrg + hv_TransPixelX, (hv_AngleOrg+hvRotate).TupleRad(), &hv_HomMat2D);
+		AffineTransContourXld(m_hoContourMask, &m_hoContourMask, hv_HomMat2D);
+		
+		//HomMat2dIdentity(&hv_HomMat2D);
+		//HomMat2dRotate(hv_HomMat2D, hvRotate.TupleRad(), hv_RowCenter, hv_ColumnCenter, &hv_HomMat2DRotate);
+		//HomMat2dTranslate(hv_HomMat2DRotate, hvTransY, hvTransX, &hv_HomMat2DTranslate);
+		//AffineTransContourXld(m_hoContourMask, &m_hoContourMask, hv_HomMat2DTranslate);
+	}
+	catch (HException& exception)
+	{
+		AfxMessageBox((HString)exception.ProcName() + (CString)_T("\n") + (HString)exception.ErrorMessage());
+		TRACE((HString)exception.ProcName() + (CString)_T("\n") + (HString)exception.ErrorMessage());
+
+		if ((int)exception.ErrorCode() < 0)
+			throw exception;
+
+		return FALSE;
+	}
+
+	g_ptDxfTranslate.x += hvTransX.D();
+	g_ptDxfTranslate.y += hvTransY.D();
+	g_fDxfRotate += hvRotate.D();
+
+	return TRUE;
+}
 BOOL CHalconWnd::ClearStringMask()
 {
 	m_bShowString = FALSE;
@@ -2432,17 +2500,17 @@ afx_msg LRESULT CHalconWnd::OnShowText(WPARAM wParam, LPARAM lParam)
 }
 
 
-BOOL CHalconWnd::ShowDxfContour(CString strPath)
+BOOL CHalconWnd::ShowDxfContourMask(CString strPath)
 {
-	HObject hoConntour, hoConntourScale, hoConntourRgn, hoConntourRealSize;
-	HTuple hv_DxfStatus;
-	HTuple hv_HomMat2DIdentity, hv_HomMat2DScale, hv_Scale;
-	HTuple hv_Area, hv_RowCenter, hv_ColumnCenter;
-	HTuple hv_Height, hv_Width, hv_HomMat2D;
-	HTuple hv_CameraX, hv_CameraY;
+	HObject hoContours, ContoursAffineTrans, hoRectangle;
+	HTuple hv_Row1, hv_Row2, hv_Column1, hv_Column2, hv_RowMin, hv_RowMax, hv_ColumnMin, hv_ColumnMax;
+	HTuple hv_RowCenter, hv_ColumnCenter, hv_Area, hv_PointOrder;
+	HTuple hv_HomMat2D, hv_HomMat2DReflect, hv_HomMat2DScale, hv_HomMat2DTrans;
+	HTuple hv_Height, hv_Width, hv_Scale, hv_Status, hv_CameraX, hv_CameraY;
+
 	try
 	{
-		ReadContourXldDxf(&hoConntour, (HString)strPath, HTuple(), HTuple(), &hv_DxfStatus);
+		ReadContourXldDxf(&hoContours, (HString)strPath, HTuple(), HTuple(), &hv_Status);
 		hv_Width = m_nImageWidth;
 		hv_Height = m_nImageHeight;
 		hv_Scale = 1 / ReadDevCameraPixelSize();
@@ -2451,15 +2519,24 @@ BOOL CHalconWnd::ShowDxfContour(CString strPath)
 		hv_CameraX *= hv_Scale;
 		hv_CameraY *= hv_Scale;
 		hv_CameraY = -hv_CameraY;
-		HomMat2dIdentity(&hv_HomMat2DIdentity);
-		HomMat2dScale(hv_HomMat2DIdentity, hv_Scale, hv_Scale, 0, 0, &hv_HomMat2DScale);
-		AffineTransContourXld(hoConntour, &hoConntourScale, hv_HomMat2DScale);
-		GenRegionContourXld(hoConntourScale, &hoConntourRgn, "filled");
-		Union1(hoConntourRgn, &hoConntourRgn);
-		AreaCenter(hoConntourRgn, &hv_Area, &hv_RowCenter, &hv_ColumnCenter);
-		HomMat2dTranslate(hv_HomMat2DScale, hv_Height / 2 - hv_RowCenter - hv_CameraY, hv_Width / 2 - hv_ColumnCenter - hv_CameraX, &hv_HomMat2D);
-		AffineTransContourXld(hoConntour, &hoConntourRealSize, hv_HomMat2D);
-		SetContourMask(hoConntourRealSize);
+
+		SmallestRectangle1Xld(hoContours, &hv_Row1, &hv_Column1, &hv_Row2, &hv_Column2);
+		TupleMin(hv_Row1, &hv_RowMin);
+		TupleMax(hv_Row2, &hv_RowMax);
+		TupleMin(hv_Column1, &hv_ColumnMin);
+		TupleMax(hv_Column2, &hv_ColumnMax);
+		GenRectangle2ContourXld(&hoRectangle, (hv_RowMin + hv_RowMax) / 2, (hv_ColumnMin + hv_ColumnMax) / 2, 0,
+								hv_ColumnMax - hv_ColumnMin, hv_RowMax - hv_RowMin);
+		AreaCenterXld(hoRectangle, &hv_Area, &hv_RowCenter, &hv_ColumnCenter, &hv_PointOrder);
+
+		HomMat2dIdentity(&hv_HomMat2D);
+		HomMat2dReflect(hv_HomMat2D, hv_RowCenter + 0.5, 0, hv_RowCenter + 0.5, hv_ColumnCenter, &hv_HomMat2DReflect);
+		HomMat2dScale(hv_HomMat2DReflect, hv_Scale, hv_Scale, hv_RowCenter + 0.5, hv_ColumnCenter + 0.5, &hv_HomMat2DScale);
+		HomMat2dTranslate(hv_HomMat2DScale, hv_Height / 2 - hv_RowCenter - hv_CameraY, hv_Width / 2 - hv_ColumnCenter - hv_CameraX, &hv_HomMat2DTrans);
+		AffineTransContourXld(hoContours, &ContoursAffineTrans, hv_HomMat2DTrans);
+		ClearStringMask();
+		SetContourMask(ContoursAffineTrans);
+
 	}
 	catch (HException& exception)
 	{
@@ -2471,6 +2548,9 @@ BOOL CHalconWnd::ShowDxfContour(CString strPath)
 
 		return FALSE;
 	}
+
+	g_ptDxfTranslate = CPointF();
+	g_fDxfRotate = 0;
 
 	return TRUE;
 }

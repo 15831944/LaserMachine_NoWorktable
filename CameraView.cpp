@@ -297,6 +297,46 @@ void CCameraView::OnSetparaCamera()
 BOOL CCameraView::PreTranslateMessage(MSG* pMsg)
 {
 	// TODO: 在此添加专用代码和/或调用基类
+	double fCameraMoveUnit;
+	fCameraMoveUnit = ReadDevCameraMoveUnit();
+	fCameraMoveUnit /= 1000;
+
+	switch (pMsg->message)
+	{
+	case WM_KEYDOWN:
+		switch (pMsg->wParam)
+		{
+		case VK_LEFT:
+			m_pHalconWnd->MoveContourMask(-fCameraMoveUnit, 0, 0);
+			break;
+		case VK_RIGHT:
+			m_pHalconWnd->MoveContourMask(fCameraMoveUnit, 0, 0);
+			break;
+		case VK_DOWN:
+			m_pHalconWnd->MoveContourMask(0, -fCameraMoveUnit, 0);
+			break;
+		case VK_UP:
+			m_pHalconWnd->MoveContourMask(0, fCameraMoveUnit, 0);
+			break;
+		case VK_PRIOR:
+			m_pHalconWnd->MoveContourMask(0, 0, 0.1);
+			break;
+		case VK_NEXT:
+			m_pHalconWnd->MoveContourMask(0, 0, -0.1);
+			break;
+		default:
+			break;
+		}
+		break;
+	case WM_KEYUP:
+		break;
+	default:
+		break;
+	}
+
+
+
+	/*
 	if (NULL == pDevCardWorktable)
 		return CScrollView::PreTranslateMessage(pMsg);
 
@@ -344,6 +384,7 @@ BOOL CCameraView::PreTranslateMessage(MSG* pMsg)
 	default:
 		break;
 	}
+	*/
 
 	return CScrollView::PreTranslateMessage(pMsg);
 }
@@ -462,5 +503,5 @@ void CCameraView::OnCameraShowDxf()
 	if (strPath.IsEmpty())
 		return;
 
-	m_pHalconWnd->ShowDxfContour(strPath);
+	m_pHalconWnd->ShowDxfContourMask(strPath);
 }
