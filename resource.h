@@ -36,6 +36,7 @@
 #define IDI_ICON_GRID_SIDE_T            363
 #define IDI_ICON_GRID_SIDE_R            364
 #define IDI_ICON_GRID_SIDE_D            365
+#define IDD_DIALOG_AXIS_Z_MOVE          367
 #define IDC_BTN_SAVE                    1002
 #define IDC_EDIT_PASSWORD               1004
 #define IDC_BTN_OBJ_UP                  1005
@@ -368,6 +369,8 @@
 #define IDM_CAMERA_AUTO_MATCH_CIRCLE    32808
 #define IDM_CAMERA_MANUAL_MATCH_CIRCLE  32809
 #define IDM_CAMERA_SHOW_DXF             32810
+#define ID_BUTTON_AXIS_Z_MOVE           32813
+#define IDM_CAMERA_AUTO_MATCH_BORDER    32814
 #define ID_INDICATOR_DEVICE_COORD       59144
 #define ID_INDICATOR_VIEW_COORD         59145
 #define ID_INDICATOR_USED_TIME          59146
@@ -377,8 +380,8 @@
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        367
-#define _APS_NEXT_COMMAND_VALUE         32811
+#define _APS_NEXT_RESOURCE_VALUE        369
+#define _APS_NEXT_COMMAND_VALUE         32815
 #define _APS_NEXT_CONTROL_VALUE         1286
 #define _APS_NEXT_SYMED_VALUE           310
 #endif

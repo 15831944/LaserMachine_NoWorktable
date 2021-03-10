@@ -174,6 +174,7 @@ private:
 public:
 	afx_msg void OnDestroy();
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnButtonAxisZMove();
 };
 
 #ifndef _DEBUG  // LaserMachineView.cpp 中的调试版本

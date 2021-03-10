@@ -19,7 +19,7 @@
 #include "PreProcess.h"
 #include "Model.h"
 #include "CDlgDevCfgTabCamera.h"
-
+#include "CDialogAxisZMove.h"
 
 
 #ifdef _DEBUG
@@ -72,6 +72,7 @@ BEGIN_MESSAGE_MAP(CLaserMachineView, CView)
 	ON_MESSAGE(WM_STOP_MARK, &CLaserMachineView::OnStopMark)
 	ON_WM_DESTROY()
 	ON_WM_TIMER()
+	ON_COMMAND(ID_BUTTON_AXIS_Z_MOVE, &CLaserMachineView::OnButtonAxisZMove)
 END_MESSAGE_MAP()
 
 // CLaserMachineView 构造/析构
@@ -1055,4 +1056,12 @@ void CLaserMachineView::OnTimer(UINT_PTR nIDEvent)
 	}
 
 	CView::OnTimer(nIDEvent);
+}
+
+
+void CLaserMachineView::OnButtonAxisZMove()
+{
+	// TODO: 在此添加命令处理程序代码
+	CDialogAxisZMove dlgAxisZMove;
+	dlgAxisZMove.DoModal();
 }

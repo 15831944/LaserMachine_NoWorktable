@@ -263,6 +263,9 @@
     <ClInclude Include="Model.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="CDialogAxisZMove.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LaserMachine.cpp">
@@ -446,6 +449,9 @@
       <Filter>Devices\源文件</Filter>
     </ClCompile>
     <ClCompile Include="Model.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="CDialogAxisZMove.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

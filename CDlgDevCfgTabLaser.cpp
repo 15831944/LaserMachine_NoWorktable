@@ -7,6 +7,7 @@
 #include "CDlgDevCfgTabLaser.h"
 #include "afxdialogex.h"
 #include "DeviceLaserBellin.h"
+#include "DeviceCardMarkBSL.h"
 
 
 //激光器参数
@@ -321,32 +322,37 @@ BOOL CDlgDevCfgTabLaser::PreTranslateMessage(MSG* pMsg)
 {
 	// TODO: 在此添加专用代码和/或调用基类
 
-	//根据不同控件焦点判断是那个在执行 
-	if (WM_KEYDOWN == pMsg->message && VK_RETURN == pMsg->wParam)
+	//贝林激光器调参
+	if (pDevLaser != NULL)
 	{
-		CString strEdit;
-		if (GetFocus() == GetDlgItem(IDC_EDIT_LASER_BELLIN_SET_FREQ)) 
+		//根据不同控件焦点判断是那个在执行 
+		if (WM_KEYDOWN == pMsg->message && VK_RETURN == pMsg->wParam)
 		{
-			((CEdit*)GetDlgItem(IDC_EDIT_LASER_BELLIN_SET_FREQ))->GetWindowText(strEdit);
-			pDevLaser->SetDevLaserFrequency((int)_ttoi(strEdit));
-		}
-		else if (GetFocus() == GetDlgItem(IDC_EDIT_LASER_BELLIN_SET_DIVIDER))
-		{
-			((CEdit*)GetDlgItem(IDC_EDIT_LASER_BELLIN_SET_DIVIDER))->GetWindowText(strEdit);
-			pDevLaser->SetDevLaserOutputDivider((int)_ttoi(strEdit));
-		}
-		else if (GetFocus() == GetDlgItem(IDC_EDIT_LASER_BELLIN_SET_BURST_NUM))
-		{
-			((CEdit*)GetDlgItem(IDC_EDIT_LASER_BELLIN_SET_BURST_NUM))->GetWindowText(strEdit);
-			pDevLaser->SetDevLaserBurstNumber((int)_ttoi(strEdit));
-		}
-		else if (GetFocus() == GetDlgItem(IDC_EDIT_LASER_BELLIN_SET_POWER_FACTOR))
-		{
-			((CEdit*)GetDlgItem(IDC_EDIT_LASER_BELLIN_SET_POWER_FACTOR))->GetWindowText(strEdit);
-			pDevLaser->SetDevLaserOutputPower((int)_ttoi(strEdit));
+			CString strEdit;
+			if (GetFocus() == GetDlgItem(IDC_EDIT_LASER_BELLIN_SET_FREQ)) 
+			{
+				((CEdit*)GetDlgItem(IDC_EDIT_LASER_BELLIN_SET_FREQ))->GetWindowText(strEdit);
+				pDevLaser->SetDevLaserFrequency((int)_ttoi(strEdit));
+			}
+			else if (GetFocus() == GetDlgItem(IDC_EDIT_LASER_BELLIN_SET_DIVIDER))
+			{
+				((CEdit*)GetDlgItem(IDC_EDIT_LASER_BELLIN_SET_DIVIDER))->GetWindowText(strEdit);
+				pDevLaser->SetDevLaserOutputDivider((int)_ttoi(strEdit));
+			}
+			else if (GetFocus() == GetDlgItem(IDC_EDIT_LASER_BELLIN_SET_BURST_NUM))
+			{
+				((CEdit*)GetDlgItem(IDC_EDIT_LASER_BELLIN_SET_BURST_NUM))->GetWindowText(strEdit);
+				pDevLaser->SetDevLaserBurstNumber((int)_ttoi(strEdit));
+			}
+			else if (GetFocus() == GetDlgItem(IDC_EDIT_LASER_BELLIN_SET_POWER_FACTOR))
+			{
+				((CEdit*)GetDlgItem(IDC_EDIT_LASER_BELLIN_SET_POWER_FACTOR))->GetWindowText(strEdit);
+				pDevLaser->SetDevLaserOutputPower((int)_ttoi(strEdit));
+			}
+
+			return TRUE;
 		}
 
-		return TRUE;
 	}
 
 	return CDialogEx::PreTranslateMessage(pMsg);

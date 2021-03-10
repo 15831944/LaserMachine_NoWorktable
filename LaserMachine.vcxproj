@@ -205,6 +205,7 @@
     <ClInclude Include="CameraPosition.h" />
     <ClInclude Include="CameraView.h" />
     <ClInclude Include="CButtonLongPush.h" />
+    <ClInclude Include="CDialogAxisZMove.h" />
     <ClInclude Include="CDlgDevCfgTabCamera.h" />
     <ClInclude Include="CDlgDevCfgTabLaser.h" />
     <ClInclude Include="CDlgDevCfgTabScanner.h" />
@@ -276,6 +277,7 @@
     <ClCompile Include="CameraPosition.cpp" />
     <ClCompile Include="CameraView.cpp" />
     <ClCompile Include="CButtonUpDown.cpp" />
+    <ClCompile Include="CDialogAxisZMove.cpp" />
     <ClCompile Include="CDlgDevCfgTabCamera.cpp" />
     <ClCompile Include="CDlgDevCfgTabLaser.cpp" />
     <ClCompile Include="CDlgDevCfgTabScanner.cpp" />

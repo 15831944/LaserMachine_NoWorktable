@@ -1642,3 +1642,134 @@ BOOL CPreProcess::AutoPreProcess1(CMachineListContainer* pList, BOOL bLocate)
 
 	return TRUE;
 }
+
+std::vector<CPointF> CPreProcess::GetBorderPtArray(CMachineListContainer* pList)
+{
+	POSITION pos;
+	CMachineObj_Comm* pObj;
+	pos = pList->GetObjHeadPosition();
+	while (pos)
+	{
+		pObj = pList->GetObjNext(pos);
+		if (pObj->m_ObjByLayer == LayerNum_Border)
+			break;
+	}
+
+	if (LayerNum_Border != pObj->m_ObjByLayer)
+		return std::vector<CPointF>();
+
+	if (MachineObj_Type_Polyline != pObj->GetObjType())
+		return std::vector<CPointF>();
+
+	ObjRect rtBound;
+	CPointF ptRTCenter;
+	ObjPoint ptPolylineLast, ptPolyline;
+	int nLayer = pObj->m_ObjByLayer;
+	std::vector<CPointF> vecPolylinePtBuf;
+
+	rtBound = pObj->GetObjBound();
+	ptRTCenter.x = (rtBound.max_x + rtBound.min_x) / 2;
+	ptRTCenter.y = (rtBound.max_y + rtBound.min_y) / 2;
+	double fMatchBorderArcStep = 1;
+
+			//***DrawPolyline***
+			CMachineObjPolyline* pPolyline;
+			pPolyline = (CMachineObjPolyline*)pObj;
+
+			int nVertCount;
+			double fConvexityLast;
+			//ObjPoint ptPolylineLast, ptPolyline;
+
+			nVertCount = pPolyline->GetPolylineVertexCount();
+			ptPolylineLast.x = pPolyline->GetPolylineStart().x;
+			ptPolylineLast.y = pPolyline->GetPolylineStart().y;
+			fConvexityLast = pPolyline->GetPolylineStart().convexity;
+
+			vecPolylinePtBuf.clear();
+			vecPolylinePtBuf.push_back(CPointF(ptPolylineLast.x, ptPolylineLast.y) - ptRTCenter);
+
+			for (int i = 1; i < nVertCount; i++)
+			{
+				//读当前顶点i
+				ptPolyline.x = pPolyline->GetPolylinePoint(i).x;
+				ptPolyline.y = pPolyline->GetPolylinePoint(i).y;
+
+				//检查上一个顶点i-1的凸度
+				if (0 == fConvexityLast)
+				{
+					//顶点i-1 to 顶点i 是直线
+					vecPolylinePtBuf.push_back(CPointF(ptPolyline.x, ptPolyline.y) - ptRTCenter);
+				}
+				else
+				{
+					//顶点i-1 to 顶点i 是圆弧
+					ObjPoint ArcCenter;
+					double /*ptArcCenterPos[2],*/ fArcRadius, fArcAngleStart, fArcAngleEnd;
+					int nArcDir;
+
+					pPolyline->TranPolylineToArc(
+						ptPolylineLast, ptPolyline, fConvexityLast,
+						&ArcCenter, &fArcRadius, &fArcAngleStart, &fArcAngleEnd);
+					nArcDir = (fArcAngleStart > fArcAngleEnd) ? (int)CW : (int)CCW;
+
+					//AddEntityArc(vecEntities, ptArcCenterPos, fArcRadius, fArcAngleStart, fArcAngleEnd, nArcDir, nLayer);
+
+					//解析圆弧上插补坐标
+					int nCountPt;
+					double fAngleDelt = fArcAngleEnd - fArcAngleStart;
+					double fMarkArcStepAngle;
+					fMarkArcStepAngle = fMatchBorderArcStep / fArcRadius * 180 / M_PI;
+					CPointF ptTmp;
+
+					if (0 == nArcDir)//顺时针
+					{
+						if (0 <= fAngleDelt)//劣弧
+							nCountPt = (int)(((M_PI * (360 - fAngleDelt) / 180) * fArcRadius) / fMatchBorderArcStep) + 1;
+						else//优弧
+							nCountPt = (int)(((M_PI * abs(fAngleDelt) / 180) * fArcRadius) / fMatchBorderArcStep) + 1;
+
+						//ptBuf = new double[nCountPt][2];
+
+						for (int i = 0; i < nCountPt - 1; i++)
+						{
+							fArcAngleStart -= fMarkArcStepAngle;
+							ptTmp.x = ArcCenter.x + fArcRadius * cos(M_PI * fArcAngleStart / 180);
+							ptTmp.y = ArcCenter.y + fArcRadius * sin(M_PI * fArcAngleStart / 180);
+							vecPolylinePtBuf.push_back(ptTmp - ptRTCenter);
+						}
+
+						ptTmp.x = ArcCenter.x + fArcRadius * cos(M_PI * fArcAngleEnd / 180);
+						ptTmp.y = ArcCenter.y + fArcRadius * sin(M_PI * fArcAngleEnd / 180);
+						vecPolylinePtBuf.push_back(ptTmp - ptRTCenter);
+					}
+					else if (1 == nArcDir)//逆时针
+					{
+						if (0 <= fAngleDelt)//优弧
+							nCountPt = (int)(((M_PI * fAngleDelt / 180) * fArcRadius) / fMatchBorderArcStep) + 1;
+						else//劣弧
+							nCountPt = (int)(((M_PI * (360 - abs(fAngleDelt)) / 180) * fArcRadius) / fMatchBorderArcStep) + 1;
+
+						for (int i = 0; i < nCountPt - 1; i++)
+						{
+							fArcAngleStart += fMarkArcStepAngle;
+							ptTmp.x = ArcCenter.x + fArcRadius * cos(M_PI * fArcAngleStart / 180);
+							ptTmp.y = ArcCenter.y + fArcRadius * sin(M_PI * fArcAngleStart / 180);
+							vecPolylinePtBuf.push_back(ptTmp - ptRTCenter);
+						}
+						ptTmp.x = ArcCenter.x + fArcRadius * cos(M_PI * fArcAngleEnd / 180);
+						ptTmp.y = ArcCenter.y + fArcRadius * sin(M_PI * fArcAngleEnd / 180);
+						vecPolylinePtBuf.push_back(ptTmp - ptRTCenter);
+					}
+				}
+
+				//更新ptPolylineLast，fConvexityLast
+				if (i < nVertCount - 1)
+				{
+					ptPolylineLast = ptPolyline;
+					fConvexityLast = pPolyline->GetPolylinePoint(i).convexity;
+				}
+			}
+
+
+			return vecPolylinePtBuf;
+}

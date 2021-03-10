@@ -61,6 +61,7 @@ public:
 	afx_msg void OnCameraAutoMatchCross();
 	afx_msg void OnCameraAutoMatchCircle();
 	afx_msg void OnCameraShowDxf();
+	afx_msg void OnCameraAutoMatchBorder();
 };
 
 

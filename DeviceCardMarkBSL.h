@@ -85,6 +85,7 @@ public:
 	virtual BOOL AddEntityCircle(double ptCenterPos[2], double fRadius, double fAngleStart, int nDir, int nPenNo);
 	virtual BOOL AddEntityArc(double ptCenterPos[2], double fRadius, double fAngleStart, double fAngleEnd, int nDir, int nPenNo);
 
+	BOOL MoveAxisRel(int nAxis, double nRelPos);
 
 protected:
 	//BSLCard

@@ -21,6 +21,7 @@ ModelBase::ModelBase()
 
 }
 
+//
 int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOOL bShowText,
 							BOOL bSort, int const nSortRow, int const nSortColumn)
 {
@@ -32,6 +33,7 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOO
 	HTuple HomMat2D;
 	HTuple hv_PosX, hv_PosY, hv_String;
 	HTuple hv_ImgWidth, hv_ImgHeight;
+	HTuple hv_NumLevels;
 
 	try
 	{
@@ -40,7 +42,7 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOO
 		::SendMessage(GetHwndShow(), WM_SHOW_CONTOUR, FALSE, NULL);
 
 		//HObject hoReadImg;
-		//ReadImage(&hoReadImg, "D://YuanLu//4. Halcon//CCD Sample//2021-03-03_14_23_56_201.bmp");
+		//ReadImage(&hoReadImg, "D://YuanLu//4. Halcon//CCD Sample//2021-03-10_10_39_07_5512.bmp");
 		//SetImage(hoReadImg);
 		SetImage();
 
@@ -70,9 +72,19 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOO
 				GenRectangle2(&hoMatchRegion, hv_RgnRow, hv_RgnCol, 0, hv_RgnWidth / 2, hv_RgnHeight / 2);
 				ReduceDomain(hoImageDisplay, hoMatchRegion, &hoImageDisplay);
 			}
-			CreateScaledShapeModel(hoModel, "auto", -0.39, 0.79, "auto", hv_ScaleMin, hv_ScaleMax,
-				"auto", "auto", "ignore_local_polarity", "auto", "auto", &hv_ModelID);
 
+			HObject hoModelImg, hoModelRegion;
+			HTuple hv_AreaModelRegions, hv_RowModelRegions, hv_ColumnModelRegions, hv_HeightPyramid;
+			InspectShapeModel(hoModel, &hoModelImg, &hoModelRegion, 5, 30);
+			AreaCenter(hoModelRegion, &hv_AreaModelRegions, &hv_RowModelRegions, &hv_ColumnModelRegions);
+			CountObj(hoModelRegion, &hv_HeightPyramid);
+			for (HTuple hv_i = 1; hv_i.Continue(hv_HeightPyramid, 1); hv_i += 1)
+			{
+				if (hv_AreaModelRegions[hv_i - 1] >= 15)
+					hv_NumLevels = hv_i;
+			}
+			CreateScaledShapeModel(hoModel, hv_NumLevels, -3.14, 6.29, "auto", hv_ScaleMin, hv_ScaleMax,
+				"auto", "auto", "ignore_local_polarity", "auto", "auto", &hv_ModelID);
 		}
 		else
 		{
@@ -92,12 +104,12 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOO
 				GenRectangle2(&hoMatchRegion, hv_RgnRow, hv_RgnCol, 0, hv_RgnWidth / 2, hv_RgnHeight / 2);
 				ReduceDomain(hoImageDisplay, hoMatchRegion, &hoImageDisplay);
 			}
-			CreateScaledShapeModelXld(hoModel, "auto", -0.39, 0.79, "auto", hv_ScaleMin, hv_ScaleMax,
+			CreateScaledShapeModelXld(hoModel, "auto", -3.14, 6.29, "auto", hv_ScaleMin, hv_ScaleMax,
 				"auto", "auto", "ignore_local_polarity", 5, &hv_ModelID);
 		}
 		SetShapeModelOrigin(hv_ModelID, hv_ModelOriginRow, hv_ModelOriginColumn);
 		GetShapeModelContours(&hoModelContour, hv_ModelID, 1);
-		FindScaledShapeModel(hoImageDisplay, hv_ModelID, -0.39, 0.79, hv_ScaleMin, hv_ScaleMax, hv_MinScore, 0, 0.2,
+		FindScaledShapeModel(hoImageDisplay, hv_ModelID, -3.14, 6.29, hv_ScaleMin, hv_ScaleMax, hv_MinScore, 0, 0.2,
 			"least_squares", 0, 0.9, &hv_Row, &hv_Column, &hv_Angle, &hv_Scale, &hv_Score);
 		ClearShapeModel(hv_ModelID);
 
@@ -138,7 +150,7 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOO
 			//显示信息
 			if (bShowText)
 			{
-				TupleConcat(hv_String, ("X: " + hv_PosX).TupleConcat("Y: " + hv_PosY), &hv_String);
+				TupleConcat(hv_String, ("X: " + hv_PosX).TupleConcat("Y: " + hv_PosY).TupleConcat("Angle: " + ((HTuple)hv_Angle[hv_i]).TupleDeg()), &hv_String);
 			}
 			//显示轮廓图案
 			if (bShowContour)
@@ -493,3 +505,64 @@ ModelCross::ModelCross(double fPixelSize, double fLength, double fWidth)
 
 	}
 }
+
+/// <summary>
+/// ModelClosedPolyline类构造函数
+/// </summary>
+/// <param name="fPixelSize"></param>
+/// <param name="vecPt"></param>
+/// <returns></returns>
+ModelClosedPolyline::ModelClosedPolyline(double fPixelSize, std::vector<CPointF> const vecPt)
+{
+	m_eModelType = ModelType::MT_ClosedPolyline;
+	m_fPixelSize = fPixelSize;
+	m_vecPt = vecPt;
+
+	CPointF ptStart = vecPt.front();
+	CPointF ptEnd = vecPt.back();
+	if (ptStart != ptEnd)
+		return;
+
+	HObject hoContour, hoContourCentered, hoContourImg, hoContourRgn, hoContourRgnDilation;
+	HTuple hv_Row, hv_Column;
+	HTuple hv_Heitht, hv_Width, hv_Hom2d;
+
+	{
+		hv_Row = HTuple();
+		hv_Column = HTuple();
+
+		for each (auto varPt in vecPt)
+		{
+			TupleConcat(hv_Column, varPt.x / m_fPixelSize, &hv_Column);
+			TupleConcat(hv_Row, -varPt.y / m_fPixelSize, &hv_Row);
+		}
+		GenContourPolygonXld(&hoContour, hv_Row, hv_Column);
+
+		//HTuple hv_RgnRow1, hv_RgnCol1, hv_RgnRow2, hv_RgnCol2;
+		//double fcr, fcl, fcr1, fcl1;
+		//SmallestRectangle1Xld(hoContour, &hv_RgnRow1, &hv_RgnCol1, &hv_RgnRow2, &hv_RgnCol2);
+		//fcl = (hv_RgnCol2 + hv_RgnCol1).D() / 2;
+		//fcr = (hv_RgnRow2 + hv_RgnRow1).D() / 2;
+		//fcl1 = (hv_Column.TupleMax() + hv_Column.TupleMin()).D() / 2;
+		//fcr1 = (hv_Row.TupleMax() + hv_Row.TupleMin()).D() / 2;
+		//HomMat2dIdentity(&hv_Hom2d);
+		//HomMat2dTranslate(hv_Hom2d, (1944) / 2, (2592) / 2, &hv_Hom2d);
+		//AffineTransContourXld(hoContour, &m_hoModel, hv_Hom2d);
+		//return;
+
+		hv_Heitht = 10 + hv_Row.TupleMax() - hv_Row.TupleMin();
+		hv_Width = 10 + hv_Column.TupleMax() - hv_Column.TupleMin();
+		HomMat2dIdentity(&hv_Hom2d);
+		HomMat2dTranslate(hv_Hom2d, hv_Heitht / 2, hv_Width / 2, &hv_Hom2d);
+		AffineTransContourXld(hoContour, &hoContourCentered, hv_Hom2d);
+		GenImageConst(&hoContourImg, "byte", hv_Width, hv_Heitht);
+		PaintXld(hoContourCentered, hoContourImg, &hoContourImg, 255);
+		Threshold(hoContourImg, &hoContourRgn, 10, 255);
+		DilationRectangle1(hoContourRgn, &hoContourRgnDilation, 3, 3);
+		ReduceDomain(hoContourImg, hoContourRgnDilation, &m_hoModel);
+
+		//WriteImage(m_hoModel, "bmp", 0, "D://YuanLu//4. Halcon//CCD Sample//m_hoModel.bmp");
+	}
+
+}
+

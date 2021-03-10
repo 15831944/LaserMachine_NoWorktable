@@ -290,9 +290,9 @@ public:
 	BOOL SetContourMask(HObject hoContour);
 	BOOL MoveContourMask(HTuple hvTransX, HTuple hvTransY, HTuple hvRotate);
 	BOOL ClearStringMask();
-	BOOL ShowDxfContourMask(CString strPath);
 	BOOL SetStringMask(HTuple hvString, HTuple hvRow, HTuple hvColumn);
 	void ShowStringMask();
+	BOOL ShowDxfContourMask(CString strPath);
 	int LocateModel(HalconModel& modelHalcon, std::vector<CPointF>* vPtPos, BOOL bShowModelCotour = TRUE, BOOL bShowModelString = TRUE);
 	///////////////////////////////与外界交互读图,定位，显示////////////////////////////
 

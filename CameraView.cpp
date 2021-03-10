@@ -12,6 +12,7 @@
 #include "XSleep.h"
 #include "Model.h"
 #include "LaserMachineDoc.h"
+#include "PreProcess.h"
 
 // CCameraView
 
@@ -69,6 +70,7 @@ BEGIN_MESSAGE_MAP(CCameraView, CScrollView)
 	ON_COMMAND(IDM_CAMERA_AUTO_MATCH_CROSS, &CCameraView::OnCameraAutoMatchCross)
 	ON_COMMAND(IDM_CAMERA_AUTO_MATCH_CIRCLE, &CCameraView::OnCameraAutoMatchCircle)
 	ON_COMMAND(IDM_CAMERA_SHOW_DXF, &CCameraView::OnCameraShowDxf)
+	ON_COMMAND(IDM_CAMERA_AUTO_MATCH_BORDER, &CCameraView::OnCameraAutoMatchBorder)
 END_MESSAGE_MAP()
 
 
@@ -504,4 +506,41 @@ void CCameraView::OnCameraShowDxf()
 		return;
 
 	m_pHalconWnd->ShowDxfContourMask(strPath);
+
+}
+
+
+void CCameraView::OnCameraAutoMatchBorder()
+{
+	// TODO: 在此添加命令处理程序代码
+	if (FALSE == m_pHalconWnd->m_bThreadsAreRunning)
+	{
+		AfxMessageBox(_T("请先打开相机"));
+		return;
+	}
+
+	//测试轮廓生成
+	CLaserMachineDoc* pDoc = (CLaserMachineDoc*)((CMainFrame*)(AfxGetApp()->m_pMainWnd))->GetActiveDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return;
+	CMachineListContainer* pList = pDoc->m_pLaserObjList;
+	CPreProcess preProcess;
+	double fRadius, fPixelSize, fScaleMin, fScaleMax, fMinScore;
+	fRadius = ReadDevCameraMarkCircleRadius();
+	fPixelSize = ReadDevCameraPixelSize();
+	fMinScore = ReadDevCameraMarkCircleFindMinScore();
+	fScaleMin = ReadDevCameraMarkCircleFindScaleMin();
+	fScaleMax = ReadDevCameraMarkCircleFindScaleMax();
+
+	ModelBase* pModel = ModelFactory::creatModel(ModelType::MT_ClosedPolyline, fPixelSize, preProcess.GetBorderPtArray(pList));
+	pModel->SetScale(fScaleMin, fScaleMax);
+	pModel->SetMinScore(fMinScore);
+
+	std::vector<CPointF> vecPtPos;
+	pModel->LocateModel(vecPtPos);
+	//m_pHalconWnd->SetContourMask(pModel->m_hoModel);
+	delete pModel;
+	pModel = NULL;
+
 }

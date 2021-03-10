@@ -1463,6 +1463,9 @@ LRESULT CHalconWnd::OnDisp(WPARAM wParam, LPARAM lParam)
 
 	//显示原图
 	//DispObj(image, m_hWindow);
+	//HObject hoReadImg;
+	//ReadImage(&hoReadImg, "D://YuanLu//4. Halcon//CCD Sample//2021-03-10_10_39_07_5512.bmp");
+	//DispObj(hoReadImg, m_hWindow);
 	DispObj(imgCameraImage, m_hWindow);
 	SetColor(m_hWindow, "red");
 	DispObj(m_hoContourMask, m_hWindow);
@@ -2321,7 +2324,7 @@ BOOL CHalconWnd::SetStringMask(HTuple hvString, HTuple hvRow, HTuple hvColumn)
 }
 void CHalconWnd::ShowStringMask()
 {
-	//约定每个对象显示两行信息
+	//约定每个对象显示三行信息
 	if (FALSE == m_bShowString)
 		return;
 
@@ -2329,7 +2332,7 @@ void CHalconWnd::ShowStringMask()
 	TupleLength(m_hvStringRow, &hv_Length);
 	for (HTuple hv_i = 0; hv_i.Continue(hv_Length - 1, 1); hv_i += 1)
 	{
-		DispText(m_hWindow, m_hvString[hv_i * 2] + "\n" + m_hvString[hv_i * 2 + 1], "image", m_hvStringRow[hv_i], m_hvStringColumn[hv_i], "black", HTuple(), HTuple());
+		DispText(m_hWindow, m_hvString[hv_i * 3] + "\n" + m_hvString[hv_i * 3 + 1] + "\n" + m_hvString[hv_i * 3 + 2], "image", m_hvStringRow[hv_i], m_hvStringColumn[hv_i], "black", HTuple(), HTuple());
 	}
 }
 
@@ -2473,22 +2476,22 @@ afx_msg LRESULT CHalconWnd::OnShowText(WPARAM wParam, LPARAM lParam)
 		//解析hvMixedText：如其长度为4N，则String:Row:Col = 2N:N:N
 		HTuple hvMixedText = *((HTuple*)lParam);
 		HTuple hvString, hvRow, hvCol;
-		HTuple hvLength, hvLengthBy4, hvI;
+		HTuple hvLength, hvLengthBy5, hvI;
 		
 		hvString = HTuple();
 		hvRow = HTuple();
 		hvCol = HTuple();
 		TupleLength(hvMixedText, &hvLength);
-		hvLengthBy4 = hvLength / 4;
-		for (hvI = 0; hvI.Continue(2 * hvLengthBy4 - 1, 1); hvI += 1)
+		hvLengthBy5 = hvLength / 5;
+		for (hvI = 0; hvI.Continue(3 * hvLengthBy5 - 1, 1); hvI += 1)
 		{
 			TupleConcat(hvString, hvMixedText[hvI], &hvString);
 		}
-		for (hvI = 2 * hvLengthBy4; hvI.Continue(3 * hvLengthBy4 - 1, 1); hvI += 1)
+		for (hvI = 3 * hvLengthBy5; hvI.Continue(4 * hvLengthBy5 - 1, 1); hvI += 1)
 		{
 			TupleConcat(hvRow, hvMixedText[hvI], &hvRow);
 		}
-		for (hvI = 3 * hvLengthBy4; hvI.Continue(hvLength - 1, 1); hvI += 1)
+		for (hvI = 4 * hvLengthBy5; hvI.Continue(hvLength - 1, 1); hvI += 1)
 		{
 			TupleConcat(hvCol, hvMixedText[hvI], &hvCol);
 		}
@@ -2536,7 +2539,6 @@ BOOL CHalconWnd::ShowDxfContourMask(CString strPath)
 		AffineTransContourXld(hoContours, &ContoursAffineTrans, hv_HomMat2DTrans);
 		ClearStringMask();
 		SetContourMask(ContoursAffineTrans);
-
 	}
 	catch (HException& exception)
 	{

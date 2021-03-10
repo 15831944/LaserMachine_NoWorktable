@@ -13,7 +13,7 @@ using namespace HalconCpp;
 #define DEFAULT_MIN_SCORE 0.8
 #endif
 
-enum class ModelType { MT_Circle, MT_Cross };
+enum class ModelType { MT_Circle, MT_Cross, MT_ClosedPolyline };
 
 class ModelBase
 {
@@ -21,6 +21,9 @@ public:
 	ModelBase();
     virtual ~ModelBase() {}
 
+	//是否显示旋转角度
+	//是否显示抓标结果轮廓和文字BOOL bShowContour = TRUE, BOOL bShowText = TRUE
+	//是否对抓标结果进行排序，用于自动校正BOOL bSort = FALSE, int const nSortRow = 0, int const nSortColumn = 0
 	int LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour = TRUE, BOOL bShowText = TRUE,
 					BOOL bSort = FALSE, int const nSortRow = 0, int const nSortColumn = 0);
 
@@ -41,7 +44,7 @@ protected:
 	void TransCameraToLogic(HTuple* hvX, HTuple* hvY, HTuple const hvRow, HTuple const hvCol);
 	void SortMtatchResult(HTuple* hvRow, HTuple* hvCol, HTuple* hvAngle, HTuple* hvScale, HTuple* hvScore, int const nCountRow, int const cCountCol);
 
-protected:
+public:
 	ModelType m_eModelType;					//模板类型
 
 	//照片 + 模板
@@ -69,7 +72,6 @@ class ModelCircle :public ModelBase
 {
 public:
 	ModelCircle(double fPixelSize, double fRadius);
-	//int LocateModel(std::vector <CPointF>& vPtPosFinded) { return 0; };
 
 protected:
 	double m_fRadius;
@@ -79,12 +81,21 @@ class ModelCross :public ModelBase
 {
 public:
 	ModelCross(double fPixelSize, double fLength, double fWidth);
-	//int LocateModel(std::vector <CPointF>& vPtPosFinded) { return 0; };
 
 protected:
 	double 	m_fLength;
 	double 	m_fWidth;
 };
+
+class ModelClosedPolyline :public ModelBase
+{
+public:
+	ModelClosedPolyline(double fPixelSize, std::vector<CPointF> const vecPt);
+
+protected:
+	std::vector<CPointF> m_vecPt;
+};
+
 
 
 class ModelFactory
@@ -121,6 +132,15 @@ public:
 
 		return new ModelCross(fPixelSize, fLength, fWidth);
 	}
+
+	static ModelBase* creatModel(ModelType typeCross, double fPixelSize, std::vector<CPointF> const vecPt)
+	{
+		if (ModelType::MT_ClosedPolyline != typeCross)
+			return NULL;
+
+		return new ModelClosedPolyline(fPixelSize, vecPt);
+	}
+
 
 };
 

@@ -92,6 +92,10 @@ public:
 	//自动化加工准备
 	BOOL AutoPreProcess1(CMachineListContainer* pList, BOOL bLocate);
 
+	//计算border层轮廓点阵用于轮廓定位
+	std::vector<CPointF> GetBorderPtArray(CMachineListContainer* pList);
+
+
 //protected:
 	void CutEntityByGrid(VecEntities &vecEntities, std::vector<Polygon_T> &vecPolyGrid);
 	void CutEntityByGrid1(VecEntities& vecEntities, std::vector<Polygon_T>& vecPolyGrid);
