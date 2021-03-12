@@ -746,7 +746,8 @@ void CDlgDevCfgTabScanner::OnBnClickedButtonScannerFindAllCaliPoints()
 
 	//自动抓标循环
 	std::vector <CPointF> vPtPosMatrixDelta, vPtPosMatrixReal;
-	pModel->LocateModel(vPtPosMatrixReal, TRUE, TRUE, TRUE, nCtMatrix, nCtMatrix);
+	std::vector <double> vFAngle;
+	pModel->LocateModel(vPtPosMatrixReal, vFAngle, TRUE, TRUE, TRUE, nCtMatrix, nCtMatrix);
 	if ((size_t)nCtMatrix * nCtMatrix != vPtPosMatrixReal.size())
 	{
 		delete pModel;

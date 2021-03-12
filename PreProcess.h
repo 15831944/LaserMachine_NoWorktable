@@ -90,7 +90,8 @@ public:
 	int FindMarkPoints(std::vector <CPointF>& vPtPosRealMark, std::vector <ModelBase>& vModelBase);
 
 	//自动化加工准备
-	BOOL AutoPreProcess1(CMachineListContainer* pList, BOOL bLocate);
+	BOOL AutoPreProcess1(CMachineListContainer* pList, BOOL bLocate);	//直接加工：套DXF位置 或 定位加工：抓mark层两个点（圆或十字）
+	BOOL AutoPreProcess2(CMachineListContainer* pList, BOOL bLocate);	//直接加工：套DXF位置 或 定位加工：抓border层外框
 
 	//计算border层轮廓点阵用于轮廓定位
 	std::vector<CPointF> GetBorderPtArray(CMachineListContainer* pList);
@@ -111,5 +112,6 @@ public:
 	BOOL GenMarkPointModel(HalconModel* pHalconModel, CMachineObj_Comm* pObj, double fCrossWidth = 0.25);
 	BOOL GenMarkPointModel(ModelBase **ppModel, CMachineObj_Comm* pObj, CMachineListContainer* pList);
 
+	BOOL GetBorderCenter(CMachineListContainer* pList, CPointF *ptBorderCenter);
 };
 

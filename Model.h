@@ -24,7 +24,7 @@ public:
 	//是否显示旋转角度
 	//是否显示抓标结果轮廓和文字BOOL bShowContour = TRUE, BOOL bShowText = TRUE
 	//是否对抓标结果进行排序，用于自动校正BOOL bSort = FALSE, int const nSortRow = 0, int const nSortColumn = 0
-	int LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour = TRUE, BOOL bShowText = TRUE,
+	int LocateModel(std::vector <CPointF>& vPtPos, std::vector <double>& vFAngle,  BOOL bShowContour = TRUE, BOOL bShowText = TRUE,
 					BOOL bSort = FALSE, int const nSortRow = 0, int const nSortColumn = 0);
 
 	void SetImage(HObject const hoImg);
@@ -44,7 +44,7 @@ protected:
 	void TransCameraToLogic(HTuple* hvX, HTuple* hvY, HTuple const hvRow, HTuple const hvCol);
 	void SortMtatchResult(HTuple* hvRow, HTuple* hvCol, HTuple* hvAngle, HTuple* hvScale, HTuple* hvScore, int const nCountRow, int const cCountCol);
 
-public:
+protected:
 	ModelType m_eModelType;					//模板类型
 
 	//照片 + 模板

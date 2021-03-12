@@ -993,7 +993,7 @@ UINT CLaserMachineView::MarkProcRun(LPVOID lpParam)
 	LeaveCriticalSection(&pView->ProcObjListMutex);        // CriticalSect
 
 	CPreProcess preProcess;
-	if (FALSE == preProcess.AutoPreProcess1(pList, bLocate))
+	if (FALSE == preProcess.AutoPreProcess2(pList, bLocate))
 		return 1;
 
 

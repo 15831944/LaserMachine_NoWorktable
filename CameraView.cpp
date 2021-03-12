@@ -457,7 +457,8 @@ void CCameraView::OnCameraAutoMatchCross()
 	pModel->SetMinScore(fMinScore);
 
 	std::vector<CPointF> vecPtPos;
-	pModel->LocateModel(vecPtPos);
+	std::vector <double> vFAngle;
+	pModel->LocateModel(vecPtPos, vFAngle);
 	delete pModel;
 	pModel = NULL;
 }
@@ -484,7 +485,8 @@ void CCameraView::OnCameraAutoMatchCircle()
 	pModel->SetMinScore(fMinScore);
 
 	std::vector<CPointF> vecPtPos;
-	pModel->LocateModel(vecPtPos);
+	std::vector <double> vFAngle;
+	pModel->LocateModel(vecPtPos, vFAngle);
 	delete pModel;
 	pModel = NULL;
 }
@@ -538,7 +540,8 @@ void CCameraView::OnCameraAutoMatchBorder()
 	pModel->SetMinScore(fMinScore);
 
 	std::vector<CPointF> vecPtPos;
-	pModel->LocateModel(vecPtPos);
+	std::vector <double> vFAngle;
+	pModel->LocateModel(vecPtPos, vFAngle);
 	//m_pHalconWnd->SetContourMask(pModel->m_hoModel);
 	delete pModel;
 	pModel = NULL;

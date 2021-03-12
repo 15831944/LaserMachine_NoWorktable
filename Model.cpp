@@ -22,7 +22,7 @@ ModelBase::ModelBase()
 }
 
 //
-int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOOL bShowText,
+int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, std::vector <double>& vFAngle, BOOL bShowContour, BOOL bShowText,
 							BOOL bSort, int const nSortRow, int const nSortColumn)
 {
 	HObject	hoImageDisplay, hoModel, hoModelContour, hoModelContourAffine, hoMatchRegion;
@@ -118,6 +118,7 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOO
 		if (0 == hv_Length.I())
 		{
 			vPtPos.clear();
+			vFAngle.clear();
 			SetMatchedPos(vPtPos);
 			return 0;
 		}
@@ -128,6 +129,7 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOO
 			if (nSortRow * nSortColumn != hv_Length.I())
 			{
 				vPtPos.clear();
+				vFAngle.clear();
 				SetMatchedPos(vPtPos);
 				return 0;
 			}
@@ -136,6 +138,7 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOO
 
 		//如果找到一个或多个
 		vPtPos.clear();
+		vFAngle.clear();
 		GenEmptyObj(&m_hoContourAffine);
 		hv_String = HTuple();
 		for (HTuple hv_i = 0; hv_i.Continue(hv_Length - 1, 1); hv_i += 1)
@@ -146,6 +149,7 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, BOOL bShowContour, BOO
 			//hv_PosY = (hv_Row[hv_i] - hv_ImgHeight / 2) * (HTuple)m_fPixelSize;
 			//hv_PosY = -hv_PosY;
 			vPtPos.push_back(CPointF(hv_PosX.D(), hv_PosY.D()));
+			vFAngle.push_back(((HTuple)hv_Angle[hv_i]).TupleDeg().D());
 
 			//显示信息
 			if (bShowText)

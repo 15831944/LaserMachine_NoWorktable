@@ -759,6 +759,10 @@ BOOL CPreProcess::WriteEntitiesPerGridToBuffer(int nGridIndex, CMachineListConta
 		}
 	}
 
+	//保存加工文件
+	if (!pDevCardMark->SaveEntityToFile())
+		return FALSE;
+
 	return TRUE;
 
 	/*
@@ -1578,8 +1582,8 @@ int CPreProcess::FindMarkPoints(std::vector <CPointF>& vPtPosRealMark, std::vect
 		nIndex++;
 		CPointF ptFinded(0,0);
 		std::vector <CPointF> vPtPos;
-		valModel.LocateModel(vPtPos);
-
+		std::vector <double> vFAngle;
+		valModel.LocateModel(vPtPos, vFAngle);
 
 		int nCount = vPtPos.size();
 		if (0 >= nCount)
@@ -1643,6 +1647,87 @@ BOOL CPreProcess::AutoPreProcess1(CMachineListContainer* pList, BOOL bLocate)
 	return TRUE;
 }
 
+BOOL CPreProcess::AutoPreProcess2(CMachineListContainer* pList, BOOL bLocate)
+{
+	if (FALSE == DoSingleGrid(pList))
+		return FALSE;
+
+	//判断是否需要抓靶定位
+	double ptOrg[2], ptScale[2], fRotateDegree, ptReal[2];
+	if (bLocate == FALSE)
+	{
+
+		//计算平移旋转拉伸
+		//无mark点 以链表外框中心为锚点，以相机视角dxf位置计算旋转偏移
+		ObjRect rtBound = pList->GetObjBound();
+		ptOrg[0] = (rtBound.max_x + rtBound.min_x) / 2;
+		ptOrg[1] = (rtBound.max_y + rtBound.min_y) / 2;
+		ptScale[0] = 1;
+		ptScale[1] = 1;
+		fRotateDegree = -g_fDxfRotate;		//ccw to cw
+		ptReal[0] = g_ptDxfTranslate.x;
+		ptReal[1] = g_ptDxfTranslate.y;
+	}
+	else
+	{
+		//抓靶定位流程
+		//生成border层多段线点阵
+		std::vector<CPointF> vPtBorder;
+		vPtBorder = GetBorderPtArray(pList);
+		if (0 == vPtBorder.size())
+			return FALSE;
+
+		//根据border点阵生成匹配模板
+		int nCountFinded = 0;
+		double fRadius, fPixelSize, fScaleMin, fScaleMax, fMinScore, fPosCameraX, fPosCameraY;
+		fRadius = ReadDevCameraMarkCircleRadius();
+		fPixelSize = ReadDevCameraPixelSize();
+		fMinScore = ReadDevCameraMarkCircleFindMinScore();
+		fScaleMin = ReadDevCameraMarkCircleFindScaleMin();
+		fScaleMax = ReadDevCameraMarkCircleFindScaleMax();
+		fPosCameraX = ReadDevCameraPosX();
+		fPosCameraY = ReadDevCameraPosY();
+
+		ModelBase* pModel = ModelFactory::creatModel(ModelType::MT_ClosedPolyline, fPixelSize, vPtBorder);
+		pModel->SetScale(fScaleMin, fScaleMax);
+		pModel->SetMinScore(fMinScore);
+		std::vector<CPointF> vecPtPos;
+		std::vector <double> vFAngle;
+		nCountFinded = pModel->LocateModel(vecPtPos, vFAngle);
+		delete pModel;
+		pModel = NULL;
+
+		if (1 != nCountFinded)
+		{
+			AfxMessageBox(_T("没有找到唯一的加工对象外框"));
+			return FALSE;
+		}
+
+		CPointF ptBorderCenter;
+		if (FALSE == GetBorderCenter(pList, &ptBorderCenter))
+		{
+			AfxMessageBox(_T("无法获得外框中心"));
+			return FALSE;
+		}
+
+		ptOrg[0] = ptBorderCenter.x;
+		ptOrg[1] = ptBorderCenter.y;
+		ptScale[0] = 1;
+		ptScale[1] = 1;
+		fRotateDegree = -vFAngle.front();		//ccw to cw
+		ptReal[0] = vecPtPos.front().x - fPosCameraX;
+		ptReal[1] = vecPtPos.front().y - fPosCameraY;
+	}
+
+	//进行平移旋转
+	//DoSingleTrans(pList, nCountMarkPoints, vPtPosDestinedMark, vPtPosRealMark);
+	DoTrans(ptOrg, ptScale, fRotateDegree, ptReal);
+
+
+	return TRUE;
+}
+
+
 std::vector<CPointF> CPreProcess::GetBorderPtArray(CMachineListContainer* pList)
 {
 	POSITION pos;
@@ -1655,7 +1740,7 @@ std::vector<CPointF> CPreProcess::GetBorderPtArray(CMachineListContainer* pList)
 			break;
 	}
 
-	if (LayerNum_Border != pObj->m_ObjByLayer)
+	if (NULL != pObj && LayerNum_Border != pObj->m_ObjByLayer)
 		return std::vector<CPointF>();
 
 	if (MachineObj_Type_Polyline != pObj->GetObjType())
@@ -1664,7 +1749,7 @@ std::vector<CPointF> CPreProcess::GetBorderPtArray(CMachineListContainer* pList)
 	ObjRect rtBound;
 	CPointF ptRTCenter;
 	ObjPoint ptPolylineLast, ptPolyline;
-	int nLayer = pObj->m_ObjByLayer;
+	//int nLayer = pObj->m_ObjByLayer;
 	std::vector<CPointF> vecPolylinePtBuf;
 
 	rtBound = pObj->GetObjBound();
@@ -1773,3 +1858,33 @@ std::vector<CPointF> CPreProcess::GetBorderPtArray(CMachineListContainer* pList)
 
 			return vecPolylinePtBuf;
 }
+
+BOOL CPreProcess::GetBorderCenter(CMachineListContainer* pList, CPointF* ptBorderCenter)
+{
+	POSITION pos;
+	CMachineObj_Comm* pObj;
+	pos = pList->GetObjHeadPosition();
+	while (pos)
+	{
+		pObj = pList->GetObjNext(pos);
+		if (pObj->m_ObjByLayer == LayerNum_Border)
+			break;
+	}
+
+	if (LayerNum_Border != pObj->m_ObjByLayer)
+		return FALSE;
+
+	if (MachineObj_Type_Polyline != pObj->GetObjType())
+		return FALSE;
+
+	ObjRect rtBound;
+	CPointF ptRTCenter;
+	rtBound = pObj->GetObjBound();
+	ptRTCenter.x = (rtBound.max_x + rtBound.min_x) / 2;
+	ptRTCenter.y = (rtBound.max_y + rtBound.min_y) / 2;
+
+	*ptBorderCenter = ptRTCenter;
+	return TRUE;
+}
+
+

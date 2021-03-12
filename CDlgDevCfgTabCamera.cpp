@@ -570,10 +570,12 @@ void CDlgDevCfgTabCamera::OnBnClickedButtonCameraCalPixelSize()
 	fScaleMax = ReadDevCameraMarkCircleFindScaleMax();
 
 	std::vector<CPointF> ptPos;
+	std::vector <double> vFAngle;
+
 	ModelBase* pModel = ModelFactory::creatModel(ModelType::MT_Circle, fPixelSize, fRadius);
 	pModel->SetScale(fScaleMin, fScaleMax);
 	pModel->SetMinScore(fMinScore);
-	pModel->LocateModel(ptPos);
+	pModel->LocateModel(ptPos, vFAngle);
 	
 	if (2 == ptPos.size())
 	{
@@ -624,11 +626,12 @@ void CDlgDevCfgTabCamera::OnBnClickedButtonCameraCaliCameraCenter()
 	fScaleMax = ReadDevCameraMarkCircleFindScaleMax();
 
 	std::vector<CPointF> ptPos;
+	std::vector <double> vFAngle;
 	ModelBase* pModel = ModelFactory::creatModel(ModelType::MT_Circle, fPixelSize, fRadius);
 	pModel->SetScale(fScaleMin, fScaleMax);
 	pModel->SetMinScore(fMinScore);
 	pModel->SetMatchDomain(CPointF(0, 0), 10);
-	pModel->LocateModel(ptPos);
+	pModel->LocateModel(ptPos, vFAngle);
 
 	if (1 != ptPos.size())
 	{
