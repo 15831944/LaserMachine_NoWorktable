@@ -54,7 +54,7 @@ public:
 	int m_nCameraExposure;
 	CSliderCtrl m_cSliderCameraExposure;
 	const int m_cnSliderSliderCameraExposureMin = 36;      /* Slider min position                                   */
-	const int m_cnSliderSliderCameraExposureMax = 1000000;    /* Slider max position                                   */
+	const int m_cnSliderSliderCameraExposureMax = 50000;    /* Slider max position                                   */
 	//增益
 	int m_nCameraGain;
 	CSliderCtrl m_cSliderCameraGain;
@@ -63,8 +63,14 @@ public:
 	//移动步长
 	double m_fCameraMoveUnit;
 	//Mark圆半径
+protected:
 	double m_fCameraMarkCircleRadius;
+	double m_fCameraMarkCrossLength;
+	double m_fCameraMarkCrossWidth;
 
 	afx_msg void OnEnChangeEdit1CameraMoveUnit();
 	afx_msg void OnEnChangeEdit1CameraMarkCircleRadius();
+public:
+	afx_msg void OnEnChangeEditCameraMarkCrossLength();
+	afx_msg void OnEnChangeEditCameraMarkCrossWidth();
 };

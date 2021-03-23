@@ -4,6 +4,7 @@
 #include "LaserMachineDoc.h"
 #include "PointF.h"
 
+
 CDeviceCardMark::CDeviceCardMark()
 {
 	m_bMarkOrRedIsRunning = FALSE;
@@ -44,6 +45,8 @@ void CDeviceCardMark::LoadMachineObj(CMachineObj_Comm* pObj)
 	//提前初始化供case MachineObj_Type_Polyline使用
 	ObjPoint ptPolylineLast, ptPolyline;
 	int nLayer = pObj->m_ObjByLayer;
+	if (LayerNum_Default > nLayer)
+		return;
 
 	std::vector<ObjPoint> vecPolylinePtBuf;
 

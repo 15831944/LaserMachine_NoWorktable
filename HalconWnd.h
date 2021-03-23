@@ -15,6 +15,13 @@
 #include "HalconModel.h"
 using namespace HalconCpp;
 
+#define WM_GET_IMAGE WM_USER + 210
+#define WM_SHOW_CONTOUR WM_USER + 211
+#define WM_SHOW_TEXT WM_USER + 212
+
+//Dxf相机窗口旋转，偏移
+extern CPointF g_ptDxfTranslate;
+extern double g_fDxfRotate;
 
 
 ////////////////////////////////////////////////////////////////
@@ -281,10 +288,13 @@ public:
 	HImage GetImageDisplay();
 	BOOL ClearContourMask();
 	BOOL SetContourMask(HObject hoContour);
+	BOOL MoveContourMask(HTuple hvTransX, HTuple hvTransY, HTuple hvRotate);
 	BOOL ClearStringMask();
 	BOOL SetStringMask(HTuple hvString, HTuple hvRow, HTuple hvColumn);
-	int LocateModel(HalconModel modelHalcon, std::vector<CPointF>* vPtPos, BOOL bShowModelCotour = TRUE, BOOL bShowModelString = TRUE);
-///////////////////////////////与外界交互读图,定位，显示////////////////////////////
+	void ShowStringMask();
+	BOOL ShowDxfContourMask(CString strPath);
+	int LocateModel(HalconModel& modelHalcon, std::vector<CPointF>* vPtPos, BOOL bShowModelCotour = TRUE, BOOL bShowModelString = TRUE);
+	///////////////////////////////与外界交互读图,定位，显示////////////////////////////
 
 
 	// Overrides
@@ -304,6 +314,9 @@ protected:
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
+	afx_msg LRESULT OnGetImage(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnShowContour(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnShowText(WPARAM wParam, LPARAM lParam);
 };
 
 /////////////////////////////////////////////////////////////////////////////

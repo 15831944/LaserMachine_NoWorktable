@@ -34,6 +34,10 @@ public:
 	int m_nVScrollPos;
 	int m_nHScrollMax;			
 	int m_nVScrollMax;
+	bool m_bObjDirDisp;
+	bool m_bObjDirDisp_EN;
+	bool m_bObjNodeDisp;
+	ObjPoint m_NodePoint;
 	vector<int> m_nList;
 
 // 重写
@@ -144,15 +148,37 @@ public:
 //	CRITICAL_SECTION	m_csListGridLock;
 
 
-	
-	
-
-	
 public:
-	
-	
-	
 	afx_msg void OnSetparaGrid();
+protected:
+	afx_msg LRESULT OnStartMark(WPARAM wParam, LPARAM lParam);
+	afx_msg LRESULT OnStopMark(WPARAM wParam, LPARAM lParam);
+	//加工进程控制**************************加工进程控制
+public:
+	BOOL m_bLocate;
+	BOOL m_bMarkThreadIsRunning;
+	void StartMarkThread();
+	void StopMarkThread(CWinThread* pThred);
+	void WaitForMarkThreadEnded();
+	//ThreadFunc
+	static UINT MarkProcRun(LPVOID lpParam);
+	//shared data
+	//CMachineListContainer* m_pListContainer;
+	// event handles to synchronize threads
+	HANDLE  MarkProcStopEvent;
+	// mutexes to guarantee mutual access to shared objects
+	CRITICAL_SECTION    ProcObjListMutex;
+private:
+	CWinThread* m_pThMarkProc;				//线程指针
+	//DWORD m_dwThMarkProc;					//线程ID
+	long m_lTimeStartMarkProcess;
+	HWND m_pHwndHalconWnd;
+	//加工进程控制**************************加工进程控制
+
+public:
+	afx_msg void OnDestroy();
+	afx_msg void OnTimer(UINT_PTR nIDEvent);
+	afx_msg void OnButtonAxisZMove();
 };
 
 #ifndef _DEBUG  // LaserMachineView.cpp 中的调试版本

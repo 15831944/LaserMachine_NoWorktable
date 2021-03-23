@@ -4,11 +4,11 @@
 #include "MachineObjDef.h"
 
 //窗口位置尺寸
-#define	MainWindowsWidth		1680
-#define MainWindowsHight		1050
-#define ControlWindowsWidth		260
-#define ObPrtyWindowsWidth		300
-#define CamPosWindowsWidth		300
+#define	MainWindowsWidth		1920
+#define MainWindowsHight		1080
+#define ControlWindowsWidth		0
+#define ObPrtyWindowsWidth		330
+#define CamPosWindowsWidth		305
 
 #define MultipeScroll			1.2		//鼠标滚轮缩放倍率
 #define MultipeScrollMin		0.0001	//鼠标滚轮缩放倍率
@@ -29,7 +29,9 @@
 #define DrawType_Select			101
 
 //设备硬件定义
+#define General_UV_Laser		0			//常规紫外激光器
 #define IPG_Fiber_Laser			1			//IPG光纤激光器
+#define IPG_QCW_Laser			2			//IPG准连续激光器
 
 //设备加工参数限定
 #define Process_MaxSpeed		50000
@@ -44,6 +46,16 @@
 #define Process_MinPulseWidth	0
 #define Process_MaxMode			1
 #define Process_MinMode			0
+#define Process_MaxOnDelay		50000
+#define Process_MinOnDelay		-50000
+#define Process_MaxOffDelay		50000
+#define Process_MinOffDelay		-50000
+#define Process_MaxBfDelay		50000
+#define Process_MinBfDelay		-50000
+#define Process_MaxAfDelay		50000
+#define Process_MinAfDelay		-50000
+#define Process_MaxPlDelay		50000
+#define Process_MinPlDelay		-50000
 #define Process_MaxDotTime		100000
 #define Process_MinDotTime		0
 
@@ -56,3 +68,11 @@
 #define WM_Init_ReSize			WM_USER + 15
 #define WM_ObjList_Refresh		WM_USER + 16
 #define WM_File_MRU_Open		WM_USER + 17
+
+#define WM_GET_CAMERA_HWND		WM_USER + 50
+
+
+#define WM_START_MARK		WM_USER + 188
+#define WM_STOP_MARK		WM_USER + 189
+#define ID_TIMEER_MARK_PROCESS_TIME WM_USER+190
+

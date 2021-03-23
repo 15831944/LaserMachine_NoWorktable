@@ -20,6 +20,7 @@ protected:
 	CToolBar m_wndToolBar;
 	CToolBar m_wndToolBar1;
 	bool m_bToolBar_Flag;
+	bool m_bObjDir_Hide;
 
 public:
 	CSplitterWnd m_wndSplitter;
@@ -61,6 +62,7 @@ protected:
 
 public:
 	afx_msg void OnObjPrtyPanelDisp();
+	afx_msg void OnObjDirctionDisp();
 	afx_msg void OnCamPosPanelDisp();
 	afx_msg void OnDrawToVideo();
 	
@@ -68,6 +70,8 @@ public:
 	afx_msg void OnSize(UINT nType, int cx, int cy);
 	afx_msg void OnDeviceConfig();	
 	afx_msg void OnClose();
+protected:
+	afx_msg LRESULT OnGetCameraHwnd(WPARAM wParam, LPARAM lParam);
 };
 
 

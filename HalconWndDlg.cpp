@@ -625,11 +625,11 @@ BOOL CHalconWndDlg::NewModelCircleHalcon(double fModelCircleRadiusIn, double* fM
 
 		//m_modelMarkPoint = MarkPointModel();
 		m_modelMarkPoint = HalconModel();
-		m_modelMarkPoint.strModelType = _T("Ô²");
-		m_modelMarkPoint.hoImg = m_hoImage;
-		m_modelMarkPoint.hoXldModel = hoModelCircle;
-		m_modelMarkPoint.hvModelOriginRow = 0;
-		m_modelMarkPoint.hvModelOriginColumn = 0;
+		m_modelMarkPoint.m_strModelType = _T("Ô²");
+		m_modelMarkPoint.m_hoImg = m_hoImage;
+		m_modelMarkPoint.m_hoXldModel = hoModelCircle;
+		m_modelMarkPoint.m_hvModelOriginRow = 0;
+		m_modelMarkPoint.m_hvModelOriginColumn = 0;
 
 		*fModelCircleRadiusOut = hvRadius.D();
 		return TRUE;
@@ -672,11 +672,11 @@ BOOL CHalconWndDlg::NewModelCrossHalcon(double fModelCrossLengthIn, double fMode
 		//ÔÝ´æÄ£°å²ÎÊý
 		//m_modelMarkPoint = MarkPointModel();
 		m_modelMarkPoint = HalconModel();
-		m_modelMarkPoint.strModelType = _T("Ê®×Ö²æ");
-		m_modelMarkPoint.hoImg = m_hoImage;
-		m_modelMarkPoint.hoXldModel = ho_ContoursUnion;
-		m_modelMarkPoint.hvModelOriginRow = 0;
-		m_modelMarkPoint.hvModelOriginColumn = 0;
+		m_modelMarkPoint.m_strModelType = _T("Ê®×Ö²æ");
+		m_modelMarkPoint.m_hoImg = m_hoImage;
+		m_modelMarkPoint.m_hoXldModel = ho_ContoursUnion;
+		m_modelMarkPoint.m_hvModelOriginRow = 0;
+		m_modelMarkPoint.m_hvModelOriginColumn = 0;
 
 		*fModelCrossLengthOut = hv_crossLength.D();
 		*fModelCrossWidthOut = hv_crossWidth.D();
@@ -802,11 +802,11 @@ BOOL CHalconWndDlg::NewModelRectOutlineHalcon(double fModelRectWidthIn, double f
 
 		//m_modelMarkPoint = MarkPointModel();
 		m_modelMarkPoint = HalconModel();
-		m_modelMarkPoint.strModelType = _T("¾ØÐÎÂÖÀª");
-		m_modelMarkPoint.hoImg = m_hoImage;
-		m_modelMarkPoint.hoXldModel = ho_Contours;
-		m_modelMarkPoint.hvModelOriginRow = hv_CrossRow - hv_RectRow;
-		m_modelMarkPoint.hvModelOriginColumn = hv_CrossColumn - hv_RectColumn;
+		m_modelMarkPoint.m_strModelType = _T("¾ØÐÎÂÖÀª");
+		m_modelMarkPoint.m_hoImg = m_hoImage;
+		m_modelMarkPoint.m_hoXldModel = ho_Contours;
+		m_modelMarkPoint.m_hvModelOriginRow = hv_CrossRow - hv_RectRow;
+		m_modelMarkPoint.m_hvModelOriginColumn = hv_CrossColumn - hv_RectColumn;
 
 		//*fModelRectWidthOut = hv_RectWidth.D();
 		//*fModelRectHeightOut = hv_RectHeight.D();
@@ -838,10 +838,10 @@ int CHalconWndDlg::MatchModelHalcon(double fScaleMin, double fScaleMax, double f
 
 	try
 	{
-		hoImage = m_modelMarkPoint.hoImg;
-		hoModel = m_modelMarkPoint.hoXldModel;
-		hv_ModelOriginRow = m_modelMarkPoint.hvModelOriginRow;
-		hv_ModelOriginColumn = m_modelMarkPoint.hvModelOriginColumn;
+		hoImage = m_modelMarkPoint.m_hoImg;
+		hoModel = m_modelMarkPoint.m_hoXldModel;
+		hv_ModelOriginRow = m_modelMarkPoint.m_hvModelOriginRow;
+		hv_ModelOriginColumn = m_modelMarkPoint.m_hvModelOriginColumn;
 		//WriteImage(hoModel, "bmp", 0, _T("./hoModel.bmp"));
 
 		//Çå¿Õ´°¿Ú
@@ -895,10 +895,10 @@ int CHalconWndDlg::MatchModelHalcon(double fScaleMin, double fScaleMax, double f
 			*fPoxY = hv_PosY.D();
 
 			//Ä£°åÐÅÏ¢ÔÝ´æ
-			m_modelMarkPoint.hoXldModelContourAffine = hoModelContourAffine;
-			m_modelMarkPoint.hvModelScaleMin = fScaleMin;
-			m_modelMarkPoint.hvModelScaleMax = fScaleMax;
-			m_modelMarkPoint.hvModelMinScore = fMinScore;
+			m_modelMarkPoint.m_hoXldModelContourAffine = hoModelContourAffine;
+			m_modelMarkPoint.m_hvModelScaleMin = fScaleMin;
+			m_modelMarkPoint.m_hvModelScaleMax = fScaleMax;
+			m_modelMarkPoint.m_hvModelMinScore = fMinScore;
 
 			return 1;
 		default:

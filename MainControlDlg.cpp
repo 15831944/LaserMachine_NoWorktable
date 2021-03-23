@@ -17,6 +17,7 @@
 #include "math.h"
 #include "CameraView.h"
 #include "CDlgSetParaGrid.h"
+#include "Model.h"
 
 
 // 添加MessageBoxTimeout支持
@@ -114,6 +115,17 @@ void CMainControlDlg::OnSize(UINT nType, int cx, int cy)
 
 void CMainControlDlg::OnBnClickedButtonStartMark()
 {
+	//CCameraView* pCameraView = (CCameraView*)
+	//	((CMainFrame*)(AfxGetApp()->m_pMainWnd))->m_wndSplitter1.GetPane(1, 0);
+	//HWND hwnd = pCameraView->m_pHalconWnd->GetSafeHwnd();
+
+	//::SendMessage(hwnd, WM_SHOW_CONTOUR, (WPARAM)TRUE, NULL);
+	
+
+	//ModelBase* pModel = ModelFactory::creatModel(ModelType::MT_Circle, 1, 2);
+
+	return;
+
 	// TODO: 在此添加控件通知处理程序代码
 
 	if (NULL == pDevCardMark)
@@ -692,7 +704,7 @@ UINT CMainControlDlg::MarkProcRun(LPVOID lpParam)
 		pDevCardWorktable->GetAbsPosXY(&fAbsCurPosX, &fAbsCurPosY);
 		pDevCardWorktable->PosMoveXY(fGridCenterX - fAbsCurPosX, fGridCenterY - fAbsCurPosY, TRUE);
 		//运动过程中写打标卡缓冲区
-		preProcess.WriteEntitiesPerGridToBuffer(nGridIndex, pDevCardMark, pListContainerTmp);
+		preProcess.WriteEntitiesPerGridToBuffer(nGridIndex, pListContainerTmp);
 		//等待工作台运动完成
 		pDevCardWorktable->WaitForMoveEndedXY();
 		XSleep(1);

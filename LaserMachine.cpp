@@ -11,7 +11,8 @@
 #include "LaserMachineDoc.h"
 #include "LaserMachineView.h"
 #include "DeviceCardMarkBSL.h"
-#include "DeviceCardWorktableMPC2810.h"
+//#include "DeviceCardWorktableMPC2810.h"
+#include "DeviceCardWorktable.h"
 #include "CameraPosition.h"
 #include "DeviceLaserBellin.h"
 #include "CDlgDevCfgTabLaser.h"
@@ -115,9 +116,9 @@ BOOL CLaserMachineApp::InitInstance()
 	case WORKTABLE_NAME::WORKTABLE_NONE:
 		pDevCardWorktable = NULL;
 		break;
-	case WORKTABLE_NAME::WORKTABLE_MPC2810:
-		pDevCardWorktable = new CDeviceCardWorktableMPC2810;
-		break;
+	//case WORKTABLE_NAME::WORKTABLE_MPC2810:
+	//	pDevCardWorktable = new CDeviceCardWorktableMPC2810;
+	//	break;
 	default:
 		pDevCardWorktable = NULL;
 		break;
@@ -285,6 +286,8 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	afx_msg void OnBnClickedOk();
+protected:
+//	afx_msg LRESULT OnStartMark(WPARAM wParam, LPARAM lParam);
 };
 
 CAboutDlg::CAboutDlg() : CDialogEx(CAboutDlg::IDD)
@@ -298,6 +301,7 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 	ON_BN_CLICKED(IDOK, &CAboutDlg::OnBnClickedOk)
+//	ON_REGISTERED_MESSAGE(WM_START_MARK, &CAboutDlg::OnStartMark)
 END_MESSAGE_MAP()
 
 // 用于运行对话框的应用程序命令
@@ -315,5 +319,13 @@ void CAboutDlg::OnBnClickedOk()
 	// TODO: 在此添加控件通知处理程序代码
 	CDialogEx::OnOK();
 }
+
+
+
+
+//afx_msg LRESULT CAboutDlg::OnStartMark(WPARAM wParam, LPARAM lParam)
+//{
+//	return 0;
+//}
 
 

@@ -1,4 +1,3 @@
-
 // stdafx.h : 标准系统包含文件的包含文件，
 // 或是经常使用但不常更改的
 // 特定于项目的包含文件
@@ -45,7 +44,8 @@
 #ifndef _USE_MATH_DEFINES
 #define _USE_MATH_DEFINES // for C++
 #endif
-#include <cmath>
+//#include <cmath>
+#include <math.h>
 
 //内存检测
 #ifdef _DEBUG
@@ -68,3 +68,30 @@ extern float gLaserOffDelay;
 extern float gBeforMarkDelay;
 extern float gAfterMarkDelay;
 extern float gPolylineDelay;
+extern int	gDupNumber;
+extern float gGapDistance;
+extern byte	gFillOutlinePrior;
+extern bool	gFillEnable0;
+extern double gFillAngle0;
+extern double gFillGap0;
+extern byte	gGapMode0;
+extern byte	gFillMode0;
+extern double gCurtail0;
+extern bool	gFillEnable1;
+extern double gFillAngle1;
+extern double gFillGap1;
+extern byte	gGapMode1;
+extern byte	gFillMode1;
+extern double gCurtail1;
+extern bool	gFillEnable2;
+extern double gFillAngle2;
+extern double gFillGap2;
+extern byte	gGapMode2;
+extern byte	gFillMode2;
+extern double gCurtail2;
+extern bool	gFillEnable3;
+extern double gFillAngle3;
+extern double gFillGap3;
+extern byte	gGapMode3;
+extern byte	gFillMode3;
+extern double gCurtail3;

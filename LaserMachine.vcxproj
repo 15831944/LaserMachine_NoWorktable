@@ -123,12 +123,12 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions);_USE_MATH_DEFINES</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
-      <AdditionalIncludeDirectories>D:\_myGitRepo\LaserMachine\boostX;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)boostX;$(SolutionDir)MachineObject\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>halcon.lib;halconc.lib;halconcpp.lib;GxIAPICPP.lib;mpc2810.lib</AdditionalDependencies>
+      <AdditionalDependencies>halcon.lib;halconc.lib;halconcpp.lib;GxIAPICPP.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)MPC2810\lib;$(SolutionDir)Halcon\lib\x64-win64;$(SolutionDir)Daheng\lib\x64;$(LibraryPath)</AdditionalLibraryDirectories>
     </Link>
     <Midl>
@@ -177,7 +177,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>false</SDLCheck>
-      <AdditionalIncludeDirectories>D:\_myGitRepo\LaserMachine\boostX</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)boostX;$(SolutionDir)MachineObject\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -205,6 +205,7 @@
     <ClInclude Include="CameraPosition.h" />
     <ClInclude Include="CameraView.h" />
     <ClInclude Include="CButtonLongPush.h" />
+    <ClInclude Include="CDialogAxisZMove.h" />
     <ClInclude Include="CDlgDevCfgTabCamera.h" />
     <ClInclude Include="CDlgDevCfgTabLaser.h" />
     <ClInclude Include="CDlgDevCfgTabScanner.h" />
@@ -233,6 +234,27 @@
     <ClInclude Include="DlgCameraPositionSetRealMarkPoint.h" />
     <ClInclude Include="HalconModel.h" />
     <ClInclude Include="HalconWndDlg.h" />
+    <ClInclude Include="MachineObject\include\MachineListContainer.h" />
+    <ClInclude Include="MachineObject\include\MachineObjArc.h" />
+    <ClInclude Include="MachineObject\include\MachineObjArcEll.h" />
+    <ClInclude Include="MachineObject\include\MachineObjCircle.h" />
+    <ClInclude Include="MachineObject\include\MachineObjDef.h" />
+    <ClInclude Include="MachineObject\include\MachineObjEllipse.h" />
+    <ClInclude Include="MachineObject\include\MachineObjFillPolyline.h" />
+    <ClInclude Include="MachineObject\include\MachineObjGroup.h" />
+    <ClInclude Include="MachineObject\include\MachineObjLine.h" />
+    <ClInclude Include="MachineObject\include\MachineObjPoint.h" />
+    <ClInclude Include="MachineObject\include\MachineObjPolyline.h" />
+    <ClInclude Include="MachineObject\include\MachineObjTiltEllipse.h" />
+    <ClInclude Include="MachineObject\include\MachineObjWArc.h" />
+    <ClInclude Include="MachineObject\include\MachineObjWLine.h" />
+    <ClInclude Include="MachineObject\include\MachineObjWPolyline.h" />
+    <ClInclude Include="MachineObject\include\MachineObj_Comm.h" />
+    <ClInclude Include="MachineObject\include\MachinePara_Layer.h" />
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="ObjectProperty.h" />
+    <ClInclude Include="ObjectProtyDlg1.h" />
+    <ClInclude Include="ObjectProtyDlg2.h" />
     <ClInclude Include="PointF.h" />
     <ClInclude Include="DevCfgDlg.h" />
     <ClInclude Include="DeviceCamera.h" />
@@ -241,30 +263,14 @@
     <ClInclude Include="DeviceCardMark.h" />
     <ClInclude Include="DeviceCardMarkBSL.h" />
     <ClInclude Include="DeviceCardWorktable.h" />
-    <ClInclude Include="DeviceCardWorktableMPC2810.h" />
     <ClInclude Include="DlgSetParaCamera.h" />
     <ClInclude Include="HalconWnd.h" />
     <ClInclude Include="LaserMachine.h" />
     <ClInclude Include="LaserMachineConst.h" />
     <ClInclude Include="LaserMachineDoc.h" />
     <ClInclude Include="LaserMachineView.h" />
-    <ClInclude Include="MachineListContainer.h" />
-    <ClInclude Include="MachineObjArc.h" />
-    <ClInclude Include="MachineObjArcEll.h" />
-    <ClInclude Include="MachineObjCircle.h" />
-    <ClInclude Include="MachineObjDef.h" />
-    <ClInclude Include="MachineObjEllipse.h" />
-    <ClInclude Include="MachineObjGroup.h" />
-    <ClInclude Include="MachineObjLine.h" />
-    <ClInclude Include="MachineObjPoint.h" />
-    <ClInclude Include="MachineObjPolyline.h" />
-    <ClInclude Include="MachineObjTiltEllipse.h" />
-    <ClInclude Include="MachineObj_Comm.h" />
-    <ClInclude Include="MachinePara_Layer.h" />
     <ClInclude Include="MainControlDlg.h" />
     <ClInclude Include="MainFrm.h" />
-    <ClInclude Include="ObjectProperty.h" />
-    <ClInclude Include="ObjPropertyDlgEdit.h" />
     <ClInclude Include="PreProcess.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Socket.h" />
@@ -276,6 +282,7 @@
     <ClCompile Include="CameraPosition.cpp" />
     <ClCompile Include="CameraView.cpp" />
     <ClCompile Include="CButtonUpDown.cpp" />
+    <ClCompile Include="CDialogAxisZMove.cpp" />
     <ClCompile Include="CDlgDevCfgTabCamera.cpp" />
     <ClCompile Include="CDlgDevCfgTabLaser.cpp" />
     <ClCompile Include="CDlgDevCfgTabScanner.cpp" />
@@ -300,6 +307,26 @@
     <ClCompile Include="DlgCameraPositionSetRealMarkPoint.cpp" />
     <ClCompile Include="HalconModel.cpp" />
     <ClCompile Include="HalconWndDlg.cpp" />
+    <ClCompile Include="MachineObject\source\MachineListContainer.cpp" />
+    <ClCompile Include="MachineObject\source\MachineObjArc.cpp" />
+    <ClCompile Include="MachineObject\source\MachineObjArcEll.cpp" />
+    <ClCompile Include="MachineObject\source\MachineObjCircle.cpp" />
+    <ClCompile Include="MachineObject\source\MachineObjEllipse.cpp" />
+    <ClCompile Include="MachineObject\source\MachineObjFillPolyline.cpp" />
+    <ClCompile Include="MachineObject\source\MachineObjGroup.cpp" />
+    <ClCompile Include="MachineObject\source\MachineObjLine.cpp" />
+    <ClCompile Include="MachineObject\source\MachineObjPoint.cpp" />
+    <ClCompile Include="MachineObject\source\MachineObjPolyline.cpp" />
+    <ClCompile Include="MachineObject\source\MachineObjTiltEllipse.cpp" />
+    <ClCompile Include="MachineObject\source\MachineObjWArc.cpp" />
+    <ClCompile Include="MachineObject\source\MachineObjWLine.cpp" />
+    <ClCompile Include="MachineObject\source\MachineObjWPolyline.cpp" />
+    <ClCompile Include="MachineObject\source\MachineObj_Comm.cpp" />
+    <ClCompile Include="MachineObject\source\MachinePara_Layer.cpp" />
+    <ClCompile Include="Model.cpp" />
+    <ClCompile Include="ObjectProperty.cpp" />
+    <ClCompile Include="ObjectProtyDlg1.cpp" />
+    <ClCompile Include="ObjectProtyDlg2.cpp" />
     <ClCompile Include="PointF.cpp" />
     <ClCompile Include="DevCfgDlg.cpp" />
     <ClCompile Include="DeviceCamera.cpp" />
@@ -308,28 +335,13 @@
     <ClCompile Include="DeviceCardMark.cpp" />
     <ClCompile Include="DeviceCardMarkBSL.cpp" />
     <ClCompile Include="DeviceCardWorktable.cpp" />
-    <ClCompile Include="DeviceCardWorktableMPC2810.cpp" />
     <ClCompile Include="DlgSetParaCamera.cpp" />
     <ClCompile Include="HalconWnd.cpp" />
     <ClCompile Include="LaserMachine.cpp" />
     <ClCompile Include="LaserMachineDoc.cpp" />
     <ClCompile Include="LaserMachineView.cpp" />
-    <ClCompile Include="MachineListContainer.cpp" />
-    <ClCompile Include="MachineObjArc.cpp" />
-    <ClCompile Include="MachineObjArcEll.cpp" />
-    <ClCompile Include="MachineObjCircle.cpp" />
-    <ClCompile Include="MachineObjEllipse.cpp" />
-    <ClCompile Include="MachineObjGroup.cpp" />
-    <ClCompile Include="MachineObjLine.cpp" />
-    <ClCompile Include="MachineObjPoint.cpp" />
-    <ClCompile Include="MachineObjPolyline.cpp" />
-    <ClCompile Include="MachineObjTiltEllipse.cpp" />
-    <ClCompile Include="MachineObj_Comm.cpp" />
-    <ClCompile Include="MachinePara_Layer.cpp" />
     <ClCompile Include="MainControlDlg.cpp" />
     <ClCompile Include="MainFrm.cpp" />
-    <ClCompile Include="ObjectProperty.cpp" />
-    <ClCompile Include="ObjPropertyDlgEdit.cpp" />
     <ClCompile Include="PreProcess.cpp" />
     <ClCompile Include="Socket.cpp" />
     <ClCompile Include="stdafx.cpp">

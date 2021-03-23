@@ -21,7 +21,7 @@
 14,
 15,
 16,
-17,导入激光加工用对象列表类(集中放在筛选器"MachineObjList"中),已完成部分含点\线段\园 --2019.06.30
+17,导入激光加工用对象列表类(集中放在筛选器"MachineObjList"中),已完成部分含点\线段\圆 --2019.06.30
 18,逻辑坐标系下，图形显示、缩放、平移等完成--2019.07.02
 19,为了便于CLaserMachineDoc类向CLaserMachineView类发送消息,将主窗口拆分变量m_wndSplitter和
    m_wndSplitter变更为public, --2019.07.03

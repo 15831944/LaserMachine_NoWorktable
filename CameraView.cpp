@@ -10,6 +10,9 @@
 #include "DeviceCardWorktable.h"
 #include "CDlgDevCfgTabCamera.h"
 #include "XSleep.h"
+#include "Model.h"
+#include "LaserMachineDoc.h"
+#include "PreProcess.h"
 
 // CCameraView
 
@@ -23,6 +26,7 @@ CCameraView::CCameraView()
 CCameraView::~CCameraView()
 {
 	delete m_pHalconWnd;
+	m_pHalconWnd = NULL;
 }
 
 void CCameraView::PostNcDestroy()
@@ -49,7 +53,7 @@ BEGIN_MESSAGE_MAP(CCameraView, CScrollView)
 	ON_WM_HSCROLL()
 	ON_WM_VSCROLL()
 	//ON_COMMAND(ID_TEST_HALCON_CREATE_MODEL, &CCameraView::OnTestCreateModel)
-	ON_COMMAND(ID_TEST_HALCON_FIND_MODEL, &CCameraView::OnTestFindModel)
+	//ON_COMMAND(ID_TEST_HALCON_FIND_MODEL, &CCameraView::OnTestFindModel)
 	ON_WM_MOUSEHWHEEL()
 	ON_WM_MOUSEWHEEL()
 	ON_WM_ERASEBKGND()
@@ -58,11 +62,15 @@ BEGIN_MESSAGE_MAP(CCameraView, CScrollView)
 	ON_WM_MOUSEACTIVATE()
 	ON_WM_INITMENUPOPUP()
 	ON_COMMAND(IDM_SETPARA_CAMERA, &CCameraView::OnSetparaCamera)
-	ON_COMMAND(ID_TEST_HALCON_FIND_CIRCLE, &CCameraView::OnTestHalconFindCircle)
+	//ON_COMMAND(ID_TEST_HALCON_FIND_CIRCLE, &CCameraView::OnTestHalconFindCircle)
 	ON_COMMAND(ID_TEST_HALCON_FIND_CIRCLE_HAND, &CCameraView::OnTestHalconFindCircleHand)
 	ON_WM_PAINT()
 	ON_WM_CLOSE()
 	ON_MESSAGE(WM_LOCATE, &CCameraView::OnLocate)
+	ON_COMMAND(IDM_CAMERA_AUTO_MATCH_CROSS, &CCameraView::OnCameraAutoMatchCross)
+	ON_COMMAND(IDM_CAMERA_AUTO_MATCH_CIRCLE, &CCameraView::OnCameraAutoMatchCircle)
+	ON_COMMAND(IDM_CAMERA_SHOW_DXF, &CCameraView::OnCameraShowDxf)
+	ON_COMMAND(IDM_CAMERA_AUTO_MATCH_BORDER, &CCameraView::OnCameraAutoMatchBorder)
 END_MESSAGE_MAP()
 
 
@@ -264,18 +272,21 @@ void CCameraView::OnCloseCamera()
 //	//m_pHalconWnd->TestDxf();
 //}
 //
-void CCameraView::OnTestFindModel()
-{
-	double fRadius, fPixelSize, fScaleMin, fScaleMax, fMinScore;
-	fRadius = ReadDevCameraMarkCircleRadius();
-	fPixelSize = ReadDevCameraPixelSize();
-	fMinScore = ReadDevCameraMarkCircleFindMinScore();
-	fScaleMin = ReadDevCameraMarkCircleFindScaleMin();
-	fScaleMax = ReadDevCameraMarkCircleFindScaleMax();
-	HalconModel hoModel(_T("圆"), fRadius, fPixelSize, fScaleMin, fScaleMax, fMinScore);
-	std::vector<CPointF> ptVec;
-	m_pHalconWnd->LocateModel(hoModel, &ptVec);
-}
+//void CCameraView::OnTestFindModel()
+//{
+//	double fRadius, fPixelSize, fScaleMin, fScaleMax, fMinScore;
+//	fRadius = ReadDevCameraMarkCircleRadius();
+//	fPixelSize = ReadDevCameraPixelSize();
+//	fMinScore = ReadDevCameraMarkCircleFindMinScore();
+//	fScaleMin = ReadDevCameraMarkCircleFindScaleMin();
+//	fScaleMax = ReadDevCameraMarkCircleFindScaleMax();
+//	HalconModel hoModel(_T("圆"), fRadius, fPixelSize);
+//	hoModel.SetScale(fScaleMin, fScaleMax);
+//	hoModel.SetMinScore(fMinScore);
+//
+//	std::vector<CPointF> ptVec;
+//	m_pHalconWnd->LocateModel(hoModel, &ptVec);
+//}
 
 void CCameraView::OnSetparaCamera()
 {
@@ -288,6 +299,46 @@ void CCameraView::OnSetparaCamera()
 BOOL CCameraView::PreTranslateMessage(MSG* pMsg)
 {
 	// TODO: 在此添加专用代码和/或调用基类
+	double fCameraMoveUnit;
+	fCameraMoveUnit = ReadDevCameraMoveUnit();
+	fCameraMoveUnit /= 1000;
+
+	switch (pMsg->message)
+	{
+	case WM_KEYDOWN:
+		switch (pMsg->wParam)
+		{
+		case VK_LEFT:
+			m_pHalconWnd->MoveContourMask(-fCameraMoveUnit, 0, 0);
+			break;
+		case VK_RIGHT:
+			m_pHalconWnd->MoveContourMask(fCameraMoveUnit, 0, 0);
+			break;
+		case VK_DOWN:
+			m_pHalconWnd->MoveContourMask(0, -fCameraMoveUnit, 0);
+			break;
+		case VK_UP:
+			m_pHalconWnd->MoveContourMask(0, fCameraMoveUnit, 0);
+			break;
+		case VK_PRIOR:
+			m_pHalconWnd->MoveContourMask(0, 0, 0.05);
+			break;
+		case VK_NEXT:
+			m_pHalconWnd->MoveContourMask(0, 0, -0.05);
+			break;
+		default:
+			break;
+		}
+		break;
+	case WM_KEYUP:
+		break;
+	default:
+		break;
+	}
+
+
+
+	/*
 	if (NULL == pDevCardWorktable)
 		return CScrollView::PreTranslateMessage(pMsg);
 
@@ -335,39 +386,44 @@ BOOL CCameraView::PreTranslateMessage(MSG* pMsg)
 	default:
 		break;
 	}
+	*/
 
 	return CScrollView::PreTranslateMessage(pMsg);
 }
 
 
-void CCameraView::OnTestHalconFindCircle()
-{
-	// TODO: 在此添加命令处理程序代码
-
-	//m_pHalconWnd->TestFindCircles();
-
-	//CArray <CPointF, CPointF&> arPtPos;
-	std::vector <CPointF> vPtPos;
-	if (FALSE == m_pHalconWnd->AutoFindCircle(&vPtPos))		//如果没抓到圆
-		return;
-	if (1 < vPtPos.size())									//如果抓到多个圆
-		return;
-	if (NULL == pDevCardWorktable)							//如果抓到一个
-		return;
-	CPointF ptTmp = vPtPos.front();
-	pDevCardWorktable->PosMoveXYHand(ptTmp.x, ptTmp.y);	
-}
+//void CCameraView::OnTestHalconFindCircle()
+//{
+//	// TODO: 在此添加命令处理程序代码
+//
+//	//m_pHalconWnd->TestFindCircles();
+//
+//	//CArray <CPointF, CPointF&> arPtPos;
+//	std::vector <CPointF> vPtPos;
+//	if (FALSE == m_pHalconWnd->AutoFindCircle(&vPtPos))		//如果没抓到圆
+//		return;
+//	if (1 < vPtPos.size())									//如果抓到多个圆
+//		return;
+//	if (NULL == pDevCardWorktable)							//如果抓到一个
+//		return;
+//	CPointF ptTmp = vPtPos.front();
+//	if(pDevCardWorktable)
+//		pDevCardWorktable->PosMoveXYHand(ptTmp.x, ptTmp.y);	
+//}
 
 
 void CCameraView::OnTestHalconFindCircleHand()
 {
 	// TODO: 在此添加命令处理程序代码
+	if (FALSE == m_pHalconWnd->m_bThreadsAreRunning)
+	{
+		AfxMessageBox(_T("请先打开相机"));
+		return;
+	}
+
 	m_pHalconWnd->TestFindCircleHand();
 
 }
-
-
-
 
 
 afx_msg LRESULT CCameraView::OnLocate(WPARAM wParam, LPARAM lParam)
@@ -376,4 +432,130 @@ afx_msg LRESULT CCameraView::OnLocate(WPARAM wParam, LPARAM lParam)
 	m_pHalconWnd->LocateModel(*((HalconModel*)wParam), (std::vector<CPointF>*)lParam);
 
 	return 0;
+}
+
+
+void CCameraView::OnCameraAutoMatchCross()
+{
+	//TODO: 在此添加命令处理程序代码
+	if (FALSE == m_pHalconWnd->m_bThreadsAreRunning)
+	{
+		AfxMessageBox(_T("请先打开相机"));
+		return;
+	}
+
+	double fLength, fWidth, fPixelSize, fScaleMin, fScaleMax, fMinScore;
+	fLength = ReadDevCameraMarkCrossLength();
+	fWidth = ReadDevCameraMarkCrossWidth();
+	fPixelSize = ReadDevCameraPixelSize();
+	fMinScore = ReadDevCameraMarkCircleFindMinScore();
+	fScaleMin = ReadDevCameraMarkCircleFindScaleMin();
+	fScaleMax = ReadDevCameraMarkCircleFindScaleMax();
+
+	ModelBase* pModel = ModelFactory::creatModel(ModelType::MT_Cross, fPixelSize, fLength, fWidth);
+	pModel->SetScale(fScaleMin, fScaleMax);
+	pModel->SetMinScore(fMinScore);
+
+	std::vector<CPointF> vecPtPos;
+	std::vector <double> vFAngle;
+	pModel->LocateModel(vecPtPos, vFAngle);
+	delete pModel;
+	pModel = NULL;
+}
+
+
+void CCameraView::OnCameraAutoMatchCircle()
+{
+	// TODO: 在此添加命令处理程序代码
+	if (FALSE == m_pHalconWnd->m_bThreadsAreRunning)
+	{
+		AfxMessageBox(_T("请先打开相机"));
+		return;
+	}
+
+	double fRadius, fPixelSize, fScaleMin, fScaleMax, fMinScore;
+	fRadius = ReadDevCameraMarkCircleRadius();
+	fPixelSize = ReadDevCameraPixelSize();
+	fMinScore = ReadDevCameraMarkCircleFindMinScore();
+	fScaleMin = ReadDevCameraMarkCircleFindScaleMin();
+	fScaleMax = ReadDevCameraMarkCircleFindScaleMax();
+
+	ModelBase* pModel = ModelFactory::creatModel(ModelType::MT_Circle, fPixelSize, fRadius);
+	pModel->SetScale(fScaleMin, fScaleMax);
+	pModel->SetMinScore(fMinScore);
+
+	std::vector<CPointF> vecPtPos;
+	std::vector <double> vFAngle;
+	pModel->LocateModel(vecPtPos, vFAngle);
+	delete pModel;
+	pModel = NULL;
+}
+
+
+void CCameraView::OnCameraShowDxf()
+{
+	// TODO: 在此添加命令处理程序代码
+	CLaserMachineDoc* pDoc = (CLaserMachineDoc*)((CMainFrame*)(AfxGetApp()->m_pMainWnd))->GetActiveDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return;
+
+	CString strPath;
+	strPath = pDoc->GetPathName();
+	strPath = strPath.Left(strPath.ReverseFind('.'));
+
+	if (strPath.IsEmpty())
+		return;
+
+	m_pHalconWnd->ShowDxfContourMask(strPath);
+
+}
+
+
+void CCameraView::OnCameraAutoMatchBorder()
+{
+	// TODO: 在此添加命令处理程序代码
+	if (FALSE == m_pHalconWnd->m_bThreadsAreRunning)
+	{
+		AfxMessageBox(_T("请先打开相机"));
+		return;
+	}
+
+	//测试轮廓生成
+	CLaserMachineDoc* pDoc = (CLaserMachineDoc*)((CMainFrame*)(AfxGetApp()->m_pMainWnd))->GetActiveDocument();
+	ASSERT_VALID(pDoc);
+	if (!pDoc)
+		return;
+	CMachineListContainer* pList = pDoc->m_pLaserObjList;
+	CPreProcess preProcess;
+	std::vector<CPointF> vecBorder = preProcess.GetBorderPtArray(pList);
+	if (0 >= vecBorder.size())
+	{
+		AfxMessageBox(_T("生成模板失败，请将Border层设置为一条封闭多段线"));
+		return;
+	}
+	if (vecBorder.front() != vecBorder.back())
+	{
+		AfxMessageBox(_T("生成模板失败，请将Border层设置为一条封闭多段线"));
+		return;
+	}
+
+
+	double fRadius, fPixelSize, fScaleMin, fScaleMax, fMinScore;
+	fRadius = ReadDevCameraMarkCircleRadius();
+	fPixelSize = ReadDevCameraPixelSize();
+	fMinScore = ReadDevCameraMarkCircleFindMinScore();
+	fScaleMin = ReadDevCameraMarkCircleFindScaleMin();
+	fScaleMax = ReadDevCameraMarkCircleFindScaleMax();
+
+	ModelBase* pModel = ModelFactory::creatModel(ModelType::MT_ClosedPolyline, fPixelSize, vecBorder);
+	pModel->SetScale(fScaleMin, fScaleMax);
+	pModel->SetMinScore(fMinScore);
+
+	std::vector<CPointF> vecPtPos;
+	std::vector <double> vFAngle;
+	pModel->LocateModel(vecPtPos, vFAngle);
+	delete pModel;
+	pModel = NULL;
+
 }

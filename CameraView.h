@@ -1,7 +1,9 @@
 #pragma once
 #include "HalconWnd.h"
 
-#define WM_LOCATE WM_USER+200
+#define WM_LOCATE WM_USER + 200
+
+
 
 // CCameraView йсм╪
 
@@ -46,8 +48,8 @@ public:
 	afx_msg void OnCloseCamera();
 	afx_msg void OnSetparaCamera();
 	//afx_msg void OnTestCreateModel();
-	afx_msg void OnTestFindModel();
-	afx_msg void OnTestHalconFindCircle();
+	//afx_msg void OnTestFindModel();
+	//afx_msg void OnTestHalconFindCircle();
 	afx_msg void OnTestHalconFindCircleHand();
 	afx_msg void OnPaint();
 
@@ -55,6 +57,11 @@ public:
 	CHalconWnd* m_pHalconWnd;
 protected:
 	afx_msg LRESULT OnLocate(WPARAM wParam, LPARAM lParam);
+public:
+	afx_msg void OnCameraAutoMatchCross();
+	afx_msg void OnCameraAutoMatchCircle();
+	afx_msg void OnCameraShowDxf();
+	afx_msg void OnCameraAutoMatchBorder();
 };
 
 

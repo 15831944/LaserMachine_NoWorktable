@@ -432,11 +432,16 @@ BOOL CDeviceCardMarkBSL::SetPensFromAllLayers(CMachineListContainer* pObjList)
 		penParaTmp.nFreq = pMachineParaLayerTmp->m_MachinePara.Frequncy;			//频率HZ
 		penParaTmp.nQPulseWidth = pMachineParaLayerTmp->m_MachinePara.PulseWidth;	//Q脉冲宽度us	
 
-		penParaTmp.nStartTC = gLaserOnDelay;										//开始延时us
-		penParaTmp.nLaserOffTC = gLaserOffDelay;									//激光关闭延时us 
-		penParaTmp.nEndTC = gAfterMarkDelay;										//结束延时us
-		penParaTmp.nPolyTC = gPolylineDelay;										//拐角延时us	
-		penParaTmp.nJumpPosTC = gBeforMarkDelay;									//标刻后延时
+		penParaTmp.nStartTC = pMachineParaLayerTmp->m_MachinePara.LaserOnDelay;										//开始延时us
+		penParaTmp.nLaserOffTC = pMachineParaLayerTmp->m_MachinePara.LaserOffDelay;									//激光关闭延时us 
+		penParaTmp.nEndTC = pMachineParaLayerTmp->m_MachinePara.AfterMarkDelay;										//结束延时us
+		penParaTmp.nPolyTC = pMachineParaLayerTmp->m_MachinePara.PolylineDelay;										//拐角延时us	
+		penParaTmp.nJumpPosTC = pMachineParaLayerTmp->m_MachinePara.BeforMarkDelay;									//标刻前延时/跳转延时
+		//penParaTmp.nStartTC = gLaserOnDelay;										//开始延时us
+		//penParaTmp.nLaserOffTC = gLaserOffDelay;									//激光关闭延时us 
+		//penParaTmp.nEndTC = gAfterMarkDelay;										//结束延时us
+		//penParaTmp.nPolyTC = gPolylineDelay;										//拐角延时us	
+		//penParaTmp.nJumpPosTC = gBeforMarkDelay;									//标刻后延时/跳转延时
 
 		//将penPara写入卡中
 		BSL_SetPenParam func = (BSL_SetPenParam)::GetProcAddress(m_hMarkDll, "SetPenParam");
@@ -1013,4 +1018,46 @@ BOOL CDeviceCardMarkBSL::InitialBSLFuncCalledInThread()
 	return TRUE;
 
 }
+
+BOOL CDeviceCardMarkBSL::MoveAxisRel(int nAxis, double nRelPos)
+{
+	if (!m_hMarkDll)
+	{
+		AfxMessageBox(_T("MarkSDK.dll 加载失败"));
+		return FALSE;
+	}
+
+	//获取当前位置
+	BSL_GetAxisCoor func = (BSL_GetAxisCoor)::GetProcAddress(m_hMarkDll, "GetAxisCoor");
+	if (NULL == func)
+	{
+		AfxMessageBox(_T("SDK中没有找到BSL_GetAxisCoor"));
+		return FALSE;
+	}
+	double fResPosCur = func((PTCHAR)(LPCTSTR)m_strDevId, nAxis);
+	//if (iRes != BSL_ERR_SUCCESS)
+	//{
+	//	AfxMessageBox(_T("BSL_AppendFileToDevice失败"));
+	//	return FALSE;
+	//}
+
+
+	//计算绝对坐标，移动Z轴
+	double fPosAbs = fResPosCur + nRelPos;
+	BSL_AxisMoveTo func1 = (BSL_AxisMoveTo)::GetProcAddress(m_hMarkDll, "AxisMoveTo");
+	if (NULL == func1)
+	{
+		AfxMessageBox(_T("SDK中没有找到BSL_AxisMoveTo"));
+		return FALSE;
+	}
+	int iRes1 = func1((PTCHAR)(LPCTSTR)m_strDevId, nAxis, fPosAbs);
+	if (iRes1 != BSL_ERR_SUCCESS)
+	{
+		AfxMessageBox(_T("BSL_AxisMoveTo失败"));
+		return FALSE;
+	}
+
+	return TRUE;
+}
+
 

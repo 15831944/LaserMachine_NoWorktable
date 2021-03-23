@@ -2,6 +2,7 @@
 #include "PreProcess.h"
 #include "CDlgDevCfgTabCamera.h"
 #include "CDlgDevCfgTabScanner.h"
+#include "CameraView.h"
 #include <math.h>
 
 CPreProcess::CPreProcess()
@@ -9,11 +10,11 @@ CPreProcess::CPreProcess()
 	m_vecProcEntPerGrid.clear();
 	m_vecProcEntPerGridTrans.clear();
 
-	m_ptOrg = Point_T(0.0, 0.0);
+	//m_ptOrg = Point_T(0.0, 0.0);
 	//m_ptOrgDxf = Point_T();
 	//m_ptScale = Point_T();
 	//m_fRotateDegree = 0;
-	m_fMarkArcStep = 0.005;
+	m_fMarkArcStep = ReadScannerMarkArcStep();
 }
 
 CPreProcess::~CPreProcess()
@@ -112,6 +113,49 @@ void CPreProcess::CalculateGrid(std::vector<ObjRect>& vecGridRect, CMachineListC
 		}
 	}
 
+}
+BOOL CPreProcess::DoSingleGrid(CMachineListContainer* pObjList)
+{
+	ObjRect rtBorder = pObjList->GetObjBound();
+	double fScannerRegion;
+	fScannerRegion = ReadScannerCaliRegion();
+	fScannerRegion *= 1.05;
+
+	if (rtBorder.max_x - rtBorder.min_x > fScannerRegion || rtBorder.max_y - rtBorder.min_y > fScannerRegion)
+	{
+		AfxMessageBox(_T("加工对象超幅面"));
+		return FALSE;
+	}
+
+	//生成polyGrid，即所有分格矩形列表
+	//std::vector<Polygon_T> vecPolyGrid;
+	Polygon_T polyTmp;
+	bg::append(polyTmp.outer(), Point_T(rtBorder.min_x, rtBorder.min_y));
+	bg::append(polyTmp.outer(), Point_T(rtBorder.min_x, rtBorder.max_y));
+	bg::append(polyTmp.outer(), Point_T(rtBorder.max_x, rtBorder.max_y));
+	bg::append(polyTmp.outer(), Point_T(rtBorder.max_x, rtBorder.min_y));
+	bg::correct(polyTmp);
+	//vecPolyGrid.push_back(polyTmp);
+
+	//生成vecEntities，即所有加工对象列表
+	VecEntities vecEntities;
+	LoadMachineObjList(vecEntities, pObjList);
+
+	std::vector<MLine_T> vecMLineAll;
+	for (auto val : vecEntities)
+	{
+		vecMLineAll.push_back(val.mlineObj);
+	}
+
+
+	//遍历vecEntities & vecPolyGrid，生成m_vecProcEntPerGrid
+	//CutEntityByGrid(vecEntities, vecPolyGrid);
+	PreProcessEntPerGrid prcEntPerGridTmp;
+	prcEntPerGridTmp.polyGrid = polyTmp;
+	prcEntPerGridTmp.vecEntitiesPerGrid = vecEntities;
+	m_vecProcEntPerGrid.push_back(prcEntPerGridTmp);
+
+	return TRUE;
 }
 
 void CPreProcess::DoGrid(std::vector<ObjRect>& vecGridRect, CMachineListContainer* pObjList)
@@ -432,10 +476,113 @@ void CPreProcess::CalculateTrans(int nCountMark, std::vector <CPointF> vPtPosDes
 	//}
 }
 
+void CPreProcess::CalculateSingleTrans(CMachineListContainer* pObjList, int nCountMark, std::vector <CPointF> vPtPosDestinedMark, std::vector <CPointF> vPtPosRealMark,
+	double ptOrg[2], double ptScale[2], double* fRotateDegree, double ptReal[2], int nScaleDirection)
+{
+	ObjRect rtBound = pObjList->GetObjBound();
+
+	//计算平移旋转拉伸
+	if (0 == nCountMark)
+	{
+		//无mark点 以链表外框中心为锚点，以相机视角dxf位置计算旋转偏移
+		ptOrg[0] = (rtBound.max_x + rtBound.min_x) / 2;
+		ptOrg[1] = (rtBound.max_y + rtBound.min_y) / 2;
+		ptScale[0] = 1;
+		ptScale[1] = 1;
+		*fRotateDegree = -g_fDxfRotate;		//ccw to cw
+		ptReal[0] = g_ptDxfTranslate.x;
+		ptReal[1] = g_ptDxfTranslate.y;
+		////无mark点 以图中分格左下角+当前位置振镜中心为原点
+		//ptOrg[0] = (rtBound.max_x - rtBound.min_x) / 2;
+		//ptOrg[1] = (rtBound.max_y - rtBound.min_y) / 2;
+		//ptScale[0] = 1;
+		//ptScale[1] = 1;
+		//*fRotateDegree = 0;
+		//ptReal[0] = 0;
+		//ptReal[1] = 0;
+
+	}
+	else
+	{
+		//有mark点 则以第一个mark点为零点
+		double fPosCameraX, fPosCameraY;
+		fPosCameraX = ReadDevCameraPosX();
+		fPosCameraY = ReadDevCameraPosY();
+		ptOrg[0] = (double)vPtPosDestinedMark[0].x;
+		ptOrg[1] = (double)vPtPosDestinedMark[0].y;
+		ptReal[0] = (double)vPtPosRealMark[0].x - fPosCameraX;
+		ptReal[1] = (double)vPtPosRealMark[0].y - fPosCameraY;
+
+		//计算拉伸旋转
+		if (1 == nCountMark)
+		{
+			ptScale[0] = 1;
+			ptScale[1] = 1;
+			*fRotateDegree = 0;
+		}
+		else if (2 == nCountMark)
+		{
+			CPointF ptVecReal, ptVecDestined;
+			double fLengthOfVecReal, fLengthOfVecDestined;
+			ptVecReal = vPtPosRealMark[1] - vPtPosRealMark[0];
+			ptVecDestined = vPtPosDestinedMark[1] - vPtPosDestinedMark[0];
+			fLengthOfVecReal = sqrt(pow(ptVecReal.x, 2) + pow(ptVecReal.y, 2));
+			fLengthOfVecDestined = sqrt(pow(ptVecDestined.x, 2) + pow(ptVecDestined.y, 2));
+
+			//str111.Format(_T("fLengthOfVecReal = %.3f\nfLengthOfVecDestined = %.3f\nptScale = %.3f"), fLengthOfVecReal, fLengthOfVecDestined, fLengthOfVecReal / fLengthOfVecDestined);
+			//AfxMessageBox(str111);
+
+			if (0 == nScaleDirection)
+			{
+				//同向拉伸
+				ptScale[0] = fLengthOfVecReal / fLengthOfVecDestined;
+				ptScale[1] = fLengthOfVecReal / fLengthOfVecDestined;
+				*fRotateDegree = atan2((double)ptVecReal.y, (double)ptVecReal.x) - atan2((double)ptVecDestined.y, (double)ptVecDestined.x);	//ccw 弧度
+				*fRotateDegree *= -180 / M_PI;	//cw 角度
+			}
+			else if (1 == nScaleDirection)
+			{
+				//X方向拉伸
+				double fPreScaleX, fPreScaleY;
+				fPreScaleY = ptVecDestined.y;
+				fPreScaleX = sqrt(pow(fLengthOfVecReal, 2) - pow(fPreScaleY, 2));
+				ptScale[0] = fPreScaleX / ptVecDestined.x;
+				ptScale[1] = 1;
+				*fRotateDegree = atan2((double)ptVecReal.y, (double)ptVecReal.x) - atan2(fPreScaleY, fPreScaleX);	//ccw 弧度
+				*fRotateDegree *= -180 / M_PI;	//cw 角度
+			}
+			else if (2 == nScaleDirection)
+			{
+				//Y方向拉伸
+				double fPreScaleX, fPreScaleY;
+				fPreScaleX = ptVecDestined.x;
+				fPreScaleY = sqrt(pow(fLengthOfVecReal, 2) - pow(fPreScaleX, 2));
+				ptScale[0] = 1;
+				ptScale[1] = fPreScaleY / ptVecDestined.y;
+				*fRotateDegree = atan2((double)ptVecReal.y, (double)ptVecReal.x) - atan2(fPreScaleY, fPreScaleX);	//ccw 弧度
+				*fRotateDegree *= -180 / M_PI;	//cw 角度
+			}
+			else
+				AfxMessageBox(_T("定位参数错误"));
+
+		}
+		else if (3 == nCountMark)
+		{
+
+		}
+		else if (4 == nCountMark)
+		{
+
+		}
+		else
+			AfxMessageBox(_T("定位参数错误"));
+
+	}
+}
+
+
 void CPreProcess::DoTrans(double ptOrg[2], double ptScale[2], double fRotateDegree, double ptReal[2])
 {
-	m_ptOrg.x(ptOrg[0]);
-	m_ptOrg.y(ptOrg[1]);
 
 	for (auto valList : m_vecProcEntPerGrid)
 	{
@@ -453,9 +600,11 @@ void CPreProcess::DoTrans(double ptOrg[2], double ptScale[2], double fRotateDegr
 		bg::transform(polyTranslate, polyScale, scale);
 		bgt::rotate_transformer<boost::geometry::degree, double, 2, 2> rotate(fRotateDegree);
 		bg::transform(polyScale, polyRotate, rotate);
-		bgt::translate_transformer<double, 2, 2> translateReal(ptReal[0], ptReal[1]);
-		bg::transform(polyRotate, polyReal, translateReal);
-		prcEntPerGridTmp.polyGrid = polyReal;
+		//grid不平移， 相当于图平移
+		prcEntPerGridTmp.polyGrid = polyRotate;
+		//bgt::translate_transformer<double, 2, 2> translateReal(ptReal[0], ptReal[1]);
+		//bg::transform(polyRotate, polyReal, translateReal);
+		//prcEntPerGridTmp.polyGrid = polyReal;
 
 		//对每个grid中的对象操作
 		for (auto valEnt : vecEntTmp)
@@ -483,6 +632,14 @@ void CPreProcess::DoTrans(double ptOrg[2], double ptScale[2], double fRotateDegr
 	}
 }
 
+void CPreProcess::DoSingleTrans(CMachineListContainer* pObjList, int nCountMark, std::vector <CPointF> vPtPosDestinedMark, std::vector <CPointF> vPtPosRealMark, int nScaleDirection)
+{
+	double ptOrg[2], ptScale[2], fRotateDegree, ptReal[2];
+	CalculateSingleTrans(pObjList, nCountMark, vPtPosDestinedMark, vPtPosRealMark, ptOrg, ptScale, &fRotateDegree, ptReal, nScaleDirection);
+	DoTrans(ptOrg, ptScale, fRotateDegree, ptReal);
+}
+
+
 void CPreProcess::GetGridCenter(int nGridIndex, double* pGridCenterX, double* pGridCenterY)
 {
 	if (nGridIndex >= m_vecProcEntPerGridTrans.size())
@@ -503,12 +660,13 @@ void CPreProcess::GetGridCenter(int nGridIndex, double* pGridCenterX, double* pG
 	return;
 }
 
-BOOL CPreProcess::WriteEntitiesPerGridToBuffer(int nGridIndex, CDeviceCardMark* pDevCardMark, CMachineListContainer* pObjList)
+BOOL CPreProcess::WriteEntitiesPerGridToBuffer(int nGridIndex, CMachineListContainer* pObjList)
 {
-
+	//debug333
 	if (NULL == pDevCardMark)
 		return FALSE;
 
+	//debug333
 	//先清空打标卡缓冲区
 	if (!pDevCardMark->DeleteALLEntities())
 		return FALSE;
@@ -535,8 +693,10 @@ BOOL CPreProcess::WriteEntitiesPerGridToBuffer(int nGridIndex, CDeviceCardMark* 
 		//计算对象相对分格中心坐标,相当于平移
 		MLine_T mlineTmp, mlineTrans;
 		mlineTmp = valEnt.mlineObj;
-		bgt::translate_transformer<double, 2, 2> translate(-ptCenter.x(), -ptCenter.y());
-		bg::transform(mlineTmp, mlineTrans, translate);
+		//bgt::translate_transformer<double, 2, 2> translate(-ptCenter.x(), -ptCenter.y());
+		//bgt::translate_transformer<double, 2, 2> translate(0, 0);
+		//bg::transform(mlineTmp, mlineTrans, translate);
+		mlineTrans = mlineTmp;
 
 		//将对象加入对应层号的vecEntSortByLayer
 		entTmp.mlineObj = mlineTrans;
@@ -608,6 +768,10 @@ BOOL CPreProcess::WriteEntitiesPerGridToBuffer(int nGridIndex, CDeviceCardMark* 
 		}
 	}
 
+	//保存加工文件
+	if (!pDevCardMark->SaveEntityToFile())
+		return FALSE;
+
 	return TRUE;
 
 	/*
@@ -666,14 +830,17 @@ BOOL CPreProcess::WriteEntitiesToBuffer(VecEntities& vecEntities)
 				ptBuf[i][1] = line[i].y();
 			}
 
+			//debug333
 			//将对象写入板卡缓冲区
 			if (FALSE == pDevCardMark->AddEntityLines(nCountPt, ptBuf, nPenNo))
 			{
 				//AfxMessageBox(_T("切割模式return flase"));
 				delete[] ptBuf;
+				ptBuf = NULL;
 				return FALSE;
 			}
 			delete[] ptBuf;
+			ptBuf = NULL;
 		}
 	}
 	return TRUE;
@@ -893,8 +1060,8 @@ void CPreProcess::LoadMachineObjList(VecEntities& vecEntities, CMachineListConta
 
 void CPreProcess::LoadMachineObj(VecEntities& vecEntities, CMachineObj_Comm* pObj)
 {
-	//滤过mark层
-	if (LayerNum_Mark == pObj->m_ObjByLayer)
+	//滤过不加工的层
+	if (LayerNum_Default > pObj->m_ObjByLayer)
 		return;
 
 	//提前初始化供case MachineObj_Type_Polyline使用
@@ -1103,8 +1270,295 @@ void CPreProcess::LoadMachineObj(VecEntities& vecEntities, CMachineObj_Comm* pOb
 		}
 		AddEntityLines(vecEntities, nCountPtPolyline, ptBuf, nLayer);
 		delete[] ptBuf;
-
 		break;
+
+	case MachineObj_Type_WLine:
+		CMachineObjWLine* pWLine;
+		int nCountWLine;
+		pWLine = (CMachineObjWLine*)pObj;
+
+		double ptPosWLine[2][2];
+		ptPosWLine[0][0] = pWLine->GetLineStart().x;
+		ptPosWLine[0][1] = pWLine->GetLineStart().y;
+		ptPosWLine[1][0] = pWLine->GetLineEnd().x;
+		ptPosWLine[1][1] = pWLine->GetLineEnd().y;
+		AddEntityLines(vecEntities, 2, ptPosWLine, nLayer);
+
+		nCountWLine = pWLine->m_pDupList.size();
+		for (int i = 0; i < nCountWLine; i++)
+		{
+			double ptPos[2][2];
+			ptPos[0][0] = pWLine->m_pDupList[i]->front().x;
+			ptPos[0][1] = pWLine->m_pDupList[i]->front().y;
+			ptPos[1][0] = pWLine->m_pDupList[i]->back().x;
+			ptPos[1][1] = pWLine->m_pDupList[i]->back().y;
+
+			AddEntityLines(vecEntities, 2, ptPos, nLayer);
+		}
+		break;
+
+	case MachineObj_Type_WArc:
+		CMachineObjWArc* pWArc;
+		int nCountWArc;
+		pWArc = (CMachineObjWArc*)pObj;
+
+		double ptWArcCenterPos[2];
+		int nWArcDir;
+		double fWArcRadius, fWArcAngleStart, fWArcAngleEnd;
+		ptWArcCenterPos[0] = pWArc->GetArcCenter().x;
+		ptWArcCenterPos[1] = pWArc->GetArcCenter().y;
+		nWArcDir = (int)pWArc->GetArcDir();
+		fWArcRadius = pWArc->GetArcRadius();
+		fWArcAngleStart = pWArc->GetStartAngle();
+		fWArcAngleEnd = pWArc->GetEndAngle();
+		AddEntityArc(vecEntities, ptWArcCenterPos, fWArcRadius, fWArcAngleStart, fWArcAngleEnd, nWArcDir, nLayer);
+
+		nCountWArc= pWArc->m_pDupList.size();
+		for (int i = 0; i < nCountWArc; i++)
+		{
+			double fWArcRadius, fWArcAngleStart, fWArcAngleEnd;
+			VectPoint vecWArc;
+			vecWArc = *pWArc->m_pDupList[i];
+
+			fWArcRadius = vecWArc[2].x;
+			fWArcAngleStart = vecWArc[1].x;
+			fWArcAngleEnd = vecWArc[1].y;
+			AddEntityArc(vecEntities, ptWArcCenterPos, fWArcRadius, fWArcAngleStart, fWArcAngleEnd, nWArcDir, nLayer);
+		}
+		break;
+
+	case MachineObj_Type_WPolyline:
+		CMachineObjWPolyline* pWPolyline;
+		int nCountWPolyline;
+		pWPolyline = (CMachineObjWPolyline*)pObj;
+
+		{
+		//原图
+		int nVertCount;
+		double fConvexityLast;
+		nVertCount = pWPolyline->GetPolylineVertexCount();
+		ptPolylineLast.x = pWPolyline->GetPolylineStart().x;
+		ptPolylineLast.y = pWPolyline->GetPolylineStart().y;
+		fConvexityLast = pWPolyline->GetPolylineStart().convexity;
+
+		vecPolylinePtBuf.clear();
+		vecPolylinePtBuf.push_back(ObjPoint(ptPolylineLast.x, ptPolylineLast.y));
+		for (int i = 1; i < nVertCount; i++)
+		{
+			//读当前顶点i
+			ptPolyline.x = pWPolyline->GetPolylinePoint(i).x;
+			ptPolyline.y = pWPolyline->GetPolylinePoint(i).y;
+
+			//检查上一个顶点i-1的凸度
+			if (0 == fConvexityLast)
+			{
+				//顶点i-1 to 顶点i 是直线
+				vecPolylinePtBuf.push_back(ObjPoint(ptPolyline.x, ptPolyline.y));
+			}
+			else
+			{
+				//顶点i-1 to 顶点i 是圆弧
+				ObjPoint ArcCenter;
+				double fArcRadius, fArcAngleStart, fArcAngleEnd;
+				int nArcDir;
+
+				pWPolyline->TranPolylineToArc(
+					ptPolylineLast, ptPolyline, fConvexityLast,
+					&ArcCenter, &fArcRadius, &fArcAngleStart, &fArcAngleEnd);
+				nArcDir = (fArcAngleStart > fArcAngleEnd) ? (int)CW : (int)CCW;
+
+				//解析圆弧上插补坐标
+				int nCountPt;
+				double fAngleDelt = fArcAngleEnd - fArcAngleStart;
+				double fMarkArcStepAngle;
+				fMarkArcStepAngle = m_fMarkArcStep / fArcRadius * 180 / M_PI;
+				ObjPoint ptTmp;
+
+				if (0 == nArcDir)//顺时针
+				{
+					if (0 <= fAngleDelt)//劣弧
+						nCountPt = (int)(((M_PI * (360 - fAngleDelt) / 180) * fArcRadius) / m_fMarkArcStep) + 1;
+					else//优弧
+						nCountPt = (int)(((M_PI * abs(fAngleDelt) / 180) * fArcRadius) / m_fMarkArcStep) + 1;
+
+					for (int i = 0; i < nCountPt - 1; i++)
+					{
+
+						fArcAngleStart -= fMarkArcStepAngle;
+						ptTmp.x = ArcCenter.x + fArcRadius * cos(M_PI * fArcAngleStart / 180);
+						ptTmp.y = ArcCenter.y + fArcRadius * sin(M_PI * fArcAngleStart / 180);
+						vecPolylinePtBuf.push_back(ptTmp);
+					}
+					ptTmp.x = ArcCenter.x + fArcRadius * cos(M_PI * fArcAngleEnd / 180);
+					ptTmp.y = ArcCenter.y + fArcRadius * sin(M_PI * fArcAngleEnd / 180);
+					vecPolylinePtBuf.push_back(ptTmp);
+				}
+				else if (1 == nArcDir)//逆时针
+				{
+					if (0 <= fAngleDelt)//优弧
+						nCountPt = (int)(((M_PI * fAngleDelt / 180) * fArcRadius) / m_fMarkArcStep) + 1;
+					else//劣弧
+						nCountPt = (int)(((M_PI * (360 - abs(fAngleDelt)) / 180) * fArcRadius) / m_fMarkArcStep) + 1;
+					for (int i = 0; i < nCountPt - 1; i++)
+					{
+						fArcAngleStart += fMarkArcStepAngle;
+						ptTmp.x = ArcCenter.x + fArcRadius * cos(M_PI * fArcAngleStart / 180);
+						ptTmp.y = ArcCenter.y + fArcRadius * sin(M_PI * fArcAngleStart / 180);
+						vecPolylinePtBuf.push_back(ptTmp);
+					}
+					ptTmp.x = ArcCenter.x + fArcRadius * cos(M_PI * fArcAngleEnd / 180);
+					ptTmp.y = ArcCenter.y + fArcRadius * sin(M_PI * fArcAngleEnd / 180);
+					vecPolylinePtBuf.push_back(ptTmp);
+				}
+			}
+			//更新ptPolylineLast，fConvexityLast
+			if (i < nVertCount - 1)
+			{
+				ptPolylineLast = ptPolyline;
+				fConvexityLast = pWPolyline->GetPolylinePoint(i).convexity;
+			}
+		}
+
+		//所有多段线读取完成,一起写入缓冲区
+		int nCountPtPolyline;
+		double(*ptBuf)[2];
+		nCountPtPolyline = (int)vecPolylinePtBuf.size();
+		ptBuf = new double[nCountPtPolyline][2];
+		for (int i = 0; i < nCountPtPolyline; i++)
+		{
+			ptBuf[i][0] = vecPolylinePtBuf[i].x;
+			ptBuf[i][1] = vecPolylinePtBuf[i].y;
+		}
+		AddEntityLines(vecEntities, nCountPtPolyline, ptBuf, nLayer);
+		delete[] ptBuf;
+		//原图//
+
+		}
+
+		nCountWPolyline = pWPolyline->m_pDupList.size();
+		for (int j = 0; j < nCountWPolyline; j++)
+		{
+			VectVpoint pVpoint = *pWPolyline->m_pDupList[j];
+		
+			//***DrawPolyline***
+			//CMachineObjPolyline* pPolyline;
+			//pPolyline = (CMachineObjPolyline*)pObj;
+
+			int nVertCount;
+			double fConvexityLast;
+			//ObjPoint ptPolylineLast, ptPolyline;
+
+			nVertCount = pVpoint.size();
+			ptPolylineLast.x = pVpoint.front().x;
+			ptPolylineLast.y = pVpoint.front().y;
+			fConvexityLast = pVpoint.front().convexity;
+			//nVertCount = pPolyline->GetPolylineVertexCount();
+			//ptPolylineLast.x = pPolyline->GetPolylineStart().x;
+			//ptPolylineLast.y = pPolyline->GetPolylineStart().y;
+			//fConvexityLast = pPolyline->GetPolylineStart().convexity;
+
+			vecPolylinePtBuf.clear();
+			vecPolylinePtBuf.push_back(ObjPoint(ptPolylineLast.x, ptPolylineLast.y));
+
+			for (int i = 1; i < nVertCount; i++)
+			{
+				//读当前顶点i
+				ptPolyline.x = pVpoint[i].x;
+				ptPolyline.y = pVpoint[i].y;
+				//ptPolyline.x = pPolyline->GetPolylinePoint(i).x;
+				//ptPolyline.y = pPolyline->GetPolylinePoint(i).y;
+
+				//检查上一个顶点i-1的凸度
+				if (0 == fConvexityLast)
+				{
+					//顶点i-1 to 顶点i 是直线
+					vecPolylinePtBuf.push_back(ObjPoint(ptPolyline.x, ptPolyline.y));
+				}
+				else
+				{
+					//顶点i-1 to 顶点i 是圆弧
+					ObjPoint ArcCenter;
+					double fArcRadius, fArcAngleStart, fArcAngleEnd;
+					int nArcDir;
+
+					pWPolyline->TranPolylineToArc(
+						ptPolylineLast, ptPolyline, fConvexityLast,
+						&ArcCenter, &fArcRadius, &fArcAngleStart, &fArcAngleEnd);
+					nArcDir = (fArcAngleStart > fArcAngleEnd) ? (int)CW : (int)CCW;
+
+					//解析圆弧上插补坐标
+					int nCountPt;
+					double fAngleDelt = fArcAngleEnd - fArcAngleStart;
+					double fMarkArcStepAngle;
+					fMarkArcStepAngle = m_fMarkArcStep / fArcRadius * 180 / M_PI;
+					ObjPoint ptTmp;
+
+					if (0 == nArcDir)//顺时针
+					{
+						if (0 <= fAngleDelt)//劣弧
+							nCountPt = (int)(((M_PI * (360 - fAngleDelt) / 180) * fArcRadius) / m_fMarkArcStep) + 1;
+						else//优弧
+							nCountPt = (int)(((M_PI * abs(fAngleDelt) / 180) * fArcRadius) / m_fMarkArcStep) + 1;
+
+						for (int i = 0; i < nCountPt - 1; i++)
+						{
+							fArcAngleStart -= fMarkArcStepAngle;
+							ptTmp.x = ArcCenter.x + fArcRadius * cos(M_PI * fArcAngleStart / 180);
+							ptTmp.y = ArcCenter.y + fArcRadius * sin(M_PI * fArcAngleStart / 180);
+							vecPolylinePtBuf.push_back(ptTmp);
+						}
+						ptTmp.x = ArcCenter.x + fArcRadius * cos(M_PI * fArcAngleEnd / 180);
+						ptTmp.y = ArcCenter.y + fArcRadius * sin(M_PI * fArcAngleEnd / 180);
+						vecPolylinePtBuf.push_back(ptTmp);
+					}
+					else if (1 == nArcDir)//逆时针
+					{
+						if (0 <= fAngleDelt)//优弧
+							nCountPt = (int)(((M_PI * fAngleDelt / 180) * fArcRadius) / m_fMarkArcStep) + 1;
+						else//劣弧
+							nCountPt = (int)(((M_PI * (360 - abs(fAngleDelt)) / 180) * fArcRadius) / m_fMarkArcStep) + 1;
+
+						for (int i = 0; i < nCountPt - 1; i++)
+						{
+							fArcAngleStart += fMarkArcStepAngle;
+							ptTmp.x = ArcCenter.x + fArcRadius * cos(M_PI * fArcAngleStart / 180);
+							ptTmp.y = ArcCenter.y + fArcRadius * sin(M_PI * fArcAngleStart / 180);
+							vecPolylinePtBuf.push_back(ptTmp);
+						}
+						ptTmp.x = ArcCenter.x + fArcRadius * cos(M_PI * fArcAngleEnd / 180);
+						ptTmp.y = ArcCenter.y + fArcRadius * sin(M_PI * fArcAngleEnd / 180);
+						vecPolylinePtBuf.push_back(ptTmp);
+					}
+				}
+
+				//更新ptPolylineLast，fConvexityLast
+				if (i < nVertCount - 1)
+				{
+					ptPolylineLast = ptPolyline;
+					fConvexityLast = pVpoint[i].convexity;
+					//fConvexityLast = pPolyline->GetPolylinePoint(i).convexity;
+				}
+			}
+
+			//所有多段线读取完成,一起写入缓冲区
+			int nCountPtPolyline;
+			double(*ptBuf)[2];
+
+			nCountPtPolyline = (int)vecPolylinePtBuf.size();
+			ptBuf = new double[nCountPtPolyline][2];
+			for (int i = 0; i < nCountPtPolyline; i++)
+			{
+				ptBuf[i][0] = vecPolylinePtBuf[i].x;
+				ptBuf[i][1] = vecPolylinePtBuf[i].y;
+			}
+			AddEntityLines(vecEntities, nCountPtPolyline, ptBuf, nLayer);
+			delete[] ptBuf;
+		}
+		break;
+
+	case MachineObj_Type_FillPolyline:
+		break;
+
 	case MachineObj_Type_Group:
 		//***DrawGroup***
 		CMachineObjGroup* pGroup;
@@ -1247,4 +1701,486 @@ void CPreProcess::AddEntityArc(VecEntities& vecEntities, double ptCenterPos[2], 
 	AddEntityLines(vecEntities, nCountPt, ptBuf, nPenNo);
 
 }
+
+//抓靶相关
+int CPreProcess::GenMarkPoints(std::vector <CPointF> vPtPosDestinedMark, std::vector <HalconModel> vMarkPointModel, CMachineListContainer* pObjList)
+{
+	vPtPosDestinedMark.resize(0);
+	vMarkPointModel.resize(0);
+
+	POSITION pos;
+	CMachineObj_Comm* pObj;
+	ObjRect objRectTmp;
+	int nLayerMark, nLayerTmp;
+	int nIndexMarkPoint = 0;
+
+	nLayerMark = pObjList->FindLayerByName(LayerName_Mark);
+	if (0 > nLayerMark)
+		return FALSE;
+
+	pos = pObjList->GetObjHeadPosition();
+	while (pos)
+	{
+		pObj = pObjList->GetObjNext(pos);
+		nLayerTmp = pObj->m_ObjByLayer;
+		if (nLayerTmp != nLayerMark)
+			continue;
+
+		//找到一个mark点，获得mark点中心坐标
+		objRectTmp = pObj->GetObjBound();
+		CPointF ptTmp((FLOAT)(objRectTmp.max_x + objRectTmp.min_x) / 2,
+			(FLOAT)(objRectTmp.max_y + objRectTmp.min_y) / 2);
+		vPtPosDestinedMark.push_back(ptTmp);
+
+		//生成mark点模板
+		HalconModel hModelTmp;
+		if (FALSE == GenMarkPointModel(&hModelTmp, pObj))
+		{
+			continue;
+		}
+		vMarkPointModel.push_back(hModelTmp);
+
+		nIndexMarkPoint++;
+		if (2 <= nIndexMarkPoint)
+			break;
+	}
+
+	if (2 != nIndexMarkPoint)
+	{
+		AfxMessageBox(_T("请设置至少两个mark点\nMark点类型为圆或十字叉"));
+		return 0;
+	}
+
+	return nIndexMarkPoint;
+}
+BOOL CPreProcess::GenMarkPointModel(HalconModel* pHalconModel, CMachineObj_Comm* pObj, double fCrossWidth)
+{
+	if (MachineObj_Type_Circle == pObj->GetObjType())
+	{
+		CMachineObjCircle* pObjCircle = (CMachineObjCircle*)pObj;
+		double fRadius = pObjCircle->GetCircleRadius();
+		double fPixelSize = ReadDevCameraPixelSize();
+
+		HalconModel hModelTmp(_T("圆"), fRadius, fPixelSize);
+		*pHalconModel = hModelTmp;
+	}
+	else if (MachineObj_Type_Group == pObj->GetObjType())
+	{
+		ObjRect rtBorder = pObj->GetObjBound();
+		double fCrossLength = rtBorder.max_x - rtBorder.min_x;
+		double fPixelSize = ReadDevCameraPixelSize();
+
+		HalconModel hModelTmp(_T("十字叉"), fCrossLength, fCrossWidth, fPixelSize);
+		*pHalconModel = hModelTmp;
+	}
+
+	return TRUE;
+}
+
+int CPreProcess::GenMarkPoints(std::vector <CPointF>& vPtPosDestinedMark, std::vector <ModelBase>& vModelBase, CMachineListContainer* pObjList)
+{
+	vPtPosDestinedMark.resize(0);
+	vModelBase.resize(0);
+
+	POSITION pos;
+	CMachineObj_Comm* pObj;
+	ObjRect objRectTmp;
+	int nLayerMark, nLayerTmp;
+	int nIndexMarkPoint = 0;
+
+	nLayerMark = pObjList->FindLayerByName(LayerName_Mark);
+	if (0 > nLayerMark)
+		return FALSE;
+
+	pos = pObjList->GetObjHeadPosition();
+	while (pos)
+	{
+		pObj = pObjList->GetObjNext(pos);
+		nLayerTmp = pObj->m_ObjByLayer;
+		if (nLayerTmp != nLayerMark)
+			continue;
+
+		//找到一个mark点
+		//生成mark点模板
+		ModelBase* pModel = NULL;
+		if (FALSE == GenMarkPointModel(&pModel, pObj, pObjList))
+		{
+			continue;
+		}
+		if (NULL != pModel)
+		{
+			vModelBase.push_back(*pModel);
+			delete pModel;
+			pModel = NULL;
+		}
+
+		//获得mark点中心坐标
+		objRectTmp = pObj->GetObjBound();
+		CPointF ptTmp((FLOAT)(objRectTmp.max_x + objRectTmp.min_x) / 2,
+			(FLOAT)(objRectTmp.max_y + objRectTmp.min_y) / 2);
+		vPtPosDestinedMark.push_back(ptTmp);
+
+		nIndexMarkPoint++;
+		if (2 <= nIndexMarkPoint)
+			break;
+	}
+
+	if (2 != nIndexMarkPoint)
+	{
+		AfxMessageBox(_T("请设置至少两个mark点\nMark点类型为圆或十字叉"));
+		return 0;
+	}
+
+	return nIndexMarkPoint;
+}
+BOOL CPreProcess::GenMarkPointModel(ModelBase **ppModel, CMachineObj_Comm* pObj, CMachineListContainer* pList)
+{
+	double fPixelSize = ReadDevCameraPixelSize();
+	double fCameraPosX = ReadDevCameraPosX();
+	double fCameraPosY = ReadDevCameraPosY();
+	CPointF ptCameraPos(fCameraPosX, fCameraPosY);
+	ObjRect rtListBorder = pList->GetObjBound();
+	CPointF ptListCenter((rtListBorder.max_x + rtListBorder.min_x) / 2, (rtListBorder.max_y + rtListBorder.min_y) / 2);
+
+	if (MachineObj_Type_Circle == pObj->GetObjType())
+	{
+		CMachineObjCircle* pObjCircle = (CMachineObjCircle*)pObj;
+		double fRadius = pObjCircle->GetCircleRadius();
+		CPointF ptObjCenter(pObjCircle->GetCircleCenter().x, pObjCircle->GetCircleCenter().y);
+
+		*ppModel = ModelFactory::creatModel(ModelType::MT_Circle, fPixelSize, fRadius);
+		(*ppModel)->SetMatchDomain(ptObjCenter - ptListCenter + ptCameraPos, 4);
+	}
+	else if (MachineObj_Type_Group == pObj->GetObjType())
+	{
+		ObjRect rtObjBorder = pObj->GetObjBound();
+		double fCrossLength = rtObjBorder.max_x - rtObjBorder.min_x;
+		CPointF ptObjCenter((rtObjBorder.max_x + rtObjBorder.min_x) / 2, (rtObjBorder.max_y + rtObjBorder.min_y) / 2);
+
+		*ppModel = ModelFactory::creatModel(ModelType::MT_Cross, fPixelSize, fCrossLength, 0.25);
+		(*ppModel)->SetMatchDomain(ptObjCenter - ptListCenter + ptCameraPos, 4);
+	}
+	else
+		return FALSE;
+
+	return TRUE;
+}
+int CPreProcess::FindMarkPoints(std::vector <CPointF>& vPtPosRealMark, std::vector <ModelBase>& vModelBase)
+{
+	vPtPosRealMark.clear();
+
+	int nFinded = 0;
+	int nIndex = 0;
+	CString strCaption, strText;
+
+	for (auto valModel : vModelBase)
+	{
+		nIndex++;
+		CPointF ptFinded(0,0);
+		std::vector <CPointF> vPtPos;
+		std::vector <double> vFAngle;
+		valModel.LocateModel(vPtPos, vFAngle);
+
+		int nCount = vPtPos.size();
+		if (0 >= nCount)
+		{
+			strText.Format(_T("没有匹配对象"));
+			strCaption.Format(_T("第%d个mark点"), nIndex);
+			::MessageBox(NULL, strText, strCaption, MB_OK);
+		}
+		else if (1 < nCount)
+		{
+			strText.Format(_T("共匹配到%d个对象，请重新设置"), nCount);
+			strCaption.Format(_T("第%d个mark点"), nIndex);
+			::MessageBox(NULL, strText, strCaption, MB_OK);
+		}
+		else
+		{
+			nFinded++;
+			ptFinded = vPtPos.front();
+		}
+		vPtPosRealMark.push_back(ptFinded);
+	}
+
+	return nFinded;
+}
+
+
+BOOL CPreProcess::AutoPreProcess1(CMachineListContainer* pList, BOOL bLocate)
+{
+	if (FALSE == DoSingleGrid(pList))
+		return FALSE;
+
+	//判断是否需要抓靶定位
+	int nCountMarkPoints = 0;
+	std::vector <CPointF> vPtPosDestinedMark;
+	std::vector <CPointF> vPtPosRealMark;
+	std::vector <ModelBase> vModeBase;
+	if (bLocate == FALSE)
+	{
+		nCountMarkPoints = 0;
+		vPtPosDestinedMark.resize(0);
+		vPtPosRealMark.resize(0);
+		vModeBase.resize(0);
+	}
+	else
+	{
+		//抓靶定位流程
+		//读mark层生成mark点理论坐标及其model,只支持两个mark点
+		nCountMarkPoints = GenMarkPoints(vPtPosDestinedMark, vModeBase, pList);
+		if (2 != nCountMarkPoints)
+			return FALSE;
+		//依次抓靶生成mark点实际坐标
+		nCountMarkPoints = FindMarkPoints(vPtPosRealMark, vModeBase);
+		if (2 != nCountMarkPoints)
+			return FALSE;
+	}
+
+	//计算平移旋转
+	DoSingleTrans(pList, nCountMarkPoints, vPtPosDestinedMark, vPtPosRealMark);
+
+
+	return TRUE;
+}
+
+BOOL CPreProcess::AutoPreProcess2(CMachineListContainer* pList, BOOL bLocate)
+{
+	if (FALSE == DoSingleGrid(pList))
+		return FALSE;
+
+	//判断是否需要抓靶定位
+	double ptOrg[2], ptScale[2], fRotateDegree, ptReal[2];
+	if (bLocate == FALSE)
+	{
+
+		//计算平移旋转拉伸
+		//无mark点 以链表外框中心为锚点，以相机视角dxf位置计算旋转偏移
+		ObjRect rtBound = pList->GetObjBound();
+		ptOrg[0] = (rtBound.max_x + rtBound.min_x) / 2;
+		ptOrg[1] = (rtBound.max_y + rtBound.min_y) / 2;
+		ptScale[0] = 1;
+		ptScale[1] = 1;
+		fRotateDegree = -g_fDxfRotate;		//ccw to cw
+		ptReal[0] = g_ptDxfTranslate.x;
+		ptReal[1] = g_ptDxfTranslate.y;
+	}
+	else
+	{
+		//抓靶定位流程
+		//生成border层多段线点阵
+		std::vector<CPointF> vPtBorder;
+		vPtBorder = GetBorderPtArray(pList);
+		if (0 == vPtBorder.size())
+			return FALSE;
+
+		//根据border点阵生成匹配模板
+		int nCountFinded = 0;
+		double fRadius, fPixelSize, fScaleMin, fScaleMax, fMinScore, fPosCameraX, fPosCameraY;
+		fRadius = ReadDevCameraMarkCircleRadius();
+		fPixelSize = ReadDevCameraPixelSize();
+		fMinScore = ReadDevCameraMarkCircleFindMinScore();
+		fScaleMin = ReadDevCameraMarkCircleFindScaleMin();
+		fScaleMax = ReadDevCameraMarkCircleFindScaleMax();
+		fPosCameraX = ReadDevCameraPosX();
+		fPosCameraY = ReadDevCameraPosY();
+
+		ModelBase* pModel = ModelFactory::creatModel(ModelType::MT_ClosedPolyline, fPixelSize, vPtBorder);
+		pModel->SetScale(fScaleMin, fScaleMax);
+		pModel->SetMinScore(fMinScore);
+		std::vector<CPointF> vecPtPos;
+		std::vector <double> vFAngle;
+		nCountFinded = pModel->LocateModel(vecPtPos, vFAngle);
+		delete pModel;
+		pModel = NULL;
+
+		if (1 != nCountFinded)
+		{
+			AfxMessageBox(_T("没有找到唯一的加工对象外框"));
+			return FALSE;
+		}
+
+		CPointF ptBorderCenter;
+		if (FALSE == GetBorderCenter(pList, &ptBorderCenter))
+		{
+			AfxMessageBox(_T("无法获得外框中心"));
+			return FALSE;
+		}
+
+		ptOrg[0] = ptBorderCenter.x;
+		ptOrg[1] = ptBorderCenter.y;
+		ptScale[0] = 1;
+		ptScale[1] = 1;
+		fRotateDegree = -vFAngle.front();		//ccw to cw
+		ptReal[0] = vecPtPos.front().x + fPosCameraX;
+		ptReal[1] = vecPtPos.front().y + fPosCameraY;
+	}
+
+	//进行平移旋转
+	//DoSingleTrans(pList, nCountMarkPoints, vPtPosDestinedMark, vPtPosRealMark);
+	DoTrans(ptOrg, ptScale, fRotateDegree, ptReal);
+
+
+	return TRUE;
+}
+
+
+std::vector<CPointF> CPreProcess::GetBorderPtArray(CMachineListContainer* pList)
+{
+	POSITION pos;
+	CMachineObj_Comm* pObj;
+	pos = pList->GetObjHeadPosition();
+	while (pos)
+	{
+		pObj = pList->GetObjNext(pos);
+		if (pObj->m_ObjByLayer == LayerNum_Border)
+			break;
+	}
+
+	if (NULL != pObj && LayerNum_Border != pObj->m_ObjByLayer)
+		return std::vector<CPointF>();
+
+	if (MachineObj_Type_Polyline != pObj->GetObjType())
+		return std::vector<CPointF>();
+
+	ObjRect rtBound;
+	CPointF ptRTCenter;
+	ObjPoint ptPolylineLast, ptPolyline;
+	//int nLayer = pObj->m_ObjByLayer;
+	std::vector<CPointF> vecPolylinePtBuf;
+
+	rtBound = pObj->GetObjBound();
+	ptRTCenter.x = (rtBound.max_x + rtBound.min_x) / 2;
+	ptRTCenter.y = (rtBound.max_y + rtBound.min_y) / 2;
+	double fMatchBorderArcStep = 1;
+
+			//***DrawPolyline***
+			CMachineObjPolyline* pPolyline;
+			pPolyline = (CMachineObjPolyline*)pObj;
+
+			int nVertCount;
+			double fConvexityLast;
+			//ObjPoint ptPolylineLast, ptPolyline;
+
+			nVertCount = pPolyline->GetPolylineVertexCount();
+			ptPolylineLast.x = pPolyline->GetPolylineStart().x;
+			ptPolylineLast.y = pPolyline->GetPolylineStart().y;
+			fConvexityLast = pPolyline->GetPolylineStart().convexity;
+
+			vecPolylinePtBuf.clear();
+			vecPolylinePtBuf.push_back(CPointF(ptPolylineLast.x, ptPolylineLast.y) - ptRTCenter);
+
+			for (int i = 1; i < nVertCount; i++)
+			{
+				//读当前顶点i
+				ptPolyline.x = pPolyline->GetPolylinePoint(i).x;
+				ptPolyline.y = pPolyline->GetPolylinePoint(i).y;
+
+				//检查上一个顶点i-1的凸度
+				if (0 == fConvexityLast)
+				{
+					//顶点i-1 to 顶点i 是直线
+					vecPolylinePtBuf.push_back(CPointF(ptPolyline.x, ptPolyline.y) - ptRTCenter);
+				}
+				else
+				{
+					//顶点i-1 to 顶点i 是圆弧
+					ObjPoint ArcCenter;
+					double /*ptArcCenterPos[2],*/ fArcRadius, fArcAngleStart, fArcAngleEnd;
+					int nArcDir;
+
+					pPolyline->TranPolylineToArc(
+						ptPolylineLast, ptPolyline, fConvexityLast,
+						&ArcCenter, &fArcRadius, &fArcAngleStart, &fArcAngleEnd);
+					nArcDir = (fArcAngleStart > fArcAngleEnd) ? (int)CW : (int)CCW;
+
+					//AddEntityArc(vecEntities, ptArcCenterPos, fArcRadius, fArcAngleStart, fArcAngleEnd, nArcDir, nLayer);
+
+					//解析圆弧上插补坐标
+					int nCountPt;
+					double fAngleDelt = fArcAngleEnd - fArcAngleStart;
+					double fMarkArcStepAngle;
+					fMarkArcStepAngle = fMatchBorderArcStep / fArcRadius * 180 / M_PI;
+					CPointF ptTmp;
+
+					if (0 == nArcDir)//顺时针
+					{
+						if (0 <= fAngleDelt)//劣弧
+							nCountPt = (int)(((M_PI * (360 - fAngleDelt) / 180) * fArcRadius) / fMatchBorderArcStep) + 1;
+						else//优弧
+							nCountPt = (int)(((M_PI * abs(fAngleDelt) / 180) * fArcRadius) / fMatchBorderArcStep) + 1;
+
+						//ptBuf = new double[nCountPt][2];
+
+						for (int i = 0; i < nCountPt - 1; i++)
+						{
+							fArcAngleStart -= fMarkArcStepAngle;
+							ptTmp.x = ArcCenter.x + fArcRadius * cos(M_PI * fArcAngleStart / 180);
+							ptTmp.y = ArcCenter.y + fArcRadius * sin(M_PI * fArcAngleStart / 180);
+							vecPolylinePtBuf.push_back(ptTmp - ptRTCenter);
+						}
+
+						ptTmp.x = ArcCenter.x + fArcRadius * cos(M_PI * fArcAngleEnd / 180);
+						ptTmp.y = ArcCenter.y + fArcRadius * sin(M_PI * fArcAngleEnd / 180);
+						vecPolylinePtBuf.push_back(ptTmp - ptRTCenter);
+					}
+					else if (1 == nArcDir)//逆时针
+					{
+						if (0 <= fAngleDelt)//优弧
+							nCountPt = (int)(((M_PI * fAngleDelt / 180) * fArcRadius) / fMatchBorderArcStep) + 1;
+						else//劣弧
+							nCountPt = (int)(((M_PI * (360 - abs(fAngleDelt)) / 180) * fArcRadius) / fMatchBorderArcStep) + 1;
+
+						for (int i = 0; i < nCountPt - 1; i++)
+						{
+							fArcAngleStart += fMarkArcStepAngle;
+							ptTmp.x = ArcCenter.x + fArcRadius * cos(M_PI * fArcAngleStart / 180);
+							ptTmp.y = ArcCenter.y + fArcRadius * sin(M_PI * fArcAngleStart / 180);
+							vecPolylinePtBuf.push_back(ptTmp - ptRTCenter);
+						}
+						ptTmp.x = ArcCenter.x + fArcRadius * cos(M_PI * fArcAngleEnd / 180);
+						ptTmp.y = ArcCenter.y + fArcRadius * sin(M_PI * fArcAngleEnd / 180);
+						vecPolylinePtBuf.push_back(ptTmp - ptRTCenter);
+					}
+				}
+
+				//更新ptPolylineLast，fConvexityLast
+				if (i < nVertCount - 1)
+				{
+					ptPolylineLast = ptPolyline;
+					fConvexityLast = pPolyline->GetPolylinePoint(i).convexity;
+				}
+			}
+
+
+			return vecPolylinePtBuf;
+}
+
+BOOL CPreProcess::GetBorderCenter(CMachineListContainer* pList, CPointF* ptBorderCenter)
+{
+	POSITION pos;
+	CMachineObj_Comm* pObj;
+	pos = pList->GetObjHeadPosition();
+	while (pos)
+	{
+		pObj = pList->GetObjNext(pos);
+		if (pObj->m_ObjByLayer == LayerNum_Border)
+			break;
+	}
+
+	if (LayerNum_Border != pObj->m_ObjByLayer)
+		return FALSE;
+
+	if (MachineObj_Type_Polyline != pObj->GetObjType())
+		return FALSE;
+
+	ObjRect rtBound;
+	CPointF ptRTCenter;
+	rtBound = pObj->GetObjBound();
+	ptRTCenter.x = (rtBound.max_x + rtBound.min_x) / 2;
+	ptRTCenter.y = (rtBound.max_y + rtBound.min_y) / 2;
+
+	*ptBorderCenter = ptRTCenter;
+	return TRUE;
+}
+
 

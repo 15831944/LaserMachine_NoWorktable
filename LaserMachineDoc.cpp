@@ -46,6 +46,11 @@ CLaserMachineDoc::CLaserMachineDoc()
 	m_pLaserObjList->m_MachineParaDefault.Power = gProcessPower;
 	m_pLaserObjList->m_MachineParaDefault.Times = gProcessTimes;
 	m_pLaserObjList->m_MachineParaDefault.PulseWidth = gProcessPulseWidth;
+	m_pLaserObjList->m_MachineParaDefault.LaserOnDelay = gLaserOnDelay;
+	m_pLaserObjList->m_MachineParaDefault.LaserOffDelay = gLaserOffDelay;
+	m_pLaserObjList->m_MachineParaDefault.BeforMarkDelay = gBeforMarkDelay;
+	m_pLaserObjList->m_MachineParaDefault.AfterMarkDelay = gAfterMarkDelay;
+	m_pLaserObjList->m_MachineParaDefault.PolylineDelay = gPolylineDelay;
 }
 
 CLaserMachineDoc::~CLaserMachineDoc()
@@ -283,6 +288,11 @@ void CLaserMachineDoc::OnImportDxf()
 	m_pLaserObjList->m_MachineParaDefault.Speed = gProcessSpeed;
 	m_pLaserObjList->m_MachineParaDefault.Times = gProcessTimes;
 	m_pLaserObjList->m_MachineWaitTimeDefault = gProcessWaitTime;
+	m_pLaserObjList->m_MachineParaDefault.LaserOnDelay = gLaserOnDelay;
+	m_pLaserObjList->m_MachineParaDefault.LaserOffDelay = gLaserOffDelay;
+	m_pLaserObjList->m_MachineParaDefault.BeforMarkDelay = gBeforMarkDelay;
+	m_pLaserObjList->m_MachineParaDefault.AfterMarkDelay = gAfterMarkDelay;
+	m_pLaserObjList->m_MachineParaDefault.PolylineDelay = gPolylineDelay;
 	AfxGetApp()->BeginWaitCursor();
 	str = fileDlg.GetFileExt();
 	if (str == _T("dxf"))
@@ -290,7 +300,9 @@ void CLaserMachineDoc::OnImportDxf()
 		str = fileDlg.GetPathName();
 		if (m_pLaserObjList->Parsedxf(str))
 		{
-			m_pLaserObjList->LayerRename();
+			ObjRect rect = m_pLaserObjList->GetObjBound();
+			if ((abs(rect.min_x) > InvalidLength) || (abs(rect.min_y) > InvalidLength))
+				m_pLaserObjList->MoveObjectListCoordinate(-rect.min_x, -rect.min_y);
 			m_bModified = TRUE;
 			str = fileDlg.GetPathName();
 			str = str.Left(str.ReverseFind(_T('.')));
@@ -398,6 +410,11 @@ void CLaserMachineDoc::OnFileImport()
 	m_pLaserObjList->m_MachineParaDefault.Speed = gProcessSpeed;
 	m_pLaserObjList->m_MachineParaDefault.Times = gProcessTimes;
 	m_pLaserObjList->m_MachineWaitTimeDefault = gProcessWaitTime;
+	m_pLaserObjList->m_MachineParaDefault.LaserOnDelay = gLaserOnDelay;
+	m_pLaserObjList->m_MachineParaDefault.LaserOffDelay = gLaserOffDelay;
+	m_pLaserObjList->m_MachineParaDefault.BeforMarkDelay = gBeforMarkDelay;
+	m_pLaserObjList->m_MachineParaDefault.AfterMarkDelay = gAfterMarkDelay;
+	m_pLaserObjList->m_MachineParaDefault.PolylineDelay = gPolylineDelay;
 	AfxGetApp()->BeginWaitCursor();
 	str = fileDlg.GetFileExt();
 	if (str == _T("dxf"))
@@ -405,7 +422,9 @@ void CLaserMachineDoc::OnFileImport()
 		str = fileDlg.GetPathName();
 		if (m_pLaserObjList->Parsedxf(str))
 		{
-			m_pLaserObjList->LayerRename();
+			ObjRect rect = m_pLaserObjList->GetObjBound();
+			if ((abs(rect.min_x) > InvalidLength) || (abs(rect.min_y) > InvalidLength))
+				m_pLaserObjList->MoveObjectListCoordinate(-rect.min_x, -rect.min_y);
 			m_bModified = TRUE;
 			str = fileDlg.GetPathName();
 			str = str.Left(str.ReverseFind(_T('.')));
@@ -460,7 +479,12 @@ BOOL CLaserMachineDoc::Check_Process_Para1(ProcessPara para, int mode)
 		|| para.PulseWidth>Process_MaxPulseWidth || para.PulseWidth < Process_MinPulseWidth
 		|| para.Speed>Process_MaxSpeed || para.Speed < Process_MinSpeed
 		|| para.Times>Process_MaxTime || para.Times < Process_MinTime
-		|| mode>Process_MaxMode || mode<Process_MinMode)
+		|| para.LaserOnDelay>Process_MaxOnDelay || para.LaserOnDelay<Process_MinOnDelay
+		|| para.LaserOffDelay>Process_MaxOffDelay || para.LaserOffDelay<Process_MinOffDelay
+		|| para.BeforMarkDelay>Process_MaxBfDelay || para.BeforMarkDelay<Process_MinBfDelay
+		|| para.AfterMarkDelay>Process_MaxAfDelay || para.AfterMarkDelay<Process_MinAfDelay
+		|| para.PolylineDelay>Process_MaxPlDelay || para.PolylineDelay<Process_MinPlDelay
+		|| mode>Process_MaxMode || mode < Process_MinMode)
 		return FALSE;
 	return TRUE;
 }
