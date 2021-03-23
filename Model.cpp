@@ -84,7 +84,7 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, std::vector <double>& 
 					hv_NumLevels = hv_i;
 			}
 			CreateScaledShapeModel(hoModel, hv_NumLevels, -3.14, 6.29, "auto", hv_ScaleMin, hv_ScaleMax,
-				"auto", "auto", "ignore_local_polarity", "auto", "auto", &hv_ModelID);
+				"auto", "auto", "ignore_global_polarity", "auto", "auto", &hv_ModelID);
 		}
 		else
 		{
@@ -105,7 +105,7 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, std::vector <double>& 
 				ReduceDomain(hoImageDisplay, hoMatchRegion, &hoImageDisplay);
 			}
 			CreateScaledShapeModelXld(hoModel, "auto", -3.14, 6.29, "auto", hv_ScaleMin, hv_ScaleMax,
-				"auto", "auto", "ignore_local_polarity", 5, &hv_ModelID);
+				"auto", "auto", "ignore_global_polarity", 5, &hv_ModelID);
 		}
 		SetShapeModelOrigin(hv_ModelID, hv_ModelOriginRow, hv_ModelOriginColumn);
 		GetShapeModelContours(&hoModelContour, hv_ModelID, 1);
