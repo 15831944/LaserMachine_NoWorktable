@@ -4,6 +4,7 @@
 #include "LaserMachineDoc.h"
 #include "PointF.h"
 
+
 CDeviceCardMark::CDeviceCardMark()
 {
 	m_bMarkOrRedIsRunning = FALSE;

@@ -1,4 +1,4 @@
-Ôªø// ObjectProperty.cpp : ÂÆûÁé∞Êñá‰ª∂
+// ObjectProperty.cpp :  µœ÷Œƒº˛
 //
 
 #include "stdafx.h"
@@ -7,8 +7,373 @@
 #include "LaserMachineView.h"
 #include "MainFrm.h"
 #include "ObjectProperty.h"
-#include "ObjPropertyDlgEdit.h"
+#include "ObjectProtyDlg1.h"
+#include "ObjectProtyDlg2.h"
 
+
+// ********************User Micro Define
+#define UnDisp_Geometry_Property\
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC36)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC37)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC39)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC40)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC41)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC42)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC43)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC44)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC45)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC46)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC47)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC48)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC49)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC50)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC51)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC52)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT16)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT17)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT18)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT19)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT20)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT21)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT22)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT23)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT24)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_RADIO3)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_RADIO4)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_RADIO5)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_RADIO6)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_RADIO7)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_RADIO8)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_RADIO9)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_RADIO10)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_RADIO11)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_RADIO12)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_RADIO13)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_CHECK1)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN18)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN19)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN20)->ShowWindow(SW_HIDE);
+
+#define Disp_Machine_Property\
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowTextW(_T("º”π§ Ù–‘"));\
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowPos(NULL, 35, 375, 188, 375, BS_CENTER); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC3)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC4)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC5)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC6)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC7)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC8)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC9)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC12)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC13)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC14)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC15)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC16)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC17)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC18)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC19)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC20)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC21)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC22)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT1)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT2)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT3)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT4)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT6)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT7)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT8)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT9)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT10)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_RADIO1)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_RADIO2)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN_SAVE)->ShowWindow(SW_SHOW); \
+	UnDisp_Geometry_Property
+
+#define UnDisp_Machine_Property\
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC3)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC4)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC5)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC6)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC7)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC8)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC9)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC12)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC13)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC14)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC15)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC16)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC17)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC18)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC19)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC20)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC21)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC22)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT1)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT2)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT3)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT4)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT6)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT7)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT8)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT9)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT10)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_RADIO1)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_RADIO2)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN_SAVE)->ShowWindow(SW_HIDE); \
+	UnDisp_Geometry_Property
+
+#define Disp_Laser_Dlg\
+	if (gLaserType==IPG_QCW_Laser)\
+	{\
+	GetDlgItem(IDC_OBJ_PROTY_STATIC10)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT5)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC11)->ShowWindow(SW_SHOW); \
+	}\
+	else\
+	{\
+	GetDlgItem(IDC_OBJ_PROTY_STATIC10)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT5)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC11)->ShowWindow(SW_HIDE); \
+	}
+#define Disp_Layer_Special\
+	GetDlgItem(IDC_OBJ_PROTY_BTN10)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN11)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN12)->ShowWindow(SW_SHOW);
+#define Close_Layer_Special\
+	GetDlgItem(IDC_OBJ_PROTY_BTN10)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN11)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN12)->ShowWindow(SW_HIDE);
+
+#define Disp_Object_Panel\
+	GetDlgItem(IDC_OBJ_PROTY_BTN1)->SetWindowText(_T("…œ“∆∂‘œÛ")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN1)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN2)->SetWindowText(_T("œ¬“∆∂‘œÛ")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN2)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN3)->SetWindowText(_T("…æ≥˝∂‘œÛ")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN3)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN4)->SetWindowText(_T("±‡º≠∂‘œÛ")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN4)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN5)->SetWindowText(_T("◊È∫œ»∫◊È")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN5)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN6)->SetWindowText(_T("Ω‚…¢»∫◊È")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN6)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN7)->SetWindowText(_T("◊™Œ™∂‡∂Œœﬂ")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN7)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN8)->SetWindowText(_T("∫œ≤¢∂‡∂Œœﬂ")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN8)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC27)->SetWindowText(_T("∂‘œÛÀ˘‘⁄Õº≤„")); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC27)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT13)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_COMBO1)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN9)->SetWindowText(_T("∏ƒ±‰Õº≤„")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN9)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN10)->SetWindowText(_T("…˙≥…ÃÓ≥‰«¯")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN10)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN11)->SetWindowText(_T("…˙≥…¿©’πœﬂ")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN11)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN12)->SetWindowText(_T("º”π§≈≈–Ú")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN12)->ShowWindow(SW_HIDE);\
+	Disp_Machine_Property
+
+#define Disp_Layer_Panel\
+	GetDlgItem(IDC_OBJ_PROTY_BTN1)->SetWindowText(_T("…œ“∆Õº≤„")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN1)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN2)->SetWindowText(_T("œ¬“∆Õº≤„")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN2)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN3)->SetWindowText(_T("πÿ±’Õº≤„")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN3)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN4)->SetWindowText(_T("À¯∂®Õº≤„")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN4)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN5)->SetWindowText(_T("–ﬁ∏ƒÕº≤„")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN5)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN6)->SetWindowText(_T("…æ≥˝Õº≤„")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN6)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN7)->SetWindowText(_T("«Â≥˝ø’Õº≤„")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN7)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN8)->SetWindowText(_T("∫œ≤¢»ﬂ”‡≤„")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN8)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC27)->SetWindowText(_T("Õº≤„√˚≥∆")); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC27)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_COMBO1)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT13)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN9)->SetWindowText(_T("–¬Ω®Õº≤„")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN9)->ShowWindow(SW_SHOW);\
+	Disp_Machine_Property\
+	Close_Layer_Special
+
+#define Disp_Layer_List\
+	m_PropertyList.DeleteAllItems(); \
+	m_PropertyList.DeleteColumn(3); \
+	m_PropertyList.DeleteColumn(2); \
+	m_PropertyList.DeleteColumn(1); \
+	m_PropertyList.DeleteColumn(0); \
+	m_PropertyList.InsertColumn(0, _T("À˜ “˝"), LVCFMT_CENTER, 40); \
+	m_PropertyList.InsertColumn(1, _T("Õº≤„√˚≥∆"), LVCFMT_CENTER, 100); \
+	m_PropertyList.InsertColumn(2, _T("◊¥ Ã¨"), LVCFMT_CENTER, 50); \
+	m_PropertyList.InsertColumn(3, _T("Õ≥ º∆"), LVCFMT_CENTER, 50); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC1)->SetWindowTextW(_T("Õº≤„¡–±Ì/∂‘œÛ¡–±Ì"));
+#define Disp_Object_List\
+	m_PropertyList.DeleteAllItems(); \
+	m_PropertyList.DeleteColumn(3); \
+	m_PropertyList.DeleteColumn(2); \
+	m_PropertyList.DeleteColumn(1); \
+	m_PropertyList.DeleteColumn(0); \
+	m_PropertyList.InsertColumn(0, _T("À˜  “˝"), LVCFMT_CENTER, 55); \
+	m_PropertyList.InsertColumn(1, _T("∂‘œÛ¿‡–Õ"), LVCFMT_CENTER, 85); \
+	m_PropertyList.InsertColumn(2, _T("Õº  ≤„"), LVCFMT_CENTER, 100); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC1)->SetWindowTextW(_T("∂‘œÛ¡–±Ì/Õº≤„¡–±Ì"));
+
+//**
+#define Enable_Layer_BTN_UpAndDown\
+	GetDlgItem(IDC_OBJ_PROTY_BTN1)->EnableWindow(TRUE); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN2)->EnableWindow(TRUE);
+
+#define Enable_Layer_OBJ_BTN_UpAndDown\
+	GetDlgItem(IDC_OBJ_PROTY_BTN1)->EnableWindow(TRUE); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN2)->EnableWindow(TRUE);
+
+#define Disable_Layer_BTN_UpAndDown\
+	GetDlgItem(IDC_OBJ_PROTY_BTN1)->EnableWindow(FALSE); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN2)->EnableWindow(FALSE);
+
+#define Disable_Layer_OBJ_BTN_UpAndDown\
+	GetDlgItem(IDC_OBJ_PROTY_BTN1)->EnableWindow(FALSE); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN2)->EnableWindow(FALSE);
+/////
+#define Enable_Layer_BTN_Close\
+	GetDlgItem(IDC_OBJ_PROTY_BTN3)->SetWindowText(_T("πÿ±’Õº≤„")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN3)->EnableWindow(TRUE);
+#define Enable_Layer_BTN_Open\
+	GetDlgItem(IDC_OBJ_PROTY_BTN3)->SetWindowText(_T("¥Úø™Õº≤„")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN3)->EnableWindow(TRUE);
+#define Disable_Layer_BTN_Close\
+	GetDlgItem(IDC_OBJ_PROTY_BTN3)->SetWindowText(_T("πÿ±’Õº≤„")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN3)->EnableWindow(FALSE);
+#define Enable_Layer_BTN_Lock\
+	GetDlgItem(IDC_OBJ_PROTY_BTN4)->SetWindowText(_T("À¯∂®Õº≤„")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN4)->EnableWindow(TRUE);
+#define Enable_Layer_BTN_Unlock\
+	GetDlgItem(IDC_OBJ_PROTY_BTN4)->SetWindowText(_T("Ω‚À¯Õº≤„")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN4)->EnableWindow(TRUE);
+#define Disable_Layer_BTN_Lock\
+	GetDlgItem(IDC_OBJ_PROTY_BTN4)->SetWindowText(_T("À¯∂®Õº≤„")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN4)->EnableWindow(FALSE);
+#define Enable_Layer_BTN_Modify		GetDlgItem(IDC_OBJ_PROTY_BTN5)->EnableWindow(TRUE);
+#define Disable_Layer_BTN_Modify	GetDlgItem(IDC_OBJ_PROTY_BTN5)->EnableWindow(FALSE);
+#define Enable_Layer_BTN_Delete		GetDlgItem(IDC_OBJ_PROTY_BTN6)->EnableWindow(TRUE);
+#define Disable_Layer_BTN_Delete	GetDlgItem(IDC_OBJ_PROTY_BTN6)->EnableWindow(FALSE);
+#define Enable_Layer_BTN_ClearLayer\
+	GetDlgItem(IDC_OBJ_PROTY_BTN7)->SetWindowText(_T("«Â≥˝ø’Õº≤„")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN7)->EnableWindow(TRUE);
+#define Enable_Layer_BTN_ClearObject\
+	GetDlgItem(IDC_OBJ_PROTY_BTN7)->SetWindowText(_T("«Â≥˝ø’∂‘œÛ")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN7)->EnableWindow(TRUE);
+#define Disable_Layer_BTN_ClearLayer\
+	GetDlgItem(IDC_OBJ_PROTY_BTN7)->SetWindowText(_T("«Â≥˝ø’Õº≤„")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN7)->EnableWindow(FALSE);
+#define Enable_Layer_BTN_Combine	GetDlgItem(IDC_OBJ_PROTY_BTN8)->EnableWindow(TRUE);
+#define Disable_Layer_BTN_Combine	GetDlgItem(IDC_OBJ_PROTY_BTN8)->EnableWindow(FALSE);
+#define Enable_Layer_BTN_New		GetDlgItem(IDC_OBJ_PROTY_BTN9)->EnableWindow(TRUE);
+#define Disable_Layer_BTN_New		GetDlgItem(IDC_OBJ_PROTY_BTN9)->EnableWindow(FALSE);
+
+#define Enable_OBJ_BTN_UpAndDown\
+	GetDlgItem(IDC_OBJ_PROTY_BTN1)->SetWindowText(_T("…œ“∆∂‘œÛ")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN1)->EnableWindow(TRUE); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN2)->SetWindowText(_T("œ¬“∆∂‘œÛ")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN2)->EnableWindow(TRUE);
+#define Disable_OBJ_BTN_UpAndDown\
+	GetDlgItem(IDC_OBJ_PROTY_BTN1)->SetWindowText(_T("…œ“∆∂‘œÛ")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN1)->EnableWindow(FALSE); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN2)->SetWindowText(_T("œ¬“∆∂‘œÛ")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN2)->EnableWindow(FALSE);
+#define Enable_OBJ_BTN_ReDirect\
+	GetDlgItem(IDC_OBJ_PROTY_BTN1)->SetWindowText(_T("Ωªªª∑ΩœÚ")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN1)->EnableWindow(TRUE);
+#define Disable_OBJ_BTN_ReDirect\
+	GetDlgItem(IDC_OBJ_PROTY_BTN1)->SetWindowText(_T("Ωªªª∑ΩœÚ")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN1)->EnableWindow(FALSE);
+#define Enable_OBJ_BTN_ReNode\
+	GetDlgItem(IDC_OBJ_PROTY_BTN2)->SetWindowText(_T("∏ƒ±‰∆µ„")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN2)->EnableWindow(TRUE);
+#define Disable_OBJ_BTN_ReNode\
+	GetDlgItem(IDC_OBJ_PROTY_BTN2)->SetWindowText(_T("∏ƒ±‰∆µ„")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN2)->EnableWindow(FALSE);
+#define Enable_OBJ_BTN_Delete		GetDlgItem(IDC_OBJ_PROTY_BTN3)->EnableWindow(TRUE);
+#define Disable_OBJ_BTN_Delete		GetDlgItem(IDC_OBJ_PROTY_BTN3)->EnableWindow(FALSE);
+#define Enable_OBJ_BTN_Edit\
+	GetDlgItem(IDC_OBJ_PROTY_BTN4)->SetWindowText(_T("±‡º≠∂‘œÛ")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN4)->EnableWindow(TRUE);
+#define Disable_OBJ_BTN_Edit\
+	GetDlgItem(IDC_OBJ_PROTY_BTN4)->SetWindowText(_T("±‡º≠∂‘œÛ")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN4)->EnableWindow(FALSE);
+#define Enable_OBJ_BTN_Group		GetDlgItem(IDC_OBJ_PROTY_BTN5)->EnableWindow(TRUE);
+#define Disable_OBJ_BTN_Group		GetDlgItem(IDC_OBJ_PROTY_BTN5)->EnableWindow(FALSE);
+#define Enable_OBJ_BTN_DisGroup\
+	GetDlgItem(IDC_OBJ_PROTY_BTN6)->SetWindowText(_T("Ω‚…¢»∫◊È")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN6)->EnableWindow(TRUE);
+#define Enable_OBJ_BTN_BreakPolyline\
+	GetDlgItem(IDC_OBJ_PROTY_BTN6)->SetWindowText(_T("∑÷Ω‚∂‘œÛ")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN6)->EnableWindow(TRUE);
+#define Disable_OBJ_BTN_DisGroup	GetDlgItem(IDC_OBJ_PROTY_BTN6)->EnableWindow(FALSE);
+#define Enable_OBJ_BTN_Polyline		GetDlgItem(IDC_OBJ_PROTY_BTN7)->EnableWindow(TRUE);
+#define Disable_OBJ_BTN_Polyline	GetDlgItem(IDC_OBJ_PROTY_BTN7)->EnableWindow(FALSE);
+#define Enable_OBJ_BTN_CombinePoly	GetDlgItem(IDC_OBJ_PROTY_BTN8)->EnableWindow(TRUE);
+#define Disable_OBJ_BTN_CombinePoly	GetDlgItem(IDC_OBJ_PROTY_BTN8)->EnableWindow(FALSE);
+#define Enable_OBJ_BTN_ChangeLayer	GetDlgItem(IDC_OBJ_PROTY_BTN9)->EnableWindow(TRUE);
+#define Disable_OBJ_BTN_ChangeLayer	GetDlgItem(IDC_OBJ_PROTY_BTN9)->EnableWindow(FALSE);
+#define Enable_OBJ_BTN_FillCreat\
+	GetDlgItem(IDC_OBJ_PROTY_BTN10)->SetWindowText(_T("…˙≥…ÃÓ≥‰«¯")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN10)->ShowWindow(SW_SHOW);
+#define Enable_OBJ_BTN_FillDestroy\
+	GetDlgItem(IDC_OBJ_PROTY_BTN10)->SetWindowText(_T("»°œ˚ÃÓ≥‰«¯")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN10)->ShowWindow(SW_SHOW);
+#define Disable_OBJ_BTN_FillCreat	GetDlgItem(IDC_OBJ_PROTY_BTN10)->ShowWindow(SW_HIDE);
+#define Enable_OBJ_BTN_WidenCreat\
+	GetDlgItem(IDC_OBJ_PROTY_BTN11)->SetWindowText(_T("…˙≥…’πøÌœﬂ")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN11)->ShowWindow(SW_SHOW);
+#define Enable_OBJ_BTN_WidenDegen\
+	GetDlgItem(IDC_OBJ_PROTY_BTN11)->SetWindowText(_T("»°œ˚’πøÌ")); \
+	GetDlgItem(IDC_OBJ_PROTY_BTN11)->ShowWindow(SW_SHOW);
+#define Disable_OBJ_BTN_WidenCreat	GetDlgItem(IDC_OBJ_PROTY_BTN11)->ShowWindow(SW_HIDE);
+#define Enable_OBJ_BTN_Route		GetDlgItem(IDC_OBJ_PROTY_BTN12)->ShowWindow(SW_SHOW);
+#define Disable_OBJ_BTN_Route		GetDlgItem(IDC_OBJ_PROTY_BTN12)->ShowWindow(SW_HIDE);
+#define Enable_OBJ_Dot_Proty\
+	GetDlgItem(IDC_OBJ_PROTY_STATIC23)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT11)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC24)->ShowWindow(SW_SHOW);\
+	GetDlgItem(IDC_OBJ_PROTY_BTN13)->ShowWindow(SW_SHOW);
+#define Disable_OBJ_Dot_Proty\
+	GetDlgItem(IDC_OBJ_PROTY_STATIC23)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT11)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC24)->ShowWindow(SW_HIDE);\
+	GetDlgItem(IDC_OBJ_PROTY_BTN13)->ShowWindow(SW_HIDE);
+#define Enable_OBJ_Rise_By_Pass\
+	GetDlgItem(IDC_OBJ_PROTY_STATIC25)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT12)->ShowWindow(SW_SHOW); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC26)->ShowWindow(SW_SHOW);\
+	GetDlgItem(IDC_OBJ_PROTY_BTN14)->ShowWindow(SW_SHOW);
+#define Disable_OBJ_Rise_By_Pass\
+	GetDlgItem(IDC_OBJ_PROTY_STATIC25)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_EDIT12)->ShowWindow(SW_HIDE); \
+	GetDlgItem(IDC_OBJ_PROTY_STATIC26)->ShowWindow(SW_HIDE);\
+	GetDlgItem(IDC_OBJ_PROTY_BTN14)->ShowWindow(SW_HIDE);
+// ********************
 
 // CObjectProperty
 IMPLEMENT_DYNCREATE(CObjectProperty, CFormView)
@@ -24,8 +389,15 @@ CObjectProperty::CObjectProperty()
 	, m_WaitTime(0)
 {
 	m_Init_Flag = FALSE;
+	m_bDispObject = false;
+	m_bDegenerate = true;
+	m_ProtyListIndex.swap(vector<UINT>());
+	m_SelectedObj.swap(vector<UINT>());
+	m_nSelGroup = 0;
+
 	m_bLocate = FALSE;
-	m_strBtnMark = _T("Áõ¥Êé•Âä†Â∑•");
+	m_strBtnMark = _T("÷±Ω”º”π§");
+
 }
 
 CObjectProperty::~CObjectProperty()
@@ -36,23 +408,49 @@ void CObjectProperty::DoDataExchange(CDataExchange* pDX)
 {
 	CFormView::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_OBJECT_PROPERTY_LIST, m_PropertyList);
-	DDX_Text(pDX, IDC_OBJECT_PROPERTY_EDIT1, m_Speed);
-	DDX_Text(pDX, IDC_OBJECT_PROPERTY_EDIT2, m_Power);
-	DDV_MinMaxFloat(pDX, m_Power, 0, 100.0);
-	DDX_Text(pDX, IDC_OBJECT_PROPERTY_EDIT3, m_Frequncy);
-	DDX_Text(pDX, IDC_OBJECT_PROPERTY_EDIT4, m_Count);
-	DDV_MinMaxByte(pDX, m_Count, 0, 255);
-	DDX_Text(pDX, IDC_OBJECT_PROPERTY_EDIT5, m_PulseWidth);
-	DDX_Text(pDX, IDC_OBJECT_PROPERTY_EDIT6, m_WaitTime);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT1, m_Speed);
+	DDV_MinMaxFloat(pDX, m_Speed, 0.0, 20000.0);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT2, m_Power);
+	DDV_MinMaxFloat(pDX, m_Power, 0.0, 100.0);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT3, m_Frequncy);
+	DDV_MinMaxFloat(pDX, m_Frequncy, 0.0, 20000.0);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT4, m_Count);
+	DDV_MinMaxUInt(pDX, m_Count, 0, 100000);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT5, m_PulseWidth);
+	DDV_MinMaxFloat(pDX, m_PulseWidth, 0.0, 1000000.0);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT6, m_LaserOnDelay);
+	DDV_MinMaxFloat(pDX, m_LaserOnDelay, -100000.0, 100000.0);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT7, m_LaserOffDelay);
+	DDV_MinMaxFloat(pDX, m_LaserOffDelay, -100000.0, 100000.0);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT8, m_BeforMarkDelay);
+	DDV_MinMaxFloat(pDX, m_BeforMarkDelay, -100000.0, 100000.0);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT9, m_AfterMarkDelay);
+	DDV_MinMaxFloat(pDX, m_AfterMarkDelay, -100000.0, 100000.0);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT10, m_PolylineDelay);
+	DDV_MinMaxFloat(pDX, m_PolylineDelay, -100000.0, 100000.0);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT11, m_WaitTime);
 	DDV_MinMaxFloat(pDX, m_WaitTime, 0, 999999);
-	DDX_Text(pDX, IDC_OBJECT_PROPERTY_EDIT7, m_Rise_Lenth_Step);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT12, m_Rise_Lenth_Step);
 	DDV_MinMaxFloat(pDX, m_Rise_Lenth_Step, -100, 100);
-	DDX_Text(pDX, IDC_OBJECT_PROPERTY_EDIT8, m_LaserOnDelay);
-	DDX_Text(pDX, IDC_OBJECT_PROPERTY_EDIT9, m_LaserOffDelay);
-	DDX_Text(pDX, IDC_OBJECT_PROPERTY_EDIT10, m_BeforMarkDelay);
-	DDX_Text(pDX, IDC_OBJECT_PROPERTY_EDIT11, m_AfterMarkDelay);
-	DDX_Text(pDX, IDC_OBJECT_PROPERTY_EDIT12, m_PolylineDelay);
-	DDX_Radio(pDX, IDC_OBJECT_PROPERTY_RADIO1, m_ModeSel);
+	DDX_Radio(pDX, IDC_OBJ_PROTY_RADIO1, m_ModeSel);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT13, m_LayerName);
+	DDX_Control(pDX, IDC_OBJ_PROTY_COMBO1, m_LayerNameListBox);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT14, m_dVar1);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT15, m_dVar2);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT16, m_dVar3);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT17, m_dVar4);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT18, m_dVar5);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT19, m_dVar6);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT20, m_dVar7);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT21, m_dVar8);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT22, m_dVar9);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT23, m_dVar10);
+	DDX_Text(pDX, IDC_OBJ_PROTY_EDIT24, m_dVar11);
+	DDX_Radio(pDX, IDC_OBJ_PROTY_RADIO3, m_OutlinePrior);
+	DDX_Check(pDX, IDC_OBJ_PROTY_CHECK1, m_FillEnable);
+	DDX_Radio(pDX, IDC_OBJ_PROTY_RADIO6, m_nSelGroup);
+	DDX_Radio(pDX, IDC_OBJ_PROTY_RADIO10, m_GapMode);
+	DDX_Radio(pDX, IDC_OBJ_PROTY_RADIO12, m_FillMode);
 }
 
 void CObjectProperty::OnInitialUpdate()
@@ -70,52 +468,55 @@ void CObjectProperty::OnInitialUpdate()
 	m_pObjList = pDoc->m_pLaserObjList;
 	m_pDoc = pDoc;
 	m_ObjSel_Old = -1;
-
+	m_LayerSel_Old = -1;
+	m_bDispObject = false;
 	m_PropertyList.SetExtendedStyle(m_PropertyList.GetExtendedStyle()
 		| LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
-	// ‰∏∫ÂàóË°®ËßÜÂõæÊéß‰ª∂Ê∑ªÂä†‰∫îÂàó   
-	m_PropertyList.InsertColumn(0, _T("Á¥¢Âºï"), LVCFMT_LEFT, 36, 0);
-	m_PropertyList.InsertColumn(1, _T("Á±ª   Âûã"), LVCFMT_CENTER, 60, 1);
-	m_PropertyList.InsertColumn(2, _T("Âõæ Â±Ç"), LVCFMT_CENTER, 48, 2);
-	m_PropertyList.InsertColumn(3, _T("Ëµ∑ÁÇπÂùêÊ†á"), LVCFMT_CENTER, 110, 3);
-	m_PropertyList.InsertColumn(4, _T("ÁªàÁÇπÂùêÊ†á"), LVCFMT_CENTER, 110, 4);
-
-	UIDeselectAll();
-	if (gLaserType == IPG_Fiber_Laser)
-	{
-		GetDlgItem(IDC_OBJECT_PROPERTY_STATIC9)->ShowWindow(SW_HIDE);
-		GetDlgItem(IDC_OBJECT_PROPERTY_EDIT5)->ShowWindow(SW_HIDE);
-		GetDlgItem(IDC_OBJECT_PROPERTY_STATIC10)->ShowWindow(SW_HIDE);
-		GetDlgItem(IDC_OBJECT_PROPERTY_STATIC13)->ShowWindow(SW_HIDE);
-		GetDlgItem(IDC_OBJECT_PROPERTY_EDIT7)->ShowWindow(SW_HIDE);
-		GetDlgItem(IDC_OBJECT_PROPERTY_STATIC14)->ShowWindow(SW_HIDE);
-	}
+	// ≥ı ºªØœ‘ æŒ™Õº≤„¡–±Ì
+	Disp_Layer_List
+	Disp_Layer_Panel
+	Disable_Layer_BTN_New
+	Disp_Laser_Dlg
+	
+	gPara_To_mPara();
 	UpdateData(FALSE);
 }
 
 BEGIN_MESSAGE_MAP(CObjectProperty, CFormView)
 	ON_WM_SIZE()
 	ON_MESSAGE(WM_ObjList_Refresh, &CObjectProperty::OnObjlistRefresh)
-	ON_NOTIFY(NM_CLICK, IDC_OBJECT_PROPERTY_LIST, &CObjectProperty::OnClickObjectPropertyList)
 	ON_NOTIFY(LVN_KEYDOWN, IDC_OBJECT_PROPERTY_LIST, &CObjectProperty::OnKeydownObjectPropertyList)
-	ON_NOTIFY(NM_RCLICK, IDC_OBJECT_PROPERTY_LIST, &CObjectProperty::OnRclickObjectPropertyList)
-	ON_BN_CLICKED(IDC_BTN_OBJ_UP, &CObjectProperty::OnBnClickedBtnObjUp)
-	ON_BN_CLICKED(IDC_BTN_OBJ_DOWN, &CObjectProperty::OnBnClickedBtnObjDown)
-	ON_BN_CLICKED(IDC_BTN_OBJ_DELETE, &CObjectProperty::OnBnClickedBtnObjDelete)
-	ON_BN_CLICKED(IDC_BTN_OBJ_INSERT, &CObjectProperty::OnBnClickedBtnObjInsert)
-	ON_BN_CLICKED(IDC_BTN_OBJ_T_G, &CObjectProperty::OnBnClickedBtnObjPolymeric)
-	ON_BN_CLICKED(IDC_BTN_OBJ_EXPLODE, &CObjectProperty::OnBnClickedBtnObjExplode)
-	ON_BN_CLICKED(IDC_BTN_OBJ_EXCHANGE, &CObjectProperty::OnBnClickedBtnObjExchange)
-	ON_BN_CLICKED(IDC_BTN_OBJ_EDIT, &CObjectProperty::OnBnClickedBtnObjEdit)
-	ON_BN_CLICKED(IDC_OBJECT_PROPERTY_BTN3, &CObjectProperty::OnBnClickedObjectPropertyBtn3)
-	ON_BN_CLICKED(IDC_OBJECT_PROPERTY_BTN1, &CObjectProperty::OnBnClickedObjectPropertyBtn1)
-	ON_BN_CLICKED(IDC_OBJECT_PROPERTY_BTN2, &CObjectProperty::OnBnClickedObjectPropertyBtn2)
 	ON_WM_MOUSEMOVE()
+	ON_STN_CLICKED(IDC_OBJ_PROTY_STATIC1, &CObjectProperty::OnClickedObjectOrLayer)
+	ON_BN_CLICKED(IDC_OBJ_PROTY_BTN_SAVE, &CObjectProperty::OnClickedObjProtyBtnSave)
+	ON_NOTIFY(NM_CLICK, IDC_OBJECT_PROPERTY_LIST, &CObjectProperty::OnClickObjectPropertyList)
+	ON_BN_CLICKED(IDC_OBJ_PROTY_BTN1, &CObjectProperty::OnObjProtyBtnLayerOrObjUp)
+	ON_BN_CLICKED(IDC_OBJ_PROTY_BTN2, &CObjectProperty::OnObjProtyBtnLayerOrObjDown)
+	ON_BN_CLICKED(IDC_OBJ_PROTY_BTN3, &CObjectProperty::OnObjProtyBtnLayerOpenAndCloseOrObjDelete)
+	ON_BN_CLICKED(IDC_OBJ_PROTY_BTN4, &CObjectProperty::OnObjProtyBtnLayerLockAndUnlockOrObjEdit)
+	ON_BN_CLICKED(IDC_OBJ_PROTY_BTN5, &CObjectProperty::OnObjProtyBtnLayerModifyOrObjGroup)
+	ON_BN_CLICKED(IDC_OBJ_PROTY_BTN6, &CObjectProperty::OnObjProtyBtnLayerDeleteOrObjExplode)
+	ON_BN_CLICKED(IDC_OBJ_PROTY_BTN7, &CObjectProperty::OnObjProtyBtnLayerClear)
+	ON_BN_CLICKED(IDC_OBJ_PROTY_BTN8, &CObjectProperty::OnObjProtyBtnCombine)
+	ON_BN_CLICKED(IDC_OBJ_PROTY_BTN9, &CObjectProperty::OnObjProtyBtnLayerNew)
+	ON_BN_CLICKED(IDC_OBJ_PROTY_BTN11, &CObjectProperty::OnClickedObjProtyExtend)
+	ON_BN_CLICKED(IDC_OBJ_PROTY_BTN10, &CObjectProperty::OnClickedObjProtyFill)
+	ON_BN_CLICKED(IDC_OBJ_PROTY_BTN15, &CObjectProperty::OnClickedObjProtyBtn15)
+	ON_BN_CLICKED(IDC_OBJ_PROTY_BTN16, &CObjectProperty::OnClickedObjProtyBtn16)
+	ON_BN_CLICKED(IDC_OBJ_PROTY_BTN17, &CObjectProperty::OnClickedObjProtyBtn17)
+	ON_BN_CLICKED(IDC_OBJ_PROTY_BTN18, &CObjectProperty::OnClickedObjProtyBtn18)
+	ON_BN_CLICKED(IDC_OBJ_PROTY_BTN19, &CObjectProperty::OnClickedObjProtyBtn19)
+	ON_BN_CLICKED(IDC_OBJ_PROTY_BTN20, &CObjectProperty::OnClickedObjProtyBtn20)
+	ON_BN_CLICKED(IDC_OBJ_PROTY_CHECK1, &CObjectProperty::OnClickedObjProtyCheck1)
+	ON_BN_CLICKED(IDC_OBJ_PROTY_RADIO6, &CObjectProperty::OnClickedObjProtyRadio6)
+	ON_COMMAND(IDC_OBJ_PROTY_RADIO7, &CObjectProperty::OnClickedObjProtyRadio6)
+	ON_COMMAND(IDC_OBJ_PROTY_RADIO8, &CObjectProperty::OnClickedObjProtyRadio6)
+	ON_COMMAND(IDC_OBJ_PROTY_RADIO9, &CObjectProperty::OnClickedObjProtyRadio6)
 	ON_BN_CLICKED(IDC_BUTTON_OBJECT_START_MARK, &CObjectProperty::OnBnClickedButtonObjectStartMark)
 END_MESSAGE_MAP()
 
 
-// CObjectProperty ËØäÊñ≠
+// CObjectProperty ’Ô∂œ
 #ifdef _DEBUG
 void CObjectProperty::AssertValid() const
 {
@@ -130,52 +531,20 @@ void CObjectProperty::Dump(CDumpContext& dc) const
 #endif
 #endif //_DEBUG
 
-// Ëá™ÂÆö‰πâÂáΩÊï∞
+// ◊‘∂®“Â∫Ø ˝
 void CObjectProperty::HScroll(int Index)
 {
-	int nItem = m_PropertyList.GetTopIndex();	// Ëé∑ÂèñÈ°∂Â±ÇÁ¥¢Âºï
+	int nItem = m_PropertyList.GetTopIndex();	// ªÒ»°∂•≤„À˜“˝
 	CRect rc;
 	m_PropertyList.GetItemRect(nItem, rc, LVIR_BOUNDS);
 	nItem = Index - nItem - 5;
-	CSize sz(0, nItem * rc.Height());	// ÂèñÂæóË¶ÅÊªöÂä®ÁöÑsize
+	CSize sz(0, nItem * rc.Height());	// »°µ√“™πˆ∂Øµƒsize
 	m_PropertyList.Scroll(sz);
 }
 
-void CObjectProperty::UIDeselectAll()
+//2021.02
+void CObjectProperty::gPara_To_mPara()
 {
-	POSITION pos;
-	int index;
-	pos = m_PropertyList.GetFirstSelectedItemPosition();
-	while (pos)
-	{
-		index = m_PropertyList.GetNextSelectedItem(pos);
-		m_PropertyList.SetItemState(index, LVNI_FOCUSED & LVIS_SELECTED,
-			LVNI_FOCUSED | LVIS_SELECTED);
-	}
-	GetDlgItem(IDC_BTN_OBJ_UP)->SetWindowText(_T("‰∏äÁßª"));
-	GetDlgItem(IDC_BTN_OBJ_UP)->EnableWindow(FALSE);
-	GetDlgItem(IDC_BTN_OBJ_DOWN)->SetWindowText(_T("‰∏ãÁßª"));
-	GetDlgItem(IDC_BTN_OBJ_DOWN)->EnableWindow(FALSE);
-	GetDlgItem(IDC_BTN_OBJ_DELETE)->SetWindowText(_T("Âà†Èô§"));
-	GetDlgItem(IDC_BTN_OBJ_DELETE)->EnableWindow(FALSE);
-	GetDlgItem(IDC_BTN_OBJ_INSERT)->SetWindowText(_T("ÊèíÂÖ•"));
-	GetDlgItem(IDC_BTN_OBJ_INSERT)->EnableWindow(FALSE);
-	GetDlgItem(IDC_BTN_OBJ_T_G)->SetWindowText(_T("ËÅöÂêà"));
-	GetDlgItem(IDC_BTN_OBJ_T_G)->EnableWindow(FALSE);
-	GetDlgItem(IDC_BTN_OBJ_EXPLODE)->SetWindowText(_T("ÂàÜ Ëß£"));
-	GetDlgItem(IDC_BTN_OBJ_EXPLODE)->EnableWindow(FALSE);
-	GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->SetWindowText(_T("Ëµ∑ÁªàÁÇπ‰∫íÊç¢"));
-	GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->EnableWindow(FALSE);
-	GetDlgItem(IDC_BTN_OBJ_EDIT)->SetWindowText(_T("Áºñ Ëæë"));
-	GetDlgItem(IDC_BTN_OBJ_EDIT)->EnableWindow(FALSE);
-	GetDlgItem(IDC_OBJECT_PROPERTY_STATIC11)->ShowWindow(SW_SHOW);
-	GetDlgItem(IDC_OBJECT_PROPERTY_EDIT6)->ShowWindow(SW_SHOW);
-	GetDlgItem(IDC_OBJECT_PROPERTY_STATIC12)->ShowWindow(SW_SHOW);
-	GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->SetWindowText(_T("‰øÆÊîπÂØπË±°\nÂä†Â∑•ÂèÇÊï∞"));
-	GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->EnableWindow(FALSE);
-	GetDlgItem(IDC_OBJECT_PROPERTY_BTN2)->EnableWindow(TRUE);
-	GetDlgItem(IDC_OBJECT_PROPERTY_BTN3)->EnableWindow(TRUE);
-	//***Âä†Â∑•ÂèÇÊï∞Âå∫
 	m_Speed = gProcessSpeed;
 	m_Power = gProcessPower;
 	m_Frequncy = (float)gProcessFrequncy / 1000;
@@ -183,248 +552,2371 @@ void CObjectProperty::UIDeselectAll()
 	m_PulseWidth = gProcessPulseWidth;
 	m_ModeSel = gProcessMode;
 	m_WaitTime = gProcessWaitTime;
+	m_LaserOnDelay = gLaserOnDelay;
+	m_LaserOffDelay = gLaserOffDelay;
+	m_BeforMarkDelay = gBeforMarkDelay;
+	m_AfterMarkDelay = gAfterMarkDelay;
+	m_PolylineDelay = gPolylineDelay;
 }
 
-BOOL CObjectProperty::UISetBySingleSel(int Index)
+void CObjectProperty::LayerPara_To_mPara(CMachinePara_Layer* pLayer)
 {
-	int nType;
-	CString str;
-	ProcessPara para;
-	if (Index == m_ObjSel_Old)
-	{
-		//*****ÈÄâ‰∏≠Ë¢´ÂèñÊ∂à
-		m_ObjSel_Old = -1;
-		UIDeselectAll();
-		return FALSE;
-	}
-	else
-	{
-		//*****ÈÄâ‰∏≠
-		m_ObjSel_Old = Index;
-		//***Â±ûÊÄßÂå∫
-		nType = m_pObjList->GetObjAtIndex(Index)->GetObjType();
-		GetDlgItem(IDC_BTN_OBJ_UP)->EnableWindow(TRUE);
-		GetDlgItem(IDC_BTN_OBJ_DOWN)->EnableWindow(TRUE);
-		GetDlgItem(IDC_BTN_OBJ_EDIT)->EnableWindow(TRUE);
-		GetDlgItem(IDC_BTN_OBJ_DELETE)->EnableWindow(TRUE);
-		GetDlgItem(IDC_BTN_OBJ_INSERT)->EnableWindow(TRUE);
-		GetDlgItem(IDC_BTN_OBJ_T_G)->EnableWindow(FALSE);
-		if (nType == MachineObj_Type_Polyline)
-		{
-			GetDlgItem(IDC_BTN_OBJ_EXPLODE)->SetWindowText(_T("ÂàÜ Ëß£"));
-			GetDlgItem(IDC_BTN_OBJ_EXPLODE)->EnableWindow(TRUE);
-		}
-		else if (nType == MachineObj_Type_Group)
-		{
-			GetDlgItem(IDC_BTN_OBJ_EXPLODE)->SetWindowText(_T("Êâì Êï£"));
-			GetDlgItem(IDC_BTN_OBJ_EXPLODE)->EnableWindow(TRUE);
-		}
-		else
-		{
-			GetDlgItem(IDC_BTN_OBJ_EXPLODE)->SetWindowText(_T("ÂàÜ Ëß£"));
-			GetDlgItem(IDC_BTN_OBJ_EXPLODE)->EnableWindow(FALSE);
-		}
-		if (nType == MachineObj_Type_Line
-			|| nType == MachineObj_Type_Arc
-			|| nType == MachineObj_Type_ArcEll
-			|| nType == MachineObj_Type_TiltEllipse
-			|| nType == MachineObj_Type_Polyline)
-		{
-			GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->SetWindowText(_T("Ëµ∑ÁªàÁÇπ‰∫íÊç¢"));
-			GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->EnableWindow(TRUE);
+	m_Speed = pLayer->m_MachinePara.Speed;
+	m_Power = pLayer->m_MachinePara.Power;
+	m_Frequncy = (float)(pLayer->m_MachinePara.Frequncy) / 1000;
+	m_Count = pLayer->m_MachinePara.Times;
+	m_PulseWidth = pLayer->m_MachinePara.PulseWidth;
+	m_ModeSel = pLayer->m_MachineMode;
+	m_WaitTime = 0.0;
+	m_LaserOnDelay = pLayer->m_MachinePara.LaserOnDelay;
+	m_LaserOffDelay = pLayer->m_MachinePara.LaserOffDelay;
+	m_BeforMarkDelay = pLayer->m_MachinePara.BeforMarkDelay;
+	m_AfterMarkDelay = pLayer->m_MachinePara.AfterMarkDelay;
+	m_PolylineDelay = pLayer->m_MachinePara.PolylineDelay;
+}
 
-		}
-		else if (nType == MachineObj_Type_Circle
-			|| nType == MachineObj_Type_Ellipse)
+void CObjectProperty::UIRefreshLayer()
+{
+	int Count = m_PropertyList.GetItemCount();
+	int SelCount = 0;
+	bool Flag_Closed = false;
+	bool Flag_Locked = false;
+	int Index = 0;
+	CMachinePara_Layer* pLayer;
+	for (int i = 0; i < Count; i++)
+	{
+		CString str = m_PropertyList.GetItemText(i, 1);
+		int nLayer = m_pObjList->FindLayerByName(str);
+		pLayer = m_pObjList->GetLayerOfNumber(nLayer);
+		if (m_PropertyList.GetItemState(i, LVIS_SELECTED) == LVIS_SELECTED)
 		{
-			GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->SetWindowText(_T("ÊîπÂèòËµ∑ÁÇπ"));
-			GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->EnableWindow(TRUE);
-			GetDlgItem(IDC_BTN_OBJ_EXPLODE)->SetWindowText(_T("Êç¢ Âêë"));
-			GetDlgItem(IDC_BTN_OBJ_EXPLODE)->EnableWindow(TRUE);
-		}
-		else
-		{
-			GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->SetWindowText(_T("Ëµ∑ÁªàÁÇπ‰∫íÊç¢"));
-			GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->EnableWindow(FALSE);
-		}
-		//***Âä†Â∑•ÂèÇÊï∞Âå∫
-		str = m_PropertyList.GetItemText(Index, 2);
-		if (str == _T("Border") || str == _T("Mark") || str == ""
-			|| nType == MachineObj_Type_Group)
-		{
-			GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->EnableWindow(FALSE);
-			GetDlgItem(IDC_OBJECT_PROPERTY_BTN2)->EnableWindow(FALSE);
-			m_Speed = 0;
-			m_Power = 0;
-			m_Frequncy = 0;
-			m_Count = 0;
-			m_PulseWidth = 0;
-			m_ModeSel = -1;
-			m_WaitTime = 0;
-			GetDlgItem(IDC_OBJECT_PROPERTY_STATIC11)->ShowWindow(SW_HIDE);
-			GetDlgItem(IDC_OBJECT_PROPERTY_EDIT6)->ShowWindow(SW_HIDE);
-			GetDlgItem(IDC_OBJECT_PROPERTY_STATIC12)->ShowWindow(SW_HIDE);
-		}
-		else
-		{
-			GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->EnableWindow(TRUE);
-			GetDlgItem(IDC_OBJECT_PROPERTY_BTN2)->EnableWindow(TRUE);
-			para = m_pObjList->GetLayerOfName(str)->m_MachinePara;
-			m_Speed = para.Speed;
-			m_Power = para.Power;
-			m_Frequncy = (float)para.Frequncy / 1000;
-			m_Count = para.Times;
-			m_PulseWidth = para.PulseWidth;
-			m_ModeSel = m_pObjList->GetLayerOfName(str)->m_MachineMode;
-			if (nType == MachineObj_Type_Point)
+			m_PropertyList.SetItemText(i, 2, _T("“——°÷–"));
+			SelCount++;
+			Index = nLayer;
+			if (pLayer != NULL)
 			{
-				GetDlgItem(IDC_OBJECT_PROPERTY_STATIC11)->ShowWindow(SW_SHOW);
-				GetDlgItem(IDC_OBJECT_PROPERTY_EDIT6)->ShowWindow(SW_SHOW);
-				GetDlgItem(IDC_OBJECT_PROPERTY_STATIC12)->ShowWindow(SW_SHOW);
-				m_WaitTime = ((CMachineObjPoint*)m_pObjList->GetObjAtIndex(Index))->m_MachineWaitTime;
+				if (((pLayer->m_bIsLayerStatus) & IsObjClosed) != 0)
+					Flag_Closed = true;
+				if (((pLayer->m_bIsLayerStatus) & IsObjLocked) != 0)
+					Flag_Locked = true;
+			}
+		}
+		else
+		{
+			if (pLayer != NULL)
+			{
+				if (((pLayer->m_bIsLayerStatus) & IsObjClosed) != 0)
+					m_PropertyList.SetItemText(i, 2, _T("“—πÿ±’"));
+				else if (((pLayer->m_bIsLayerStatus) & IsObjLocked) != 0)
+					m_PropertyList.SetItemText(i, 2, _T("“—À¯∂®"));
+				else if (nLayer < LayerNum_Default)
+					m_PropertyList.SetItemText(i, 2, _T("œµ Õ≥"));
+				else
+					m_PropertyList.SetItemText(i, 2, _T("ªÓ ∂Ø"));
+			}
+		}
+	}
+	if (SelCount == 1)
+	{
+		pLayer = m_pObjList->GetLayerOfNumber(Index);
+		LayerPara_To_mPara(pLayer);
+		m_LayerName = pLayer->m_LayerName;
+		if (Flag_Closed)
+		{
+			Enable_Layer_BTN_Open
+			Disable_Layer_BTN_Lock
+		}
+		else
+		{
+			Enable_Layer_BTN_Close
+			if (Flag_Locked)
+			{
+				Enable_Layer_BTN_Unlock
 			}
 			else
 			{
-				GetDlgItem(IDC_OBJECT_PROPERTY_STATIC11)->ShowWindow(SW_HIDE);
-				GetDlgItem(IDC_OBJECT_PROPERTY_EDIT6)->ShowWindow(SW_HIDE);
-				GetDlgItem(IDC_OBJECT_PROPERTY_STATIC12)->ShowWindow(SW_HIDE);
+				Enable_Layer_BTN_Lock
 			}
 		}
+		if (Index < LayerNum_Default)
+		{
+			Disable_Layer_BTN_Modify
+			Disable_Layer_BTN_Delete
+			Disable_Layer_BTN_UpAndDown
+			Disable_Layer_BTN_ClearLayer
+		}
+		else
+		{
+			Enable_Layer_BTN_Modify
+			Enable_Layer_BTN_Delete
+			Enable_Layer_BTN_UpAndDown
+			Enable_Layer_BTN_ClearObject
+		}
 	}
-	UpdateData(FALSE);
-	return TRUE;
+	else
+	{
+		gPara_To_mPara();
+		m_LayerName = "";
+		Disable_Layer_BTN_UpAndDown
+		Disable_Layer_BTN_Close
+		Disable_Layer_BTN_Lock
+		Disable_Layer_BTN_Modify
+		Disable_Layer_BTN_Delete
+		if (SelCount == 0)
+		{
+			Enable_Layer_BTN_ClearLayer
+		}
+		else
+		{
+			Disable_Layer_BTN_ClearLayer
+		}
+	}
+	Enable_Layer_BTN_Combine
 }
 
-void CObjectProperty::UISetByMultipleSel(int Index)
+void CObjectProperty::UIRefreshObject(int Index)
 {
-	POSITION pos, pos1;
-	int nLayer, nType;
-	float PointTime;
-	CString str;
-	ProcessPara para;
-	BOOL bEnPolyline = TRUE;
-	BOOL bExchange = TRUE;
-	m_ObjSel_Old = Index;
-	str = m_PropertyList.GetItemText(Index, 2);
-	nLayer = m_pObjList->FindLayerByName(str);
-	PointTime = 0;
-	pos = m_PropertyList.GetFirstSelectedItemPosition();
-	pos1 = pos;
-	Index = m_PropertyList.GetNextSelectedItem(pos1);
-	nLayer = m_pObjList->GetObjAtIndex(Index)->m_ObjByLayer;
-	while (pos)
+	CMachineObj_Comm* pObj = m_pObjList->GetObjAtIndex(m_ProtyListIndex[Index]);
+	int ObjType = pObj->GetObjType();
+	CMachinePara_Layer* pLayer = m_pObjList->GetLayerOfNumber(pObj->m_ObjByLayer);
+	int nLayer = pObj->m_ObjByLayer;
+	ObjPoint point1, point2;
+	if (nLayer < LayerNum_Group)
+		m_LayerNameListBox.SetCurSel(nLayer);
+	else if (nLayer == LayerNum_Group)
+		m_LayerNameListBox.SetCurSel(-1);
+	else
+		m_LayerNameListBox.SetCurSel(nLayer - LayerNum_Group - 1);
+	LayerPara_To_mPara(pLayer);
+	Enable_OBJ_BTN_UpAndDown
+	Enable_OBJ_BTN_Delete
+	Enable_OBJ_BTN_Edit
+	Disable_OBJ_BTN_Group
+	switch (ObjType)
 	{
+		case MachineObj_Type_Arc:
+			Enable_OBJ_BTN_Polyline
+			Disable_OBJ_BTN_DisGroup
+			break;
+		case MachineObj_Type_Line:
+			Enable_OBJ_BTN_Polyline
+			Disable_OBJ_BTN_DisGroup
+			break;
+		case MachineObj_Type_Group:
+			Disable_OBJ_BTN_Polyline
+			Enable_OBJ_BTN_DisGroup
+			break;
+		case MachineObj_Type_Polyline:
+			Disable_OBJ_BTN_Polyline
+			Enable_OBJ_BTN_BreakPolyline
+			break;
+		default:
+			Disable_OBJ_BTN_DisGroup
+			Disable_OBJ_BTN_Polyline
+			break;
+	}
+	Disable_OBJ_BTN_CombinePoly
+	Enable_OBJ_BTN_ChangeLayer
+	if (ObjType == MachineObj_Type_Point)
+	{
+		Enable_OBJ_Dot_Proty
+		m_WaitTime = ((CMachineObjPoint*)pObj)->m_MachineWaitTime;
+	}
+	else
+	{
+		Disable_OBJ_Dot_Proty
+		m_WaitTime = gProcessWaitTime;
+	}
+	//************Ãÿ ‚≤Ÿ◊˜*********
+	if (nLayer < LayerNum_Default)
+	{
+		Disable_OBJ_BTN_FillCreat
+		Disable_OBJ_BTN_WidenCreat
+		Disable_OBJ_BTN_Route
+	}
+	else
+	{
+		//Fill≈–∂®
+		if (ObjType == MachineObj_Type_Polyline)
+		{
+			point1 = pObj->GetObjStart(pObj);
+			point2 = pObj->GetObjEnd(pObj);
+			if ((abs(point1.x - point2.x) < Zero) && (abs(point1.y - point2.y) < Zero))
+			{
+				m_bDegenerate = false;
+				Enable_OBJ_BTN_FillCreat
+			}
+			else
+			{
+				Disable_OBJ_BTN_FillCreat
+			}
+		}
+		else if ((ObjType == MachineObj_Type_Circle)
+			|| (ObjType == MachineObj_Type_Ellipse))
+		{
+			m_bDegenerate = false;
+			Enable_OBJ_BTN_FillCreat
+		}
+		else if ((ObjType == MachineObj_Type_FillPolyline))
+		{
+			m_bDegenerate = true;
+			Enable_OBJ_BTN_FillDestroy;
+		}
+		else
+		{
+			Disable_OBJ_BTN_FillCreat
+		}
+		//Widen ≈–∂®
+		if ((ObjType == MachineObj_Type_Line)
+			|| (ObjType == MachineObj_Type_Arc)
+			|| (ObjType == MachineObj_Type_Polyline))
+		{
+			m_bDegenerate = false;
+			Enable_OBJ_BTN_WidenCreat
+		}
+		else if ((ObjType == MachineObj_Type_WLine)		///////////////////////////////////////////////////////////////////////////////////
+			|| (ObjType == MachineObj_Type_WArc)
+			|| (ObjType == MachineObj_Type_WPolyline))
+		{
+			m_bDegenerate = true;
+			Enable_OBJ_BTN_WidenDegen
+		}
+		else
+		{
+			Disable_OBJ_BTN_WidenCreat
+		}
+		Disable_OBJ_BTN_Route
+	}
+}
+
+void CObjectProperty::UIRefreshObject()
+{
+	POSITION pos;
+	int Index;
+	CMachineObj_Comm* pObj;
+	CMachinePara_Layer* pLayer;
+	int ObjType;
+	int nLayer = 0;
+	ObjPoint point1, point2;
+	m_SelectedObj.swap(vector<UINT>());
+	int Count = m_PropertyList.GetSelectedCount();
+	if (Count < 1)
+	{
+		//Œﬁ—°÷–
+		m_LayerNameListBox.SetCurSel(-1);
+		gPara_To_mPara();
+		Disable_OBJ_BTN_UpAndDown
+		Disable_OBJ_BTN_Delete
+		Disable_OBJ_BTN_Edit
+		Disable_OBJ_BTN_Group
+		Disable_OBJ_BTN_DisGroup
+		Disable_OBJ_BTN_Polyline
+		Disable_OBJ_BTN_CombinePoly
+		Disable_OBJ_BTN_ChangeLayer
+		Disable_OBJ_Dot_Proty
+		Disable_OBJ_Rise_By_Pass
+		Disable_OBJ_BTN_FillCreat
+		Disable_OBJ_BTN_WidenCreat
+		Disable_OBJ_BTN_Route
+	}
+	//Œﬁ—°÷– Ω· ¯
+	//else if (Count == 1)
+	//{
+	//	//—°÷–1∏ˆ
+	//	pos = m_PropertyList.GetFirstSelectedItemPosition();
+	//	while (pos)
+	//	{
+	//		Index = m_PropertyList.GetNextSelectedItem(pos);
+	//	}
+	//	if (Index < 0 || Index >= m_PropertyList.GetItemCount())
+	//		return;
+	//	m_SelectedObj.push_back(Index);
+	//	UIRefreshObject(Index);
+	//}
+	////—°÷–1∏ˆΩ· ¯
+	else
+	{
+		//”–—°÷–
+		bool Flag_InSysLayer = false;
+		bool Flag_SingleLayer = true;
+		bool Flag_AllPoint = true;
+		bool Flag_AllGroup = true;
+		bool Flag_AllPolyline = true;
+		bool Flag_AllEnPolyline = true;
+		bool Flag_AllEnCombine = true;
+		bool Flag_AllEnDirect = true;
+		bool Flag_AllCircle = true;
+		bool Flag_AllEnFill = true;
+		bool Flag_AllFill = true;
+		bool Flag_AllEnWiden = true;
+		bool Flag_AllWiden = true;
+
+		pos = m_PropertyList.GetFirstSelectedItemPosition();
 		Index = m_PropertyList.GetNextSelectedItem(pos);
-		m_pObjList->SetObjSelect(Index);
-		//***Â±ûÊÄßÂå∫
-		nType = m_pObjList->GetObjAtIndex(Index)->GetObjType();
-		if (!(nType == MachineObj_Type_Line
-			|| nType == MachineObj_Type_Arc
-			|| nType == MachineObj_Type_Polyline))
-			bEnPolyline = FALSE;
-		if (nLayer != m_pObjList->GetObjAtIndex(Index)->m_ObjByLayer)
-			bEnPolyline = FALSE;
-		if (!(nType == MachineObj_Type_Line
-			|| nType == MachineObj_Type_Arc
-			|| nType == MachineObj_Type_ArcEll
-			|| nType == MachineObj_Type_TiltEllipse
-			|| nType == MachineObj_Type_Polyline))
-			bExchange = FALSE;
-		//***ÂèÇÊï∞Âå∫
-		str = m_PropertyList.GetItemText(Index, 2);
-		if (nLayer != m_pObjList->FindLayerByName(str))
-			nLayer = -1;
-		if (nType == MachineObj_Type_Point)
+		pObj = m_pObjList->GetObjAtIndex(m_ProtyListIndex[Index]);
+		int nLayer_Old = pObj->m_ObjByLayer;
+		pos = m_PropertyList.GetFirstSelectedItemPosition();
+		while (pos)
 		{
-			GetDlgItem(IDC_OBJECT_PROPERTY_STATIC11)->ShowWindow(SW_SHOW);
-			GetDlgItem(IDC_OBJECT_PROPERTY_EDIT6)->ShowWindow(SW_SHOW);
-			GetDlgItem(IDC_OBJECT_PROPERTY_STATIC12)->ShowWindow(SW_SHOW);
-			m_WaitTime = ((CMachineObjPoint*)m_pObjList->GetObjAtIndex(Index))->m_MachineWaitTime;
-			if (m_WaitTime != PointTime && PointTime != 0)
-				PointTime = -1;
-			else
-				PointTime = m_WaitTime;
+			Index = m_PropertyList.GetNextSelectedItem(pos);
+			if (Index < 0 || Index >= m_PropertyList.GetItemCount())
+				break;
+			m_SelectedObj.push_back(Index);
+			pObj = m_pObjList->GetObjAtIndex(m_ProtyListIndex[Index]);
+			nLayer = pObj->m_ObjByLayer;
+			if ((nLayer < LayerNum_Default) && (nLayer != LayerNum_Group))
+				Flag_InSysLayer = true;
+			if (nLayer != nLayer_Old)
+				Flag_SingleLayer = false;
+			ObjType = pObj->GetObjType();
+			switch (ObjType)
+			{
+			case MachineObj_Type_Point:
+				Flag_AllGroup = false;
+				Flag_AllPolyline = false;
+				Flag_AllEnPolyline = false;
+				Flag_AllEnCombine = false;
+				Flag_AllEnDirect = false;
+				Flag_AllCircle = false;
+				Flag_AllEnFill = false;
+				Flag_AllFill = false;
+				Flag_AllEnWiden = false;
+				Flag_AllWiden = false;
+				break;
+			case MachineObj_Type_Line:
+				Flag_AllPoint = false;
+				Flag_AllGroup = false;
+				Flag_AllPolyline = false;
+				Flag_AllCircle = false;
+				Flag_AllEnFill = false;
+				Flag_AllFill = false;
+				Flag_AllWiden = false;
+				break;
+			case MachineObj_Type_Circle:
+				Flag_AllPoint = false;
+				Flag_AllGroup = false;
+				Flag_AllPolyline = false;
+				Flag_AllEnPolyline = false;
+				Flag_AllEnCombine = false;
+				Flag_AllFill = false;
+				Flag_AllEnWiden = false;	//**true
+				Flag_AllWiden = false;
+				break;
+			case MachineObj_Type_Arc:
+				Flag_AllPoint = false;
+				Flag_AllGroup = false;
+				Flag_AllPolyline = false;
+				Flag_AllCircle = false;
+				Flag_AllEnFill = false;
+				Flag_AllFill = false;
+				Flag_AllWiden = false;
+				break;
+			case MachineObj_Type_Ellipse:
+				Flag_AllPoint = false;
+				Flag_AllGroup = false;
+				Flag_AllPolyline = false;
+				Flag_AllEnPolyline = false;
+				Flag_AllEnCombine = false;
+//				Flag_AllCircle = false;
+				Flag_AllFill = false;
+				Flag_AllEnWiden = false;	//**
+				Flag_AllWiden = false;
+				break;
+			case MachineObj_Type_ArcEll:
+				Flag_AllPoint = false;
+				Flag_AllGroup = false;
+				Flag_AllPolyline = false;
+				Flag_AllEnPolyline = false;
+				Flag_AllEnCombine = false;
+				Flag_AllCircle = false;
+				Flag_AllEnFill = false;
+				Flag_AllFill = false;
+				Flag_AllEnWiden = false;	//**
+				Flag_AllWiden = false;
+				break;
+			case MachineObj_Type_TiltEllipse:
+				Flag_AllPoint = false;
+				Flag_AllGroup = false;
+				Flag_AllPolyline = false;
+				Flag_AllEnPolyline = false;
+				Flag_AllEnCombine = false;
+				Flag_AllCircle = false;
+				Flag_AllEnFill = false;		//**
+				Flag_AllFill = false;
+				Flag_AllEnWiden = false;	//**
+				Flag_AllWiden = false;
+				break;
+			case MachineObj_Type_Polyline:
+				Flag_AllPoint = false;
+				Flag_AllGroup = false;
+				Flag_AllCircle = false;
+				Flag_AllEnPolyline = false;
+				point1 = pObj->GetObjStart(pObj);
+				point2 = pObj->GetObjEnd(pObj);
+				if ((abs(point1.x - point2.x) > Zero) || (abs(point1.y - point2.y) > Zero))
+					Flag_AllEnFill = false;
+				Flag_AllFill = false;
+				Flag_AllWiden = false;
+				break;
+			case MachineObj_Type_Group:
+				Flag_AllPoint = false;
+				Flag_AllPolyline = false;
+				Flag_AllEnPolyline = false;
+				Flag_AllEnCombine = false;
+				Flag_AllEnDirect = false;
+				Flag_AllCircle = false;
+				Flag_AllEnFill = false;
+				Flag_AllFill = false;
+				Flag_AllEnWiden = false;
+				Flag_AllWiden = false;
+				break;
+			case MachineObj_Type_WLine:
+				Flag_AllPoint = false;
+				Flag_AllGroup = false;
+				Flag_AllPolyline = false;
+				Flag_AllEnPolyline = false;
+				Flag_AllEnCombine = false;
+				Flag_AllEnDirect = false;
+				Flag_AllCircle = false;
+				Flag_AllEnFill = false;
+				Flag_AllFill = false;
+				Flag_AllEnWiden = false;
+				break;
+			case MachineObj_Type_WArc:
+				Flag_AllPoint = false;
+				Flag_AllGroup = false;
+				Flag_AllPolyline = false;
+				Flag_AllEnPolyline = false;
+				Flag_AllEnCombine = false;
+				Flag_AllEnDirect = false;
+				Flag_AllCircle = false;
+				Flag_AllEnFill = false;
+				Flag_AllFill = false;
+				Flag_AllEnWiden = false;
+				break;
+			case MachineObj_Type_WPolyline:
+				Flag_AllPoint = false;
+				Flag_AllGroup = false;
+				Flag_AllPolyline = false;
+				Flag_AllEnPolyline = false;
+				Flag_AllEnCombine = false;
+				Flag_AllEnDirect = false;
+				Flag_AllCircle = false;
+				Flag_AllEnFill = false;
+				Flag_AllFill = false;
+				Flag_AllEnWiden = false;
+				break;
+			case MachineObj_Type_FillPolyline:
+				Flag_AllPoint = false;
+				Flag_AllGroup = false;
+				Flag_AllPolyline = false;
+				Flag_AllEnPolyline = false;
+				Flag_AllEnCombine = false;
+				Flag_AllEnDirect = false;
+				Flag_AllCircle = false;
+				Flag_AllEnFill = false;
+				Flag_AllEnWiden = false;
+				Flag_AllWiden = false;
+				break;
+			default:
+				Flag_AllPoint = false;
+				Flag_AllGroup = false;
+				Flag_AllPolyline = false;
+				Flag_AllEnPolyline = false;
+				Flag_AllEnCombine = false;
+				Flag_AllEnDirect = false;
+				Flag_AllCircle = false;
+				Flag_AllEnFill = false;
+				Flag_AllFill = false;
+				Flag_AllEnWiden = false;
+				Flag_AllWiden = false;
+				break;
+			}
 		}
-	}
-	//*****Â±ûÊÄßÂå∫
-	GetDlgItem(IDC_BTN_OBJ_UP)->EnableWindow(FALSE);
-	GetDlgItem(IDC_BTN_OBJ_DOWN)->EnableWindow(FALSE);
-	GetDlgItem(IDC_BTN_OBJ_EDIT)->EnableWindow(TRUE);
-	GetDlgItem(IDC_BTN_OBJ_DELETE)->EnableWindow(TRUE);
-	GetDlgItem(IDC_BTN_OBJ_INSERT)->EnableWindow(TRUE);
-	if (bEnPolyline)
-	{
-		GetDlgItem(IDC_BTN_OBJ_T_G)->SetWindowText(_T("ËÅö Âêà"));
-		GetDlgItem(IDC_BTN_OBJ_T_G)->EnableWindow(TRUE);
-	}
-	else
-	{
-		GetDlgItem(IDC_BTN_OBJ_T_G)->SetWindowText(_T("ËÅö Âêà"));
-		GetDlgItem(IDC_BTN_OBJ_T_G)->EnableWindow(FALSE);
-	}
-	GetDlgItem(IDC_BTN_OBJ_EXPLODE)->SetWindowText(_T("ÁªÑ Âêà"));
-	GetDlgItem(IDC_BTN_OBJ_EXPLODE)->EnableWindow(TRUE);
-	if (bExchange)
-	{
-		GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->SetWindowText(_T("Ëµ∑ÁªàÁÇπ‰∫íÊç¢"));
-		GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->EnableWindow(TRUE);
-	}
-	else
-	{
-		GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->SetWindowText(_T("Ëµ∑ÁªàÁÇπ‰∫íÊç¢"));
-		GetDlgItem(IDC_BTN_OBJ_EXCHANGE)->EnableWindow(FALSE);
-	}
-	//*****ÂèÇÊï∞Âå∫
-	if (nLayer < 0)
-	{
-		GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->EnableWindow(TRUE);
-		GetDlgItem(IDC_OBJECT_PROPERTY_BTN2)->EnableWindow(FALSE);
-		m_Speed = -9999;
-		m_Power = -9999;
-		m_Frequncy = -9999;
-		m_Count = 0;
-		m_PulseWidth = 0;
-		m_ModeSel = -1;
-		m_WaitTime = 0;
-	}
-	else
-	{
-		if (nLayer == 0 || nLayer == 1)
+
+		if (Flag_SingleLayer)
 		{
-			GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->EnableWindow(FALSE);
-			GetDlgItem(IDC_OBJECT_PROPERTY_BTN2)->EnableWindow(FALSE);
-			m_Speed = 0;
-			m_Power = 0;
-			m_Frequncy = 0;
-			m_Count = 0;
-			m_PulseWidth = 0;
-			m_ModeSel = -1;
-			m_WaitTime = 0;
+			pLayer = m_pObjList->GetLayerOfNumber(nLayer);
+			if (nLayer < LayerNum_Default)
+				m_LayerNameListBox.SetCurSel(nLayer);
+			else
+				m_LayerNameListBox.SetCurSel(nLayer - LayerNum_Group - 1);
+			LayerPara_To_mPara(pLayer);
 		}
 		else
 		{
-			GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->EnableWindow(TRUE);
-			GetDlgItem(IDC_OBJECT_PROPERTY_BTN2)->EnableWindow(TRUE);
-			para = m_pObjList->GetLayerOfNumber(nLayer)->m_MachinePara;
-			m_Speed = para.Speed;
-			m_Power = para.Power;
-			m_Frequncy = (float)para.Frequncy / 1000;
-			m_Count = para.Times;
-			m_PulseWidth = para.PulseWidth;
-			m_ModeSel = m_pObjList->GetLayerOfNumber(nLayer)->m_MachineMode;
+			m_LayerNameListBox.SetCurSel(-1);
+			gPara_To_mPara();
+		}
+		if (Flag_AllPoint)
+		{
+			Enable_OBJ_Dot_Proty
+				m_WaitTime = ((CMachineObjPoint*)pObj)->m_MachineWaitTime;
+		}
+		else
+		{
+			Disable_OBJ_Dot_Proty
+				m_WaitTime = gProcessWaitTime;
 		}
 
+		//*********
+		if (Count == 1)
+		{
+			Enable_OBJ_BTN_UpAndDown
+		}
+		else
+		{
+			if (Flag_AllEnDirect && Flag_AllCircle)
+			{
+				Enable_OBJ_BTN_ReDirect
+				Enable_OBJ_BTN_ReNode
+			}
+			else if (Flag_AllEnDirect)
+			{
+				Enable_OBJ_BTN_ReDirect
+				Disable_OBJ_BTN_ReNode
+			}
+			else if (Flag_AllCircle)
+			{
+				Disable_OBJ_BTN_ReDirect
+				Enable_OBJ_BTN_ReNode
+			}
+			else
+			{
+				Disable_OBJ_BTN_UpAndDown
+			}
+		}
+		Enable_OBJ_BTN_Delete
+		if (((Count == 1) && (ObjType != MachineObj_Type_Invaild))	//Group
+			|| Flag_AllFill || Flag_AllWiden)
+		{
+			Enable_OBJ_BTN_Edit
+		}
+		else
+		{
+			Disable_OBJ_BTN_Edit
+		}
+		if (((Flag_InSysLayer && Flag_SingleLayer) || (!Flag_InSysLayer)) && (Count != 1))
+		{
+			Enable_OBJ_BTN_Group
+		}
+		else
+		{
+			Disable_OBJ_BTN_Group
+		}
+		if (Flag_AllGroup)
+		{
+			Enable_OBJ_BTN_DisGroup
+		}
+		else if (Flag_AllPolyline)
+		{
+			Enable_OBJ_BTN_BreakPolyline
+		}
+		else
+		{
+			Disable_OBJ_BTN_DisGroup
+		}
+		if (Flag_AllEnPolyline)
+		{
+			Enable_OBJ_BTN_Polyline
+		}
+		else
+		{
+			Disable_OBJ_BTN_Polyline
+		}
+		if (Flag_AllEnCombine && Flag_SingleLayer && (Count != 1))
+		{
+			Enable_OBJ_BTN_CombinePoly
+		}
+		else
+		{
+			Disable_OBJ_BTN_CombinePoly
+		}
+		Enable_OBJ_BTN_ChangeLayer;
+
+		//********Ãÿ ‚≤Ÿ◊˜
+		if (Flag_AllEnFill)
+		{
+			m_bDegenerate = false;
+			Enable_OBJ_BTN_FillCreat
+		}
+		else if (Flag_AllFill)
+		{
+			m_bDegenerate = true;
+			Enable_OBJ_BTN_FillDestroy
+		}
+		else
+		{
+			Disable_OBJ_BTN_FillCreat
+		}
+		if (Flag_AllEnWiden)
+		{
+			m_bDegenerate = false;
+			Enable_OBJ_BTN_WidenCreat
+		}
+		else if (Flag_AllWiden)
+		{
+			m_bDegenerate = true;
+			Enable_OBJ_BTN_WidenDegen
+		}
+		else
+		{
+			Disable_OBJ_BTN_WidenCreat
+		}
+		if (Flag_InSysLayer || (Count == 1))
+		{
+			Disable_OBJ_BTN_Route
+		}
+		else
+		{
+			Enable_OBJ_BTN_Route
+		}
+
+
 	}
-	if (PointTime < 0)
-		m_WaitTime = -9999;
+	//—°÷–∂‡∏ˆΩ· ¯
+}
+
+void CObjectProperty::ClearAllObjSel()
+{
+	CMachineObj_Comm* pObj;
+	int Count = m_ProtyListIndex.size();
+	for (int i = 0; i < Count; i++)
+	{
+		pObj = m_pObjList->GetObjAtIndex(m_ProtyListIndex[i]);
+		pObj->m_bIsObjStatus &= ~IsObjSel;
+	}
+}
+
+void CObjectProperty::ClearActiveLayerSel()
+{
+	CMachinePara_Layer* pLayer;
+	byte status;
+	int Count = m_pObjList->GetLayerCount();
+	for (int i = 0; i < Count; i++)
+	{
+		pLayer = m_pObjList->GetLayerOfNumber(i);
+		status = pLayer->m_bIsLayerStatus;
+		if (((status & IsObjClosed) == 0) && ((status & IsObjLocked) == 0))
+			pLayer->m_bIsLayerStatus &= ~IsObjSel;
+	}
+}
+
+int CObjectProperty::FindProtyListIndex(int ObjListIndex)
+{
+	int Count = m_ProtyListIndex.size();
+	for (int i = 0; i < Count; i++)
+	{
+		if (ObjListIndex == m_ProtyListIndex[i])
+			return i;
+	}
+	return -1;
+}
+
+void CObjectProperty::SetExtenfPara()
+{
+	CObjectProtyDlg1 dlg;
+	dlg.DoModal();
+	return;
+}
+
+void CObjectProperty::SetFillPara()
+{
+	CObjectProtyDlg2 dlg;
+	dlg.DoModal();
+	return;
+
+}
+
+void CObjectProperty::EditPoint(CMachineObj_Comm* pObj)
+{
+	CMachineObjPoint* pPoint = (CMachineObjPoint*)pObj;
+	UnDisp_Machine_Property
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowTextW(_T("∂‘œÛº∏∫Œ Ù–‘"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowPos(NULL, 30, 375, 210, 170, BS_CENTER);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowPos(NULL, 45, 415, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowTextW(_T("µ„◊¯±Í      X"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->SetWindowPos(NULL, 130, 414, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowPos(NULL, 215, 415, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowPos(NULL, 45, 435, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowTextW(_T("                  Y"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->SetWindowPos(NULL, 130, 434, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->SetWindowPos(NULL, 215, 435, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->SetWindowPos(NULL, 70, 500, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->SetWindowPos(NULL, 150, 500, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->EnableWindow(TRUE);
+	ObjPoint point;
+	point = pPoint->GetPoint();
+	m_dVar1 = point.x;
+	m_dVar2 = point.y;
+	m_Edit_pObj = pObj;
 	UpdateData(FALSE);
 }
 
-// CObjectProperty Ê∂àÊÅØÂ§ÑÁêÜÁ®ãÂ∫è
+void CObjectProperty::SavePoint(CMachineObj_Comm* pObj)
+{
+	CMachineObjPoint* pPoint = (CMachineObjPoint*)pObj;
+	if (UpdateData(TRUE))
+	{
+		pPoint->SetPoint(ObjPoint(m_dVar1, m_dVar2));
+		m_pView->Invalidate();
+	}
+}
+
+void CObjectProperty::EditLine(CMachineObj_Comm* pObj)
+{
+	CMachineObjLine* pLine = (CMachineObjLine*)pObj;
+	UnDisp_Machine_Property
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowTextW(_T("∂‘œÛº∏∫Œ Ù–‘"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowPos(NULL, 30, 375, 210, 325, BS_CENTER);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowPos(NULL, 45, 415, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowTextW(_T("∆µ„◊¯±Í  X"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->SetWindowPos(NULL, 130, 414, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowPos(NULL, 215, 415, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowPos(NULL, 45, 435, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowTextW(_T("                  Y"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->SetWindowPos(NULL, 130, 434, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->SetWindowPos(NULL, 215, 435, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->SetWindowPos(NULL, 45, 460, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->SetWindowTextW(_T("÷’µ„◊¯±Í  X"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT16)->SetWindowPos(NULL, 130, 459, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT16)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->SetWindowPos(NULL, 215, 460, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->SetWindowPos(NULL, 45, 480, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->SetWindowTextW(_T("                  Y"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT17)->SetWindowPos(NULL, 130, 479, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT17)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->SetWindowPos(NULL, 215, 480, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC36)->SetWindowPos(NULL, 45, 520, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC36)->SetWindowTextW(_T("÷––ƒ◊¯±Í  X"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC36)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT18)->SetWindowPos(NULL, 130, 519, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT18)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC37)->SetWindowPos(NULL, 215, 520, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC37)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC37)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->SetWindowPos(NULL, 45, 540, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->SetWindowTextW(_T("                  Y"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT19)->SetWindowPos(NULL, 130, 539, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT19)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC39)->SetWindowPos(NULL, 215, 540, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC39)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC39)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->SetWindowPos(NULL, 100, 580, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->SetWindowText(_T("Ωªªª∆÷’µ„"));
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->SetWindowPos(NULL, 70, 630, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->SetWindowPos(NULL, 150, 630, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->EnableWindow(TRUE);
+	ObjPoint point;
+	point = pLine->GetLineStart();
+	m_dVar1 = point.x;
+	m_dVar2 = point.y;
+	point = pLine->GetLineEnd();
+	m_dVar3 = point.x;
+	m_dVar4 = point.y;
+	ObjRect rect = pLine->GetObjBound();
+	m_dVar5 = (rect.max_x + rect.min_x) / 2;
+	m_dVar6 = (rect.max_y + rect.min_y) / 2;
+	m_Edit_pObj = pObj;
+	UpdateData(FALSE);
+}
+
+void CObjectProperty::ExchangeLineStartAndEnd(CMachineObj_Comm* pObj)
+{
+	CMachineObjLine* pLine = (CMachineObjLine*)pObj;
+	double dtemp1 = m_dVar1;
+	double dtemp2 = m_dVar2;
+	pLine->ExchangeStartAndEnd(pLine);
+	m_dVar1 = m_dVar3;
+	m_dVar2 = m_dVar4;
+	m_dVar3 = dtemp1;
+	m_dVar4 = dtemp2;
+	UpdateData(FALSE);
+	m_pView->Invalidate();
+		
+}
+
+void CObjectProperty::SaveLineModify(CMachineObj_Comm* pObj)
+{
+	CMachineObjLine* pLine = (CMachineObjLine*)pObj;
+	double dtemp1 = m_dVar5;
+	double dtemp2 = m_dVar6;
+	if (UpdateData(TRUE))
+	{
+		pLine->SetLine(ObjPoint(m_dVar1, m_dVar2), ObjPoint(m_dVar3, m_dVar4));
+		pLine->MoveLine(m_dVar5 - dtemp1, m_dVar6 - dtemp2);
+		ObjPoint point;
+		point = pLine->GetLineStart();
+		m_dVar1 = point.x;
+		m_dVar2 = point.y;
+		point = pLine->GetLineEnd();
+		m_dVar3 = point.x;
+		m_dVar4 = point.y;
+		ObjRect rect = pLine->GetObjBound();
+		m_dVar5 = (rect.max_x + rect.min_x) / 2;
+		m_dVar6 = (rect.max_y + rect.min_y) / 2;
+		m_Edit_pObj = pLine;
+		UpdateData(FALSE);
+		m_pView->Invalidate();
+	}
+}
+
+void CObjectProperty::EditCircle(CMachineObj_Comm* pObj)
+{
+	CMachineObjCircle* pCircle = (CMachineObjCircle*)pObj;
+	UnDisp_Machine_Property
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowTextW(_T("∂‘œÛº∏∫Œ Ù–‘"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowPos(NULL, 30, 375, 210, 325, BS_CENTER);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowPos(NULL, 45, 415, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowTextW(_T("‘≤–ƒ◊¯±Í  X"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->SetWindowPos(NULL, 130, 414, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowPos(NULL, 215, 415, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowPos(NULL, 45, 435, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowTextW(_T("                  Y"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->SetWindowPos(NULL, 130, 434, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->SetWindowPos(NULL, 215, 435, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->SetWindowPos(NULL, 45, 455, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->SetWindowTextW(_T("∞Îæ∂          R"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT16)->SetWindowPos(NULL, 130, 454, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT16)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->SetWindowPos(NULL, 215, 455, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->SetWindowPos(NULL, 45, 475, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->SetWindowTextW(_T("∑ΩœÚ"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->SetWindowPos(NULL, 180, 475, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC36)->SetWindowPos(NULL, 45, 500, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC36)->SetWindowTextW(_T("∆µ„◊¯±Í  X"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC36)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT17)->SetWindowPos(NULL, 130, 499, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT17)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC37)->SetWindowPos(NULL, 215, 500, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC37)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC37)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->SetWindowPos(NULL, 45, 520, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->SetWindowTextW(_T("                  Y"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT18)->SetWindowPos(NULL, 130, 519, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT18)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC39)->SetWindowPos(NULL, 215, 520, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC39)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC39)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN18)->SetWindowPos(NULL, 50, 560, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN18)->SetWindowText(_T("«–ªª∆µ„"));
+	GetDlgItem(IDC_OBJ_PROTY_BTN18)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN18)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->SetWindowPos(NULL, 150, 560, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->SetWindowText(_T("ªª œÚ"));
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->SetWindowPos(NULL, 70, 630, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->SetWindowPos(NULL, 150, 630, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->EnableWindow(TRUE);
+	ObjPoint point;
+	point = pCircle->GetCircleCenter();
+	m_dVar1 = point.x;
+	m_dVar2 = point.y;
+	m_dVar3 = pCircle->GetCircleRadius();
+	if (pCircle->GetCircleDir() == CCW)
+		GetDlgItem(IDC_OBJ_PROTY_STATIC35)->SetWindowTextW(_T("ƒÊ ±’Î"));
+	else
+		GetDlgItem(IDC_OBJ_PROTY_STATIC35)->SetWindowTextW(_T("À≥ ±’Î"));
+	point = pCircle->GetCircleStart();
+	m_dVar4 = point.x;
+	m_dVar5 = point.y;
+	m_Edit_pObj = pObj;
+	UpdateData(FALSE);
+}
+
+void CObjectProperty::SaveCircleModify(CMachineObj_Comm* pObj)
+{
+	CMachineObjCircle* pCircle = (CMachineObjCircle*)pObj;
+	double dTemp1 = m_dVar1;
+	double dTemp2 = m_dVar2;
+	double dTemp3 = m_dVar3;
+	double dTemp4 = m_dVar4;
+	double dTemp5 = m_dVar5;
+	if (UpdateData(TRUE))
+	{
+		if (((abs(dTemp1-m_dVar1)>Zero) || (abs(dTemp2-m_dVar2)>Zero) || (abs(dTemp3-m_dVar3)>Zero))
+			&& ((abs(dTemp4-m_dVar4)>Zero) || (abs(dTemp5-m_dVar5)>Zero)))
+		{
+			MessageBox(_T("’‚–©≤Œ ˝≤ª»›–ÌÕ¨ ±–ﬁ∏ƒ!"));
+			m_dVar1 = dTemp1;
+			m_dVar2 = dTemp2;
+			m_dVar3 = dTemp3;
+			m_dVar4 = dTemp4;
+			m_dVar5 = dTemp5;
+		}
+		else
+		{
+			pCircle->SetCircleRadius(m_dVar3);
+			double x, y;
+			x = m_dVar1 - dTemp1 + m_dVar4 - dTemp4;
+			if (abs(x) < Zero)
+				x = 0;
+			y = m_dVar2 - dTemp2 + m_dVar5 - dTemp5;
+			if (abs(y) < Zero)
+				y = 0;
+			pCircle->MoveCircle(x, y);
+		}
+		ObjPoint point = pCircle->GetCircleCenter();
+		m_dVar1 = point.x;
+		m_dVar2 = point.y;
+		pCircle->GetCircleStart();
+		m_dVar4 = point.x;
+		m_dVar5 = point.y;
+		UpdateData(FALSE);
+		m_pView->Invalidate();
+	}
+}
+
+void CObjectProperty::ExchangeCircleStartAndEnd(CMachineObj_Comm* pObj)
+{
+	CMachineObjCircle* pCircle = (CMachineObjCircle*)pObj;
+	pCircle->ExchangeDirection();
+	if (pCircle->GetCircleDir() == CCW)
+		GetDlgItem(IDC_OBJ_PROTY_STATIC35)->SetWindowTextW(_T("ƒÊ ±’Î"));
+	else
+		GetDlgItem(IDC_OBJ_PROTY_STATIC35)->SetWindowTextW(_T("À≥ ±’Î"));
+	m_pView->Invalidate();
+}
+
+void CObjectProperty::ChangeCircleNode(CMachineObj_Comm* pObj)
+{
+	CMachineObjCircle* pCircle = (CMachineObjCircle*)pObj;
+	char StartNum = pCircle->GetCircleStartNum();
+	StartNum++;
+	if (StartNum > 3)
+		StartNum = 0;
+	pCircle->SetCircleStart(StartNum);
+	ObjPoint point = pCircle->GetCircleStart();
+	m_dVar4 = point.x;
+	m_dVar5 = point.y;
+	UpdateData(FALSE);
+	m_pView->Invalidate();
+}
+
+void CObjectProperty::EditArc(CMachineObj_Comm* pObj)
+{
+	CMachineObjArc* pArc = (CMachineObjArc*)pObj;
+	UnDisp_Machine_Property
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowTextW(_T("∂‘œÛº∏∫Œ Ù–‘"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowPos(NULL, 30, 375, 210, 360, BS_CENTER);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowPos(NULL, 45, 415, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowTextW(_T("‘≤–ƒ◊¯±Í  X"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->SetWindowPos(NULL, 130, 414, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowPos(NULL, 215, 415, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowPos(NULL, 45, 435, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowTextW(_T("                  Y"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->SetWindowPos(NULL, 130, 434, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->SetWindowPos(NULL, 215, 435, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->SetWindowPos(NULL, 45, 455, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->SetWindowTextW(_T("‘≤ª°∞Îæ∂    R"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT16)->SetWindowPos(NULL, 130, 454, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT16)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->SetWindowPos(NULL, 215, 455, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->SetWindowPos(NULL, 45, 475, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->SetWindowTextW(_T("∆ ºΩ«"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT17)->SetWindowPos(NULL, 130, 474, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT17)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->SetWindowPos(NULL, 215, 475, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->SetWindowTextW(_T("∂»"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC36)->SetWindowPos(NULL, 45, 495, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC36)->SetWindowTextW(_T("÷’÷πΩ«"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC36)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT18)->SetWindowPos(NULL, 130, 494, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT18)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC37)->SetWindowPos(NULL, 215, 495, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC37)->SetWindowTextW(_T("∂»"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC37)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->SetWindowPos(NULL, 45, 515, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->SetWindowTextW(_T("∑ΩœÚ"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC39)->SetWindowPos(NULL, 180, 515, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC39)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC40)->SetWindowPos(NULL, 45, 540, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC40)->SetWindowTextW(_T("‘≤ª°∆µ„  X"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC40)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT19)->SetWindowPos(NULL, 130, 539, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT19)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC41)->SetWindowPos(NULL, 215, 540, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC41)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC41)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC42)->SetWindowPos(NULL, 45, 560, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC42)->SetWindowTextW(_T("                  Y"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC42)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT20)->SetWindowPos(NULL, 130, 559, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT20)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC43)->SetWindowPos(NULL, 215, 560, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC43)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC43)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC44)->SetWindowPos(NULL, 45, 580, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC44)->SetWindowTextW(_T("‘≤ª°÷’µ„  X"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC44)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT21)->SetWindowPos(NULL, 130, 579, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT21)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC45)->SetWindowPos(NULL, 215, 580, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC45)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC45)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC46)->SetWindowPos(NULL, 45, 600, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC46)->SetWindowTextW(_T("                  Y"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC46)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT22)->SetWindowPos(NULL, 130, 599, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT22)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC47)->SetWindowPos(NULL, 215, 600, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC47)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC47)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->SetWindowPos(NULL, 100, 640, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->SetWindowText(_T("Ωªªª∆÷’µ„"));
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->SetWindowPos(NULL, 70, 680, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->SetWindowPos(NULL, 150, 680, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->EnableWindow(TRUE);
+	ObjPoint point;
+	point = pArc->GetArcCenter();
+	m_dVar1 = point.x;
+	m_dVar2 = point.y;
+	m_dVar3 = pArc->GetArcRadius();
+	m_dVar4 = pArc->GetStartAngle();
+	m_dVar5 = pArc->GetEndAngle();
+	if (pArc->GetArcDir() == CCW)
+		GetDlgItem(IDC_OBJ_PROTY_STATIC39)->SetWindowTextW(_T("ƒÊ ±’Î"));
+	else
+		GetDlgItem(IDC_OBJ_PROTY_STATIC39)->SetWindowTextW(_T("À≥ ±’Î"));
+	point = pArc->GetArcStart();
+	m_dVar6 = point.x;
+	m_dVar7 = point.y;
+	point = pArc->GetArcEnd();
+	m_dVar8 = point.x;
+	m_dVar9 = point.y;
+	m_Edit_pObj = pObj;
+	UpdateData(FALSE);
+}
+
+void CObjectProperty::SaveArcModify(CMachineObj_Comm* pObj)
+{
+	CMachineObjArc* pArc = (CMachineObjArc*)pObj;
+	double dTemp1 = m_dVar1;
+	double dTemp2 = m_dVar2;
+	double dTemp3 = m_dVar3;
+	double dTemp4 = m_dVar4;
+	double dTemp5 = m_dVar5;
+	double dTemp6 = m_dVar6;
+	double dTemp7 = m_dVar7;
+	double dTemp8 = m_dVar8;
+	double dTemp9 = m_dVar9;
+	if (UpdateData(TRUE))
+	{
+		if (((abs(dTemp1-m_dVar1)>Zero) || (abs(dTemp2-m_dVar2)>Zero) || (abs(dTemp3-m_dVar3)>Zero)
+			|| (abs(dTemp4-m_dVar4)>Zero) || (abs(dTemp5-m_dVar5)>Zero))
+			&& ((abs(dTemp6-m_dVar6)>Zero) || (abs(dTemp7-m_dVar7)>Zero))
+			&& ((abs(dTemp8-m_dVar8)>Zero) || (abs(dTemp9-m_dVar9)>Zero)))
+		{
+			MessageBox(_T("’‚–©≤Œ ˝≤ª»›–ÌÕ¨ ±–ﬁ∏ƒ!"));
+			m_dVar1 = dTemp1;
+			m_dVar2 = dTemp2;
+			m_dVar3 = dTemp3;
+			m_dVar4 = dTemp4;
+			m_dVar5 = dTemp5;
+			m_dVar6 = dTemp6;
+			m_dVar7 = dTemp7;
+			m_dVar8 = dTemp8;
+			m_dVar9 = dTemp9;
+		}
+		else
+		{
+			pArc->SetArcRadius(m_dVar3);
+			pArc->SetStartAndEndAngle(m_dVar4, m_dVar5, pArc->GetArcDir());
+			double x, y;
+			x = m_dVar1 - dTemp1 + m_dVar6 - dTemp6 + m_dVar8 - dTemp8;
+			if (abs(x) < Zero)
+				x = 0;
+			y = m_dVar2 - dTemp2 + m_dVar7 - dTemp7 + m_dVar9 - dTemp9;
+			if (abs(y) < Zero)
+				y = 0;
+			pArc->MoveArc(x, y);
+			ObjPoint point;
+			point = pArc->GetArcCenter();
+			m_dVar1 = point.x;
+			m_dVar2 = point.y;
+			if (pArc->GetArcDir() == CCW)
+				GetDlgItem(IDC_OBJ_PROTY_STATIC39)->SetWindowTextW(_T("ƒÊ ±’Î"));
+			else
+				GetDlgItem(IDC_OBJ_PROTY_STATIC39)->SetWindowTextW(_T("À≥ ±’Î"));
+			point = pArc->GetArcStart();
+			m_dVar6 = point.x;
+			m_dVar7 = point.y;
+			point = pArc->GetArcEnd();
+			m_dVar8 = point.x;
+			m_dVar9 = point.y;
+		}
+		UpdateData(FALSE);
+		m_pView->Invalidate();
+	}
+}
+
+void CObjectProperty::ExchangeArcStartAndEnd(CMachineObj_Comm* pObj)
+{
+	CMachineObjArc* pArc = (CMachineObjArc*)pObj;
+	double dtemp1 = m_dVar4;
+	pArc->ExchangeStartAndEnd(pArc);
+	m_dVar4 = m_dVar5;
+	m_dVar5 = dtemp1;
+	dtemp1 = m_dVar6;
+	m_dVar6 = m_dVar8;
+	m_dVar8 = dtemp1;
+	dtemp1 = m_dVar7;
+	m_dVar7 = m_dVar9;
+	m_dVar9 = dtemp1;
+	if (pArc->GetArcDir() == CCW)
+		GetDlgItem(IDC_OBJ_PROTY_STATIC39)->SetWindowTextW(_T("ƒÊ ±’Î"));
+	else
+		GetDlgItem(IDC_OBJ_PROTY_STATIC39)->SetWindowTextW(_T("À≥ ±’Î"));
+	UpdateData(FALSE);
+	m_pView->Invalidate();
+}
+
+void CObjectProperty::EditEllipse(CMachineObj_Comm* pObj)
+{
+	CMachineObjEllipse* pEllipse = (CMachineObjEllipse*)pObj;
+	UnDisp_Machine_Property
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowTextW(_T("∂‘œÛº∏∫Œ Ù–‘"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowPos(NULL, 30, 375, 210, 325, BS_CENTER);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowPos(NULL, 45, 415, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowTextW(_T("‘≤–ƒ◊¯±Í  X"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->SetWindowPos(NULL, 130, 414, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowPos(NULL, 215, 415, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowPos(NULL, 45, 435, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowTextW(_T("                  Y"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->SetWindowPos(NULL, 130, 434, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->SetWindowPos(NULL, 215, 435, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->SetWindowPos(NULL, 45, 455, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->SetWindowTextW(_T("≥§÷·(X)   a"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT16)->SetWindowPos(NULL, 130, 454, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT16)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->SetWindowPos(NULL, 215, 455, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->SetWindowPos(NULL, 45, 475, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->SetWindowTextW(_T("∂Ã÷·(Y)   b"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT17)->SetWindowPos(NULL, 130, 474, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT17)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->SetWindowPos(NULL, 45, 495, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->SetWindowTextW(_T("∑ΩœÚ"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC36)->SetWindowPos(NULL, 180, 495, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC36)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->SetWindowPos(NULL, 45, 520, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->SetWindowTextW(_T("∆µ„◊¯±Í  X"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT18)->SetWindowPos(NULL, 130, 519, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT18)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC39)->SetWindowPos(NULL, 215, 520, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC39)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC39)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC40)->SetWindowPos(NULL, 45, 540, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC40)->SetWindowTextW(_T("                  Y"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC40)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT19)->SetWindowPos(NULL, 130, 539, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT19)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC41)->SetWindowPos(NULL, 215, 540, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC41)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC41)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN18)->SetWindowPos(NULL, 50, 580, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN18)->SetWindowText(_T("«–ªª∆µ„"));
+	GetDlgItem(IDC_OBJ_PROTY_BTN18)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN18)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->SetWindowPos(NULL, 150, 580, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->SetWindowText(_T("ªª œÚ"));
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->SetWindowPos(NULL, 70, 630, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->SetWindowPos(NULL, 150, 630, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->EnableWindow(TRUE);
+	ObjPoint point;
+	point = pEllipse->GetEllipseCenter();
+	m_dVar1 = point.x;
+	m_dVar2 = point.y;
+	m_dVar3 = pEllipse->GetEllipseXRadius();
+	m_dVar4 = pEllipse->GetEllipseYRadius();
+	if (pEllipse->GetEllipseDir() == CCW)
+		GetDlgItem(IDC_OBJ_PROTY_STATIC36)->SetWindowTextW(_T("ƒÊ ±’Î"));
+	else
+		GetDlgItem(IDC_OBJ_PROTY_STATIC36)->SetWindowTextW(_T("À≥ ±’Î"));
+	point = pEllipse->GetEllipseStart();
+	m_dVar5 = point.x;
+	m_dVar6 = point.y;
+	m_Edit_pObj = pObj;
+	UpdateData(FALSE);
+}
+
+void CObjectProperty::SaveEllipseModify(CMachineObj_Comm* pObj)
+{
+	CMachineObjEllipse* pEllipse = (CMachineObjEllipse*)pObj;
+	double dTemp1 = m_dVar1;
+	double dTemp2 = m_dVar2;
+	double dTemp3 = m_dVar3;
+	double dTemp4 = m_dVar4;
+	double dTemp5 = m_dVar5;
+	double dTemp6 = m_dVar6;
+	if (UpdateData(TRUE))
+	{
+		if (((abs(dTemp1-m_dVar1)>Zero) || (abs(dTemp2-m_dVar2)>Zero) || (abs(dTemp3-m_dVar3)>Zero) || (abs(dTemp4-m_dVar4)>Zero))
+			&& ((abs(dTemp5-m_dVar5)>Zero) || (abs(dTemp6-m_dVar6)>Zero)))
+		{
+			MessageBox(_T("’‚–©≤Œ ˝≤ª»›–ÌÕ¨ ±–ﬁ∏ƒ!"));
+			m_dVar1 = dTemp1;
+			m_dVar2 = dTemp2;
+			m_dVar3 = dTemp3;
+			m_dVar4 = dTemp4;
+			m_dVar5 = dTemp5;
+			m_dVar6 = dTemp6;
+		}
+		else
+		{
+			pEllipse->SetEllipseXradius(m_dVar3);
+			pEllipse->SetEllipseRatio(m_dVar4 / m_dVar3);
+			double x, y;
+			x = m_dVar1 - dTemp1 + m_dVar5 - dTemp5;
+			if (abs(x) < Zero)
+				x = 0;
+			y = m_dVar2 - dTemp2 + m_dVar6 - dTemp6;
+			if (abs(y) < Zero)
+				y = 0;
+			pEllipse->MoveEllipse(x, y);
+			ObjPoint point = pEllipse->GetEllipseCenter();
+			m_dVar1 = point.x;
+			m_dVar2 = point.y;
+			point = pEllipse->GetEllipseStart();
+			m_dVar5 = point.x;
+			m_dVar6 = point.y;
+		}
+		UpdateData(FALSE);
+		m_pView->Invalidate();
+	}
+
+
+}
+
+void CObjectProperty::ExchangeEllipseStartAndEnd(CMachineObj_Comm* pObj)
+{
+	CMachineObjEllipse* pEllipse = (CMachineObjEllipse*)pObj;
+	pEllipse->ExchangeDirection();
+	if (pEllipse->GetEllipseDir() == CCW)
+		GetDlgItem(IDC_OBJ_PROTY_STATIC36)->SetWindowTextW(_T("ƒÊ ±’Î"));
+	else
+		GetDlgItem(IDC_OBJ_PROTY_STATIC36)->SetWindowTextW(_T("À≥ ±’Î"));
+	m_pView->Invalidate();
+}
+
+void CObjectProperty::ChangeEllipseNode(CMachineObj_Comm* pObj)
+{
+	CMachineObjEllipse* pEllipse = (CMachineObjEllipse*)pObj;
+	char StartNum = pEllipse->GetEllipseStartNum();
+	StartNum++;
+	if (StartNum > 3)
+		StartNum = 0;
+	pEllipse->SetEllipseStart(StartNum);
+	ObjPoint point = pEllipse->GetEllipseStart();
+	m_dVar5 = point.x;
+	m_dVar6 = point.y;
+	UpdateData(FALSE);
+	m_pView->Invalidate();
+}
+
+void CObjectProperty::EditArcEll(CMachineObj_Comm* pObj)
+{
+	CMachineObjArcEll* pArcEll = (CMachineObjArcEll*)pObj;
+	UnDisp_Machine_Property
+		GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowTextW(_T("∂‘œÛº∏∫Œ Ù–‘"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowPos(NULL, 30, 375, 210, 370, BS_CENTER);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowPos(NULL, 45, 415, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowTextW(_T("‘≤–ƒ◊¯±Í  X"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->SetWindowPos(NULL, 130, 414, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowPos(NULL, 215, 415, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowPos(NULL, 45, 435, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowTextW(_T("                  Y"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->SetWindowPos(NULL, 130, 434, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->SetWindowPos(NULL, 215, 435, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->SetWindowPos(NULL, 45, 455, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->SetWindowTextW(_T("≥§÷·(X)    a"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT16)->SetWindowPos(NULL, 130, 454, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT16)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->SetWindowPos(NULL, 215, 455, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->SetWindowPos(NULL, 45, 475, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->SetWindowTextW(_T("∂Ã÷·(Y)    b"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT17)->SetWindowPos(NULL, 130, 474, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT17)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->SetWindowPos(NULL, 215, 475, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC36)->SetWindowPos(NULL, 45, 495, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC36)->SetWindowTextW(_T("∆ ºΩ«"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC36)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT18)->SetWindowPos(NULL, 130, 494, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT18)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC37)->SetWindowPos(NULL, 215, 495, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC37)->SetWindowTextW(_T("∂»"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC37)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->SetWindowPos(NULL, 45, 515, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->SetWindowTextW(_T("÷’÷πΩ«"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT19)->SetWindowPos(NULL, 130, 514, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT19)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC39)->SetWindowPos(NULL, 215, 515, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC39)->SetWindowTextW(_T("∂»"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC39)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC40)->SetWindowPos(NULL, 45, 535, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC40)->SetWindowTextW(_T("∑ΩœÚ"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC40)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC41)->SetWindowPos(NULL, 180, 535, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC41)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC42)->SetWindowPos(NULL, 45, 560, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC42)->SetWindowTextW(_T("ª°∆µ„     X"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC42)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT20)->SetWindowPos(NULL, 130, 559, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT20)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC43)->SetWindowPos(NULL, 215, 560, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC43)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC43)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC44)->SetWindowPos(NULL, 45, 580, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC44)->SetWindowTextW(_T("                 Y"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC44)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT21)->SetWindowPos(NULL, 130, 579, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT21)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC45)->SetWindowPos(NULL, 215, 580, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC45)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC45)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC46)->SetWindowPos(NULL, 45, 600, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC46)->SetWindowTextW(_T("ª°÷’µ„     X"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC46)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT22)->SetWindowPos(NULL, 130, 599, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT22)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC47)->SetWindowPos(NULL, 215, 600, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC47)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC47)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC48)->SetWindowPos(NULL, 45, 620, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC48)->SetWindowTextW(_T("                 Y"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC48)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT23)->SetWindowPos(NULL, 130, 619, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT23)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC49)->SetWindowPos(NULL, 215, 620, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC49)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC49)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->SetWindowPos(NULL, 100, 660, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->SetWindowText(_T("Ωªªª∆÷’µ„"));
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->SetWindowPos(NULL, 70, 700, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->SetWindowPos(NULL, 150, 700, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->EnableWindow(TRUE);
+	ObjPoint point;
+	point = pArcEll->GetEllipseCenter();
+	m_dVar1 = point.x;
+	m_dVar2 = point.y;
+	m_dVar3 = pArcEll->GetEllipseXRadius();
+	m_dVar4 = pArcEll->GetEllipseYRadius();
+	m_dVar5 = pArcEll->GetStartRadian() * 180 / M_PI;
+	m_dVar6 = pArcEll->GetEndRadian() * 180 / M_PI;
+	if (pArcEll->GetArcDir()==CCW)
+		GetDlgItem(IDC_OBJ_PROTY_STATIC41)->SetWindowTextW(_T("ƒÊ ±’Î"));
+	else
+		GetDlgItem(IDC_OBJ_PROTY_STATIC41)->SetWindowTextW(_T("À≥ ±’Î"));
+	point = pArcEll->GetArcStart();
+	m_dVar7 = point.x;
+	m_dVar8 = point.y;
+	point = pArcEll->GetArcEnd();
+	m_dVar9 = point.x;
+	m_dVar10 = point.y;
+	m_Edit_pObj = pObj;
+	UpdateData(FALSE);
+}
+
+void CObjectProperty::SaveArcEllModify(CMachineObj_Comm* pObj)
+{
+	CMachineObjArcEll* pArcEll = (CMachineObjArcEll*)pObj;
+	double dTemp1 = m_dVar1;
+	double dTemp2 = m_dVar2;
+	double dTemp3 = m_dVar3;
+	double dTemp4 = m_dVar4;
+	double dTemp5 = m_dVar5;
+	double dTemp6 = m_dVar6;
+	double dTemp7 = m_dVar7;
+	double dTemp8 = m_dVar8;
+	double dTemp9 = m_dVar9;
+	double dTemp10 = m_dVar10;
+	if (UpdateData(TRUE))
+	{
+		if (((abs(dTemp1 - m_dVar1)>Zero) || (abs(dTemp2 - m_dVar2)>Zero) || (abs(dTemp3 - m_dVar3)>Zero)
+			|| (abs(dTemp4 - m_dVar4)>Zero) || (abs(dTemp5 - m_dVar5)>Zero) || (abs(dTemp6 - m_dVar6)>Zero))
+			&& ((abs(dTemp7 - m_dVar7)>Zero) || (abs(dTemp8 - m_dVar8)>Zero))
+			&& ((abs(dTemp9 - m_dVar9)>Zero) || (abs(dTemp10 - m_dVar10)>Zero)))
+		{
+			MessageBox(_T("’‚–©≤Œ ˝≤ª»›–ÌÕ¨ ±–ﬁ∏ƒ!"));
+			m_dVar1 = dTemp1;
+			m_dVar2 = dTemp2;
+			m_dVar3 = dTemp3;
+			m_dVar4 = dTemp4;
+			m_dVar5 = dTemp5;
+			m_dVar6 = dTemp6;
+			m_dVar7 = dTemp7;
+			m_dVar8 = dTemp8;
+			m_dVar9 = dTemp9;
+			m_dVar10 = dTemp10;
+		}
+		else
+		{
+			pArcEll->SetArcEllXradius(m_dVar3);
+			pArcEll->SetArcEllRatio(m_dVar4 / m_dVar3);
+			pArcEll->SetStartAndEndRadian(m_dVar5 / 180 * M_PI, m_dVar6 / 180 * M_PI, pArcEll->GetArcDir());
+			double x, y;
+			x = m_dVar1 - dTemp1 + m_dVar7 - dTemp7 + m_dVar9 - dTemp9;
+			if (abs(x) < Zero)
+				x = 0;
+			y = m_dVar2 - dTemp2 + m_dVar8 - dTemp8 + m_dVar10 - dTemp10;
+			if (abs(y) < Zero)
+				y = 0;
+			pArcEll->MoveArcEll(x, y);
+			ObjPoint point;
+			point = pArcEll->GetEllipseCenter();
+			m_dVar1 = point.x;
+			m_dVar2 = point.y;
+			if (pArcEll->GetArcDir() == CCW)
+				GetDlgItem(IDC_OBJ_PROTY_STATIC41)->SetWindowTextW(_T("ƒÊ ±’Î"));
+			else
+				GetDlgItem(IDC_OBJ_PROTY_STATIC41)->SetWindowTextW(_T("À≥ ±’Î"));
+			point = pArcEll->GetArcStart();
+			m_dVar7 = point.x;
+			m_dVar8 = point.y;
+			point = pArcEll->GetArcEnd();
+			m_dVar9 = point.x;
+			m_dVar10 = point.y;
+		}
+		UpdateData(FALSE);
+		m_pView->Invalidate();
+	}
+}
+
+void CObjectProperty::ExchangeArcEllStartAndEnd(CMachineObj_Comm* pObj)
+{
+	CMachineObjArcEll* pArcEll = (CMachineObjArcEll*)pObj;
+	pArcEll->ExchangeStartAndEnd(pArcEll);
+	m_dVar5 = pArcEll->GetStartRadian() * 180 / M_PI;
+	m_dVar6 = pArcEll->GetEndRadian() * 180 / M_PI;
+	if (pArcEll->GetArcDir() == CCW)
+		GetDlgItem(IDC_OBJ_PROTY_STATIC41)->SetWindowTextW(_T("ƒÊ ±’Î"));
+	else
+		GetDlgItem(IDC_OBJ_PROTY_STATIC41)->SetWindowTextW(_T("À≥ ±’Î"));
+	ObjPoint point;
+	point = pArcEll->GetArcStart();
+	m_dVar7 = point.x;
+	m_dVar8 = point.y;
+	point = pArcEll->GetArcEnd();
+	m_dVar9 = point.x;
+	m_dVar10 = point.y;
+	UpdateData(FALSE);
+	m_pView->Invalidate();
+}
+
+void CObjectProperty::EditTiltEllipse(CMachineObj_Comm* pObj)
+{
+	CMachineObjTiltEllipse* pTiltEllipse = (CMachineObjTiltEllipse*)pObj;
+	UnDisp_Machine_Property
+		GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowTextW(_T("∂‘œÛº∏∫Œ Ù–‘"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowPos(NULL, 30, 375, 210, 390, BS_CENTER);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowPos(NULL, 45, 415, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowTextW(_T("‘≤–ƒ◊¯±Í  X"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->SetWindowPos(NULL, 130, 414, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowPos(NULL, 215, 415, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowPos(NULL, 45, 435, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowTextW(_T("                  Y"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->SetWindowPos(NULL, 130, 434, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->SetWindowPos(NULL, 215, 435, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->SetWindowPos(NULL, 45, 455, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->SetWindowTextW(_T("≥§÷·(X)    a"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT16)->SetWindowPos(NULL, 130, 454, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT16)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->SetWindowPos(NULL, 215, 455, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->SetWindowPos(NULL, 45, 475, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->SetWindowTextW(_T("∂Ã÷·(Y)    b"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT17)->SetWindowPos(NULL, 130, 474, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT17)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->SetWindowPos(NULL, 215, 475, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC36)->SetWindowPos(NULL, 45, 495, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC36)->SetWindowTextW(_T("∆ ºΩ«"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC36)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT18)->SetWindowPos(NULL, 130, 494, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT18)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC37)->SetWindowPos(NULL, 215, 495, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC37)->SetWindowTextW(_T("∂»"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC37)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->SetWindowPos(NULL, 45, 515, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->SetWindowTextW(_T("÷’÷πΩ«"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT19)->SetWindowPos(NULL, 130, 514, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT19)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC39)->SetWindowPos(NULL, 215, 515, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC39)->SetWindowTextW(_T("∂»"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC39)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC40)->SetWindowPos(NULL, 45, 535, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC40)->SetWindowTextW(_T("–˝◊™Ω«"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC40)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT20)->SetWindowPos(NULL, 130, 534, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT20)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC41)->SetWindowPos(NULL, 215, 535, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC41)->SetWindowTextW(_T("∂»"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC41)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC42)->SetWindowPos(NULL, 45, 555, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC42)->SetWindowTextW(_T("∑ΩœÚ"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC42)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC43)->SetWindowPos(NULL, 180, 555, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC43)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC44)->SetWindowPos(NULL, 45, 580, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC44)->SetWindowTextW(_T("ª°∆µ„     X"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC44)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT21)->SetWindowPos(NULL, 130, 579, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT21)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC45)->SetWindowPos(NULL, 215, 580, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC45)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC45)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC46)->SetWindowPos(NULL, 45, 600, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC46)->SetWindowTextW(_T("                 Y"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC46)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT22)->SetWindowPos(NULL, 130, 599, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT22)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC47)->SetWindowPos(NULL, 215, 600, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC47)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC47)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC48)->SetWindowPos(NULL, 45, 620, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC48)->SetWindowTextW(_T("ª°÷’µ„     X"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC48)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT23)->SetWindowPos(NULL, 130, 619, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT23)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC49)->SetWindowPos(NULL, 215, 620, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC49)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC49)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC50)->SetWindowPos(NULL, 45, 640, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC50)->SetWindowTextW(_T("                 Y"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC50)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT24)->SetWindowPos(NULL, 130, 639, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT24)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC51)->SetWindowPos(NULL, 215, 640, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC51)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC51)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->SetWindowPos(NULL, 100, 680, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->SetWindowText(_T("Ωªªª∆÷’µ„"));
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->SetWindowPos(NULL, 70, 720, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->SetWindowPos(NULL, 150, 720, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->EnableWindow(TRUE);
+	ObjPoint point;
+	point = pTiltEllipse->GetTiltEllipseCenter();
+	m_dVar1 = point.x;
+	m_dVar2 = point.y;
+	m_dVar3 = pTiltEllipse->GetTiltEllipseXRadius();
+	m_dVar4 = pTiltEllipse->GetTiltEllipseYRadius();
+	m_dVar5 = pTiltEllipse->GetStartRadian() * 180 / M_PI;
+	m_dVar6 = pTiltEllipse->GetEndRadian() * 180 / M_PI;
+	m_dVar7 = pTiltEllipse->GetRotateRadian() * 180 / M_PI;
+	if (pTiltEllipse->GetArcDir() == CCW)
+		GetDlgItem(IDC_OBJ_PROTY_STATIC43)->SetWindowTextW(_T("ƒÊ ±’Î"));
+	else
+		GetDlgItem(IDC_OBJ_PROTY_STATIC43)->SetWindowTextW(_T("À≥ ±’Î"));
+	point = pTiltEllipse->GetTiltEllipseStart();
+	m_dVar8 = point.x;
+	m_dVar9 = point.y;
+	point = pTiltEllipse->GetTiltEllipseEnd();
+	m_dVar10 = point.x;
+	m_dVar11 = point.y;
+	m_Edit_pObj = pObj;
+	UpdateData(FALSE);
+}
+
+void CObjectProperty::SaveTiltEllipseModify(CMachineObj_Comm* pObj)
+{
+	CMachineObjTiltEllipse* pTiltEllipse = (CMachineObjTiltEllipse*)pObj;
+	double dTemp1 = m_dVar1;
+	double dTemp2 = m_dVar2;
+	double dTemp3 = m_dVar3;
+	double dTemp4 = m_dVar4;
+	double dTemp5 = m_dVar5;
+	double dTemp6 = m_dVar6;
+	double dTemp7 = m_dVar7;
+	double dTemp8 = m_dVar8;
+	double dTemp9 = m_dVar9;
+	double dTemp10 = m_dVar10;
+	double dTemp11 = m_dVar11;
+	if (UpdateData(TRUE))
+	{
+		if (((abs(dTemp1 - m_dVar1) > Zero) || (abs(dTemp2 - m_dVar2) > Zero) || (abs(dTemp3 - m_dVar3) > Zero)
+			|| (abs(dTemp4 - m_dVar4) > Zero) || (abs(dTemp5 - m_dVar5) > Zero) || (abs(dTemp6 - m_dVar6) > Zero)
+			|| (abs(dTemp7 - m_dVar7) > Zero))
+			&& ((abs(dTemp8 - m_dVar8) > Zero) || (abs(dTemp9 - m_dVar9) > Zero))
+			&& ((abs(dTemp10 - m_dVar10) > Zero) || (abs(dTemp11 - m_dVar11) > Zero)))
+		{
+			MessageBox(_T("’‚–©≤Œ ˝≤ª»›–ÌÕ¨ ±–ﬁ∏ƒ!"));
+			m_dVar1 = dTemp1;
+			m_dVar2 = dTemp2;
+			m_dVar3 = dTemp3;
+			m_dVar4 = dTemp4;
+			m_dVar5 = dTemp5;
+			m_dVar6 = dTemp6;
+			m_dVar7 = dTemp7;
+			m_dVar8 = dTemp8;
+			m_dVar9 = dTemp9;
+			m_dVar10 = dTemp10;
+			m_dVar11 = dTemp11;
+		}
+		else
+		{
+			pTiltEllipse->SetTiltEllipseXRadius(m_dVar3);
+			pTiltEllipse->SetTiltEllipseRatio(m_dVar4 / m_dVar3);
+			pTiltEllipse->SetStartAndEndRadian(m_dVar5 / 180 * M_PI, m_dVar6 / 180 * M_PI, pTiltEllipse->GetArcDir());
+			pTiltEllipse->SetRotateRadian(m_dVar7 / 180 * M_PI);
+			double x, y;
+			x = m_dVar1 - dTemp1 + m_dVar8 - dTemp8 + m_dVar10 - dTemp10;
+			if (abs(x) < Zero)
+				x = 0;
+			y = m_dVar2 - dTemp2 + m_dVar9 - dTemp9 + m_dVar11 - dTemp11;
+			if (abs(y) < Zero)
+				y = 0;
+			pTiltEllipse->MoveTileEllipse(x, y);
+			ObjPoint point;
+			point = pTiltEllipse->GetTiltEllipseCenter();
+			m_dVar1 = point.x;
+			m_dVar2 = point.y;
+			if (pTiltEllipse->GetArcDir() == CCW)
+				GetDlgItem(IDC_OBJ_PROTY_STATIC43)->SetWindowTextW(_T("ƒÊ ±’Î"));
+			else
+				GetDlgItem(IDC_OBJ_PROTY_STATIC43)->SetWindowTextW(_T("À≥ ±’Î"));
+			point = pTiltEllipse->GetTiltEllipseStart();
+			m_dVar8 = point.x;
+			m_dVar9 = point.y;
+			point = pTiltEllipse->GetTiltEllipseEnd();
+			m_dVar10 = point.x;
+			m_dVar11 = point.y;
+		}
+		UpdateData(FALSE);
+		m_pView->Invalidate();
+	}
+}
+
+void CObjectProperty::ExchangeTiltEllipseStartAndEnd(CMachineObj_Comm* pObj)
+{
+	CMachineObjTiltEllipse* pTiltEllipse = (CMachineObjTiltEllipse*)pObj;
+	pTiltEllipse->ExchangeStartAndEnd(pTiltEllipse);
+	m_dVar5 = pTiltEllipse->GetStartRadian() * 180 / M_PI;
+	m_dVar6 = pTiltEllipse->GetEndRadian() * 180 / M_PI;
+	if (pTiltEllipse->GetArcDir() == CCW)
+		GetDlgItem(IDC_OBJ_PROTY_STATIC43)->SetWindowTextW(_T("ƒÊ ±’Î"));
+	else
+		GetDlgItem(IDC_OBJ_PROTY_STATIC43)->SetWindowTextW(_T("À≥ ±’Î"));
+	ObjPoint point;
+	point = pTiltEllipse->GetTiltEllipseStart();
+	m_dVar8 = point.x;
+	m_dVar9 = point.y;
+	point = pTiltEllipse->GetTiltEllipseEnd();
+	m_dVar10 = point.x;
+	m_dVar11 = point.y;
+	UpdateData(FALSE);
+	m_pView->Invalidate();
+}
+
+void CObjectProperty::EditPolyline(CMachineObj_Comm* pObj)
+{
+	CMachineObjPolyline* pPolyline = (CMachineObjPolyline*)pObj;
+	UnDisp_Machine_Property
+		GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowTextW(_T("∂‘œÛº∏∫Œ Ù–‘"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowPos(NULL, 30, 375, 210, 350, BS_CENTER);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->ShowWindow(SW_SHOW);
+	CString str;
+	str.Format(_T("%d"), pPolyline->GetPolylineVertexCount());
+	str = _T("Ω⁄µ„ ˝:  ") + str;
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowPos(NULL, 45, 410, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowTextW(str);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowPos(NULL, 45, 435, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowTextW(_T("∆µ„◊¯±Í  X"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->SetWindowPos(NULL, 130, 434, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowPos(NULL, 215, 435, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->SetWindowPos(NULL, 45, 455, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->SetWindowTextW(_T("                  Y"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->SetWindowPos(NULL, 130, 454, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->SetWindowPos(NULL, 215, 455, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->SetWindowPos(NULL, 45, 475, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->SetWindowTextW(_T("÷’µ„◊¯±Í  X"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT16)->SetWindowPos(NULL, 130, 474, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT16)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->SetWindowPos(NULL, 215, 475, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->SetWindowPos(NULL, 45, 495, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->SetWindowTextW(_T("                  Y"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT17)->SetWindowPos(NULL, 130, 494, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT17)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC36)->SetWindowPos(NULL, 215, 495, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC36)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC36)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->SetWindowPos(NULL, 50, 525, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->SetWindowText(_T("Ωªªª∆÷’µ„"));
+	GetDlgItem(IDC_OBJ_PROTY_BTN15)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN18)->SetWindowPos(NULL, 150, 525, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN18)->SetWindowText(_T("±’∫œ∂‡∂Œœﬂ"));
+	GetDlgItem(IDC_OBJ_PROTY_BTN18)->ShowWindow(SW_SHOW);
+	str.Format(_T("%d"), m_SelNode);
+	str = _T("µ±«∞Ω⁄µ„:  ") + str;
+	GetDlgItem(IDC_OBJ_PROTY_STATIC37)->SetWindowPos(NULL, 45, 570, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC37)->SetWindowTextW(str);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC37)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN19)->SetWindowPos(NULL, 150, 567, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN19)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN19)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN20)->SetWindowPos(NULL, 185, 567, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN20)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN20)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->SetWindowPos(NULL, 45, 595, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->SetWindowTextW(_T("Ω⁄µ„◊¯±Í  X"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC38)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT18)->SetWindowPos(NULL, 130, 594, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT18)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC39)->SetWindowPos(NULL, 215, 595, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC39)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC39)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC40)->SetWindowPos(NULL, 45, 615, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC40)->SetWindowTextW(_T("                  Y"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC40)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT19)->SetWindowPos(NULL, 130, 614, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT19)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC41)->SetWindowPos(NULL, 215, 615, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC41)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC41)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC42)->SetWindowPos(NULL, 45, 635, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC42)->SetWindowTextW(_T("Ω⁄µ„«˙∂»"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC42)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT20)->SetWindowPos(NULL, 130, 635, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT20)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->SetWindowPos(NULL, 70, 680, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->SetWindowPos(NULL, 150, 680, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->EnableWindow(TRUE);
+	ObjVPoint vpoint;
+	vpoint = pPolyline->GetPolylineStart();
+	m_dVar1 = vpoint.x;
+	m_dVar2 = vpoint.y;
+	vpoint = pPolyline->GetPolylineEnd();
+	m_dVar3 = vpoint.x;
+	m_dVar4 = vpoint.y;
+	if (abs(m_dVar1 - m_dVar3) < Zero && abs(m_dVar2 - m_dVar4) < Zero)
+		GetDlgItem(IDC_OBJ_PROTY_BTN18)->EnableWindow(FALSE);
+	else
+		GetDlgItem(IDC_OBJ_PROTY_BTN18)->EnableWindow(TRUE);
+	vpoint = pPolyline->GetPolylinePoint(m_SelNode);
+	m_dVar5 = vpoint.x;
+	m_dVar6 = vpoint.y;
+	m_dVar7 = vpoint.convexity;
+	m_pView->m_bObjNodeDisp = true;
+	m_pView->m_NodePoint.x = m_dVar5;
+	m_pView->m_NodePoint.y = m_dVar6;
+	m_pView->Invalidate();
+	m_Edit_pObj = pObj;
+	UpdateData(FALSE);
+}
+
+void CObjectProperty::SavePolylineModify(CMachineObj_Comm* pObj)
+{
+	CMachineObjPolyline* pPolyline = (CMachineObjPolyline*)pObj;
+	ObjVPoint vpoint;
+	double dTemp1 = m_dVar1;
+	double dTemp2 = m_dVar2;
+	double dTemp3 = m_dVar3;
+	double dTemp4 = m_dVar4;
+	double dTemp5 = m_dVar5;
+	double dTemp6 = m_dVar6;
+	double dTemp7 = m_dVar7;
+	if (UpdateData(TRUE))
+	{
+		if (((abs(dTemp1 - m_dVar1)>Zero) || (abs(dTemp2 - m_dVar2)>Zero))
+			&& ((abs(dTemp3 - m_dVar3)>Zero) || (abs(dTemp4 - m_dVar4)>Zero))
+			&& ((abs(dTemp5 - m_dVar5)>Zero) || (abs(dTemp6 - m_dVar6)>Zero) || (abs(dTemp7 - m_dVar7)>Zero)))
+		{
+			MessageBox(_T("’‚–©≤Œ ˝≤ª»›–ÌÕ¨ ±–ﬁ∏ƒ!"));
+			m_dVar1 = dTemp1;
+			m_dVar2 = dTemp2;
+			m_dVar3 = dTemp3;
+			m_dVar4 = dTemp4;
+			m_dVar5 = dTemp5;
+			m_dVar6 = dTemp6;
+			m_dVar7 = dTemp7;
+		}
+		else
+		{
+			vpoint.x = m_dVar5;
+			vpoint.y = m_dVar6;
+			vpoint.convexity = m_dVar7;
+			if ((abs(dTemp5 - m_dVar5)>Zero) || (abs(dTemp6 - m_dVar6)>Zero) || (abs(dTemp7 - m_dVar7)>Zero))
+				pPolyline->ModifyPolylineVpoint(vpoint, m_SelNode);
+			double x, y;
+			x = m_dVar1 - dTemp1 + m_dVar3 - dTemp3;
+			if (abs(x) < Zero)
+				x = 0;
+			y = m_dVar2 - dTemp2 + m_dVar4 - dTemp4;
+			if (abs(y) < Zero)
+				y = 0;
+			pPolyline->MovePolyline(x, y);
+		}
+		vpoint = pPolyline->GetPolylineStart();
+		m_dVar1 = vpoint.x;
+		m_dVar2 = vpoint.y;
+		vpoint = pPolyline->GetPolylineEnd();
+		m_dVar3 = vpoint.x;
+		m_dVar4 = vpoint.y;
+		if ((m_dVar1 == m_dVar3) && (m_dVar2 == m_dVar4))
+			GetDlgItem(IDC_OBJ_PROTY_BTN18)->EnableWindow(FALSE);
+		else
+			GetDlgItem(IDC_OBJ_PROTY_BTN18)->EnableWindow(TRUE);
+		vpoint = pPolyline->GetPolylinePoint(m_SelNode);
+		m_dVar5 = vpoint.x;
+		m_dVar6 = vpoint.y;
+		m_dVar7 = vpoint.convexity;
+		m_pView->m_NodePoint.x = m_dVar5;
+		m_pView->m_NodePoint.y = m_dVar6;
+		m_pView->Invalidate();
+		UpdateData(FALSE);
+	}
+}
+
+void CObjectProperty::LastNodePolyline(CMachineObj_Comm* pObj)
+{
+	CMachineObjPolyline* pPolyline = (CMachineObjPolyline*)pObj;
+	if (m_SelNode > 0)
+	{
+		m_SelNode--;
+		CString str;
+		str.Format(_T("%d"), m_SelNode);
+		str = _T("µ±«∞Ω⁄µ„:  ") + str;
+		GetDlgItem(IDC_OBJ_PROTY_STATIC37)->SetWindowTextW(str);
+		ObjVPoint vpoint = pPolyline->GetPolylinePoint(m_SelNode);
+		m_dVar5 = vpoint.x;
+		m_dVar6 = vpoint.y;
+		m_dVar7 = vpoint.convexity;
+		m_pView->m_NodePoint.x = m_dVar5;
+		m_pView->m_NodePoint.y = m_dVar6;
+		m_pView->Invalidate();
+		UpdateData(FALSE);
+	}
+}
+
+void CObjectProperty::NextNodePolyline(CMachineObj_Comm* pObj)
+{
+	CMachineObjPolyline* pPolyline = (CMachineObjPolyline*)pObj;
+	if (m_SelNode < (pPolyline->GetPolylineVertexCount() - 1))
+	{
+		m_SelNode++;
+		CString str;
+		str.Format(_T("%d"), m_SelNode);
+		str = _T("µ±«∞Ω⁄µ„:  ") + str;
+		GetDlgItem(IDC_OBJ_PROTY_STATIC37)->SetWindowTextW(str);
+		ObjVPoint vpoint = pPolyline->GetPolylinePoint(m_SelNode);
+		m_dVar5 = vpoint.x;
+		m_dVar6 = vpoint.y;
+		m_dVar7 = vpoint.convexity;
+		m_pView->m_NodePoint.x = m_dVar5;
+		m_pView->m_NodePoint.y = m_dVar6;
+		m_pView->Invalidate();
+		UpdateData(FALSE);
+	}
+}
+
+void CObjectProperty::ExchangePolylineStartAndEnd(CMachineObj_Comm* pObj)
+{
+	CMachineObjPolyline* pPolyline = (CMachineObjPolyline*)pObj;
+	pPolyline->ExchangeStartAndEnd(pPolyline);
+	ObjVPoint vpoint;
+	vpoint = pPolyline->GetPolylineStart();
+	m_dVar1 = vpoint.x;
+	m_dVar2 = vpoint.y;
+	vpoint = pPolyline->GetPolylineEnd();
+	m_dVar3 = vpoint.x;
+	m_dVar4 = vpoint.y;
+	vpoint = pPolyline->GetPolylinePoint(m_SelNode);
+	m_dVar5 = vpoint.x;
+	m_dVar6 = vpoint.y;
+	m_dVar7 = vpoint.convexity;
+	m_pView->m_NodePoint.x = m_dVar5;
+	m_pView->m_NodePoint.y = m_dVar6;
+	UpdateData(FALSE);
+	m_pView->Invalidate();
+}
+
+void CObjectProperty::ClosePolyline(CMachineObj_Comm* pObj)
+{
+	CMachineObjPolyline* pPolyline = (CMachineObjPolyline*)pObj;
+	pPolyline->ClosePolylineEndToStart();
+	m_dVar3 = m_dVar1;
+	m_dVar4 = m_dVar2;
+	CString str;
+	str.Format(_T("%d"), pPolyline->GetPolylineVertexCount() - 1);
+	str = _T("Ω⁄µ„ ˝:  ") + str;
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowTextW(str);
+	GetDlgItem(IDC_OBJ_PROTY_BTN18)->EnableWindow(FALSE);
+	UpdateData(FALSE);
+	m_pView->Invalidate();
+}
+
+void CObjectProperty::EditGroup(CMachineObj_Comm* pObj)
+{
+	CMachineObjGroup* pGroup = (CMachineObjGroup*)pObj;
+	UnDisp_Machine_Property
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowTextW(_T("∂‘œÛº∏∫Œ Ù–‘"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowPos(NULL, 30, 375, 210, 180, BS_CENTER);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowPos(NULL, 45, 415, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowTextW(_T("÷––ƒ◊¯±Í  X"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->SetWindowPos(NULL, 130, 414, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowPos(NULL, 215, 415, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowPos(NULL, 45, 435, 85, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowTextW(_T("                  Y"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->SetWindowPos(NULL, 130, 434, 80, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->SetWindowPos(NULL, 215, 435, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->SetWindowPos(NULL, 70, 480, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->SetWindowPos(NULL, 150, 480, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->EnableWindow(TRUE);
+	ObjRect rect = pGroup->GetObjBound();
+	m_dVar1 = (rect.max_x + rect.min_x) / 2;
+	m_dVar2 = (rect.max_y + rect.min_y) / 2;
+	m_pView->m_bObjNodeDisp = true;
+	m_pView->m_NodePoint = ObjPoint(m_dVar1, m_dVar2);
+	m_Edit_pObj = pObj;
+	UpdateData(FALSE);
+}
+
+void CObjectProperty::SaveGroupModify(CMachineObj_Comm* pObj)
+{
+	CMachineObjGroup* pGroup = (CMachineObjGroup*)pObj;
+	double dTemp1 = m_dVar1;
+	double dTemp2 = m_dVar2;
+	if (UpdateData(TRUE))
+	{
+		double x = m_dVar1 - dTemp1;
+		double y = m_dVar2 - dTemp2;
+		if (abs(x) > Zero || abs(y) > Zero)
+		{
+			pGroup->MoveGroup(x, y);
+			ObjRect rect = pGroup->GetObjBound();
+			m_dVar1 = (rect.max_x + rect.min_x) / 2;
+			m_dVar2 = (rect.max_y + rect.min_y) / 2;
+			m_pView->m_bObjNodeDisp = true;
+			m_pView->m_NodePoint = ObjPoint(m_dVar1, m_dVar2);
+			UpdateData(FALSE);
+			m_pView->Invalidate();
+		}
+	}
+}
+
+void CObjectProperty::EditWiden(CMachineObj_Comm* pObj)
+{
+	int nCount = m_SelectedObj.size();
+	CString str;
+	if (nCount > 1)
+	{
+		str.Format(_T("%d"), nCount);
+		str = _T("’πøÌœﬂ≤Œ ˝(") + str + _T(")");
+	}
+	else
+		str = _T("’πøÌœﬂ≤Œ ˝");
+	UnDisp_Machine_Property
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowTextW(str);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowPos(NULL, 30, 375, 210, 150, BS_CENTER);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowPos(NULL, 45, 415, 120, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowTextW(_T("’πøÌœﬂ ˝(±ÿ–ÎŒ™∆Ê ˝)"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->SetWindowPos(NULL, 170, 414, 30, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowPos(NULL, 45, 440, 100, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowTextW(_T("’πøÌœﬂº‰æ‡"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->SetWindowPos(NULL, 150, 439, 50, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowPos(NULL, 210, 440, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->SetWindowPos(NULL, 70, 480, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->SetWindowPos(NULL, 150, 480, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->EnableWindow(TRUE);
+	int nType = pObj->GetObjType();
+	if (nType == MachineObj_Type_WLine)
+	{
+		CMachineObjWLine* pWLine = (CMachineObjWLine*)pObj;
+		m_dVar1 = (double)pWLine->GetDupNumber() * 2 + 1;
+		m_dVar2 = (double)pWLine->GetGapDistance();
+	}
+	else if (nType == MachineObj_Type_WArc)
+	{
+		CMachineObjWArc* pWArc = (CMachineObjWArc*)pObj;
+		m_dVar1 = (double)pWArc->GetDupNumber() * 2 + 1;
+		m_dVar2 = (double)pWArc->GetGapDistance();
+	}
+	else if (nType == MachineObj_Type_WPolyline)
+	{
+		CMachineObjWPolyline* pWPolyline = (CMachineObjWPolyline*)pObj;
+		m_dVar1 = (double)pWPolyline->GetDupNumber() * 2 + 1;
+		m_dVar2 = (double)pWPolyline->GetGapDistance();
+	}
+	else
+	{
+		m_dVar1 = 1;
+		m_dVar2 = 0;
+	}
+	m_Edit_pObj = pObj;
+	UpdateData(FALSE);
+}
+
+void CObjectProperty::SaveWiden()
+{
+	int nCount = m_SelectedObj.size();
+	if (UpdateData(TRUE))
+	{
+		UINT n = (UINT)m_dVar1;
+		if ((n & 1) == 0)
+		{
+			MessageBox(_T("œﬂ ˝±ÿ–ÎŒ™∆Ê ˝"));
+		}
+		else
+		{
+			n = UINT(n / 2);
+			for (int i = 0; i < nCount; i++)
+			{
+				int nIndex = m_ProtyListIndex[m_SelectedObj[i]];
+				CMachineObj_Comm* pObj1 = m_pObjList->GetObjAtIndex(nIndex);
+				int nType = pObj1->GetObjType();
+				if (nType == MachineObj_Type_WLine)
+				{
+					CMachineObjWLine* pWLine = (CMachineObjWLine*)pObj1;
+					pWLine->ReCreatWLine(n, (float)m_dVar2);
+				}
+				else if (nType == MachineObj_Type_WArc)
+				{
+					CMachineObjWArc* pWArc = (CMachineObjWArc*)pObj1;
+					pWArc->ReCreatWArc(n, (float)m_dVar2);
+				}
+				else if (nType == MachineObj_Type_WPolyline)
+				{
+					CMachineObjWPolyline* pWPolyline = (CMachineObjWPolyline*)pObj1;
+					pWPolyline->ReCreatWPolyline(n, (float)m_dVar2);
+				}
+			}
+			m_pView->Invalidate();
+		}
+	}
+}
+
+void CObjectProperty::EditFill(CMachineObj_Comm* pObj)
+{
+	int nCount = m_SelectedObj.size();
+	CString str;
+	if (nCount > 1)
+	{
+		str.Format(_T("%d"), nCount);
+		str = _T("ÃÓ≥‰≤Œ ˝(") + str + _T(")");
+	}
+	else
+		str = _T("ÃÓ≥‰≤Œ ˝");
+	UnDisp_Machine_Property
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowTextW(_T("ÃÓ≥‰≤Œ ˝"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->SetWindowPos(NULL, 12, 375, 250, 380, BS_CENTER);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC2)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO3)->SetWindowPos(NULL, 30, 400, 55, 20, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO3)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO3)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO4)->SetWindowPos(GetDlgItem(IDC_OBJ_PROTY_RADIO3), 100, 400, 65, 20, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO4)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO4)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO5)->SetWindowPos(GetDlgItem(IDC_OBJ_PROTY_RADIO4), 175, 400, 65, 20, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO5)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO5)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC52)->SetWindowTextW(_T("ÃÓ≥‰◊È±—°‘Ò"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC52)->SetWindowPos(NULL, 20, 430, 234, 260, BS_CENTER);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC52)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO6)->SetWindowPos(NULL, 30, 460, 50, 20, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO6)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO6)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO7)->SetWindowPos(GetDlgItem(IDC_OBJ_PROTY_RADIO6), 85, 460, 50, 20, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO7)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO7)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO8)->SetWindowPos(GetDlgItem(IDC_OBJ_PROTY_RADIO7), 140, 460, 50, 20, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO8)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO8)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO9)->SetWindowPos(GetDlgItem(IDC_OBJ_PROTY_RADIO8), 195, 460, 50, 20, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO9)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO9)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowPos(NULL, 50, 500, 80, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->SetWindowTextW(_T("ÃÓ≥‰Ω«∂»"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC28)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->SetWindowPos(NULL, 140, 499, 60, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT14)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowPos(NULL, 205, 500, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->SetWindowTextW(_T("∂»"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC29)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowPos(NULL, 50, 525, 80, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->SetWindowTextW(_T("ÃÓ≥‰º‰æ‡"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC30)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->SetWindowPos(NULL, 140, 524, 60, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT15)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->SetWindowPos(NULL, 205, 525, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC31)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->SetWindowPos(NULL, 50, 550, 80, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->SetWindowTextW(_T("ÀıΩ¯æ‡¿Î"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC32)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT16)->SetWindowPos(NULL, 140, 549, 60, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_EDIT16)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->SetWindowPos(NULL, 205, 550, 20, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->SetWindowTextW(_T("mm"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC33)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->SetWindowPos(NULL, 50, 575, 80, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->SetWindowTextW(_T("ÃÓ≥‰œﬂ∑÷≤º"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC34)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO10)->SetWindowPos(NULL, 135, 575, 50, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO10)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO11)->SetWindowPos(GetDlgItem(IDC_OBJ_PROTY_RADIO10), 190, 575, 50, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO11)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->SetWindowPos(NULL, 50, 600, 80, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->SetWindowTextW(_T("ÃÓ≥‰∑ΩœÚ"));
+	GetDlgItem(IDC_OBJ_PROTY_STATIC35)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO12)->SetWindowPos(NULL, 135, 600, 50, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO12)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO13)->SetWindowPos(GetDlgItem(IDC_OBJ_PROTY_RADIO12), 190, 600, 50, 14, BS_LEFT);
+	GetDlgItem(IDC_OBJ_PROTY_RADIO13)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_CHECK1)->SetWindowPos(NULL, 100, 660, 100, 16, BS_RIGHT);
+	GetDlgItem(IDC_OBJ_PROTY_CHECK1)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_CHECK1)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->SetWindowPos(NULL, 70, 710, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN16)->EnableWindow(TRUE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->SetWindowPos(NULL, 150, 710, 0, 0, SWP_NOSIZE);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->ShowWindow(SW_SHOW);
+	GetDlgItem(IDC_OBJ_PROTY_BTN17)->EnableWindow(TRUE);
+
+	int nType = pObj->GetObjType();
+	if (nType == MachineObj_Type_FillPolyline)
+	{
+		CMachineObjFillPolyline* pFillPolyline = (CMachineObjFillPolyline*)pObj;
+		m_OutlinePrior = pFillPolyline->GetOutlinePrior();
+		for (int i = 0; i < 4; i++)
+		{
+			m_FillPara[i] = pFillPolyline->GetFillPolylinePara(i);
+		}
+	}
+	else
+	{
+		//
+	}
+	m_nSel_Old = m_nSelGroup;
+	m_dVar1 = m_FillPara[m_nSelGroup].FillAngle;
+	m_dVar2 = m_FillPara[m_nSelGroup].FillGap;
+	m_dVar3 = m_FillPara[m_nSelGroup].Curtail;
+	m_GapMode = m_FillPara[m_nSelGroup].GapMode;
+	m_FillMode = m_FillPara[m_nSelGroup].FillMode;
+	m_FillEnable = m_FillPara[m_nSelGroup].IsEnable;
+	if (m_FillEnable)
+	{
+		GetDlgItem(IDC_OBJ_PROTY_EDIT14)->EnableWindow(TRUE);
+		GetDlgItem(IDC_OBJ_PROTY_EDIT15)->EnableWindow(TRUE);
+		GetDlgItem(IDC_OBJ_PROTY_EDIT16)->EnableWindow(TRUE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO10)->EnableWindow(TRUE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO11)->EnableWindow(TRUE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO12)->EnableWindow(TRUE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO13)->EnableWindow(TRUE);
+		((CButton*)GetDlgItem(IDC_OBJ_PROTY_CHECK1))->SetCheck(TRUE);
+	}
+	else
+	{
+		GetDlgItem(IDC_OBJ_PROTY_EDIT14)->EnableWindow(FALSE);
+		GetDlgItem(IDC_OBJ_PROTY_EDIT15)->EnableWindow(FALSE);
+		GetDlgItem(IDC_OBJ_PROTY_EDIT16)->EnableWindow(FALSE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO10)->EnableWindow(FALSE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO11)->EnableWindow(FALSE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO12)->EnableWindow(FALSE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO13)->EnableWindow(FALSE);
+		((CButton*)GetDlgItem(IDC_OBJ_PROTY_CHECK1))->SetCheck(FALSE);
+	}
+	m_Edit_pObj = pObj;
+	UpdateData(FALSE);
+}
+
+void CObjectProperty::SaveFill()
+{
+	int nCount = m_SelectedObj.size();
+	if (UpdateData(TRUE))
+	{
+		m_FillPara[m_nSelGroup].FillAngle = m_dVar1;
+		m_FillPara[m_nSelGroup].FillGap = m_dVar2;
+		m_FillPara[m_nSelGroup].Curtail = m_dVar3;
+		m_FillPara[m_nSelGroup].GapMode = m_GapMode;
+		m_FillPara[m_nSelGroup].FillMode = m_FillMode;
+		if (m_FillEnable)
+			m_FillPara[m_nSelGroup].IsEnable = true;
+		else
+			m_FillPara[m_nSelGroup].IsEnable = false;
+		for (int i = 0; i < nCount; i++)
+		{
+			int nIndex = m_ProtyListIndex[m_SelectedObj[i]];
+			CMachineObjFillPolyline* pFillPolyline = (CMachineObjFillPolyline*)(m_pObjList->GetObjAtIndex(nIndex));
+			pFillPolyline->ReCreatFillPolyline(m_OutlinePrior, m_FillPara);
+		}
+	}
+	m_pView->Invalidate();
+}
+
+
+// CObjectProperty œ˚œ¢¥¶¿Ì≥Ã–Ú
 void CObjectProperty::OnSize(UINT nType, int cx, int cy)
 {
 	CFormView::OnSize(nType, cx, cy);
-	//ËØïÂõæË∞ÉÊï¥Á™óÂè£Â∞∫ÂØ∏ÔºåÂàôÂêë‰∏äÁ∫ßÂèëÈÄÅÊ∂àÊÅØÔºåÁî®‰∫éÈîÅÂÆöÊú¨ÂØπËØùÊ°ÜÂ∞∫ÂØ∏
+	// ‘Õºµ˜’˚¥∞ø⁄≥ﬂ¥Á£¨‘ÚœÚ…œº∂∑¢ÀÕœ˚œ¢£¨”√”⁄À¯∂®±æ∂‘ª∞øÚ≥ﬂ¥Á
 	GetParentFrame()->SendMessage(WM_ObPrtyWindows_Size, NULL, NULL);
 }
 
@@ -432,720 +2924,404 @@ afx_msg LRESULT CObjectProperty::OnObjlistRefresh(WPARAM wParam, LPARAM lParam)
 {
 	if (m_pObjList->IsEmptyObj())
 	{
+		//–¬Ω®Œƒº˛»Îø⁄
 		m_PropertyList.DeleteAllItems();
+		m_bDispObject = true;
+		OnClickedObjectOrLayer();
 		return -1;
 	}
+	//–¬Ω®Œƒº˛¥¶¿ÌΩ· ¯
 	if (wParam == 0 && lParam == 0)
 	{
-		int i = 0;
-		CString str;
-		ObjVPoint pVpoint;
-		ObjPoint point1, point2;
-		CMachineObj_Comm* pObj;
-		POSITION pos;
-		point1 = ObjPoint(0, 0);
-		point2 = point1;
+		//µº»ÎŒƒº˛»Îø⁄
 		m_PropertyList.DeleteAllItems();
-		pos = m_pObjList->GetObjHeadPosition();
-		while (pos)
+		m_bDispObject = true;
+		OnClickedObjectOrLayer();
+		return 0;
+	}
+	//µº»ÎŒƒº˛¥¶¿ÌΩ· ¯
+	if (m_bDispObject)
+	{
+		//∂‘œÛ Ù–‘¡–±Ì
+		m_pView->m_bObjNodeDisp = false;
+		Disp_Machine_Property
+		int nIndex = 0;
+		CMachineObj_Comm* pObj;
+		if (wParam == 1 && lParam < 0)
 		{
-			str.Format(_T("%d"), i);
-			m_PropertyList.InsertItem(i, str);
-			pObj = m_pObjList->GetObjNext(pos);
-			switch (pObj->GetObjType())
+			//µ•—°ƒ£ Ω,Œﬁ”––ß—°÷–∂‘œÛ
+			ClearAllObjSel();
+			m_ObjSel_Old = -1;
+			m_PropertyList.SetItemState(-1, LVNI_FOCUSED & LVIS_SELECTED,
+				LVNI_FOCUSED | LVIS_SELECTED);
+		}
+		//µ•—°ƒ£ Ω,Œﬁ”––ß—°÷–∂‘œÛ¥¶¿ÌΩ· ¯
+		else if (wParam == 1)
+		{
+			//µ•—°ƒ£ Ω,—°÷–À˜“˝Œ™"lParam"∂‘œÛ
+			ClearAllObjSel();
+			m_PropertyList.SetItemState(-1, LVNI_FOCUSED & LVIS_SELECTED,
+				LVNI_FOCUSED | LVIS_SELECTED);
+			nIndex = FindProtyListIndex(lParam);
+			if ((nIndex != m_ObjSel_Old) && (nIndex >= 0))
 			{
-			case MachineObj_Type_Point:
-				str = _T("ÁÇπ");
-				CMachineObjPoint* pPoint;
-				pPoint = (CMachineObjPoint*)pObj;
-				point1 = pPoint->GetPoint();
-				point2.x = pPoint->m_MachineWaitTime;
-				break;
-			case MachineObj_Type_Line:
-				str = _T("Áõ¥Á∫ø");
-				CMachineObjLine* pLine;
-				pLine = (CMachineObjLine*)pObj;
-				point1 = pLine->GetLineStart();
-				point2 = pLine->GetLineEnd();
-				break;
-			case MachineObj_Type_Circle:
-				str = _T("Âõ≠");
-				CMachineObjCircle* pCircle;
-				pCircle = (CMachineObjCircle*)pObj;
-				point1 = pCircle->GetCircleStart();
-				point2 = point1;
-				break;
-			case MachineObj_Type_Arc:
-				str = _T("Âõ≠Âºß");
-				CMachineObjArc* pArc;
-				pArc = (CMachineObjArc*)pObj;
-				point1 = pArc->GetArcStart();
-				point2 = pArc->GetArcEnd();
-				break;
-			case MachineObj_Type_Ellipse:
-				str = _T("Ê§≠Âõ≠");
-				CMachineObjEllipse* pEllipse;
-				pEllipse = (CMachineObjEllipse*)pObj;
-				point1 = pEllipse->GetEllipseStart();
-				point2 = point1;
-				break;
-			case MachineObj_Type_ArcEll:
-				str = _T("Ê§≠Âõ≠Âºß");
-				CMachineObjArcEll* pArcEll;
-				pArcEll = (CMachineObjArcEll*)pObj;
-				point1 = pArcEll->GetArcStart();
-				point2 = pArcEll->GetArcEnd();
-				break;
-			case MachineObj_Type_TiltEllipse:
-				str = _T("ÊñúÊ§≠Âõ≠Âºß");
-				CMachineObjTiltEllipse* pTileEll;
-				pTileEll = (CMachineObjTiltEllipse*)pObj;
-				point1 = pTileEll->GetTiltEllipseStart();
-				point2 = pTileEll->GetTiltEllipseEnd();
-				break;
-			case MachineObj_Type_Polyline:
-				str = _T("Â§öÊÆµÁ∫ø");
-				CMachineObjPolyline* pPolyline;
-				pPolyline = (CMachineObjPolyline*)pObj;
-				pVpoint = pPolyline->GetPolylineStart();
-				point1.x = pVpoint.x;
-				point1.y = pVpoint.y;
-				pVpoint = pPolyline->GetPolylineEnd();
-				point2.x = pVpoint.x;
-				point2.y = pVpoint.y;
-				break;
-			case MachineObj_Type_Group:
-				str = _T("Áæ§ ÁªÑ");
-				break;
-			default:
-				str = "";
-				break;
-			}
-			m_PropertyList.SetItemText(i, 1, str);
-			str = (m_pObjList->GetLayerOfNumber(pObj->m_ObjByLayer))->m_LayerName;
-			m_PropertyList.SetItemText(i, 2, str);
-			if (pObj->GetObjType() == MachineObj_Type_Group)
-			{
-				str = _T("");
-				m_PropertyList.SetItemText(i, 3, str);
-				m_PropertyList.SetItemText(i, 4, str);
+				m_ObjSel_Old = nIndex;
+				pObj = m_pObjList->GetObjAtIndex(lParam);
+				pObj->m_bIsObjStatus |= IsObjSel;
+				m_PropertyList.SetItemState(nIndex, LVNI_FOCUSED | LVIS_SELECTED,
+					LVNI_FOCUSED | LVIS_SELECTED);
+				HScroll(nIndex);
 			}
 			else
 			{
-				str.Format(_T("%.3f,%.3f"), point1.x, point1.y);
-				m_PropertyList.SetItemText(i, 3, str);
-				if (pObj->GetObjType() == MachineObj_Type_Point)
-				{
-					if (point2.x < 1000)
-						str.Format(_T("ÂÅúÁïôÊó∂Èó¥=%.1fms"), point2.x);
-					else
-						str.Format(_T("ÂÅúÁïôÊó∂Èó¥=%.2fs"), point2.x / 1000);
-				}
-				else
-					str.Format(_T("%.3f,%.3f"), point2.x, point2.y);
-				m_PropertyList.SetItemText(i, 4, str);
-			}
-			i++;
-		}
-		m_ObjSel_Old = -1;
-		UIDeselectAll();
-	}
-	else if (wParam==1)
-	{
-		int Count = m_PropertyList.GetItemCount();
-		for (int Index = 0; Index < Count; Index++)
-		{
-			m_PropertyList.SetItemState(Index, LVNI_FOCUSED & LVIS_SELECTED,
-				LVNI_FOCUSED | LVIS_SELECTED);
-		}
-		m_PropertyList.SetItemState(lParam, LVNI_FOCUSED | LVIS_SELECTED,
-			LVNI_FOCUSED | LVIS_SELECTED);
-		m_ObjSel_Old = -1;
-		UISetBySingleSel(lParam);
-		HScroll(lParam);
-		m_PropertyList.SetFocus();
-		UpdateData(FALSE);
-	}
-	else if (wParam == 2)
-	{
-		m_PropertyList.SetItemState(lParam, LVNI_FOCUSED | LVIS_SELECTED,
-			LVNI_FOCUSED | LVIS_SELECTED);
-		UISetByMultipleSel(lParam);
-		HScroll(lParam);
-		m_PropertyList.SetFocus();
-		UpdateData(FALSE);
-	}
-	else if (wParam == 3)
-	{
-		for (int Index = 0; Index < m_PropertyList.GetItemCount(); Index++)
-		{
-			m_PropertyList.SetItemState(Index, LVNI_FOCUSED & LVIS_SELECTED,
-				LVNI_FOCUSED | LVIS_SELECTED);
-		}
-		vector<int> *nList;
-		nList = (vector<int>*)(lParam);
-		int Count = (*nList).size();
-		if (Count == 1)
-		{
-			m_PropertyList.SetItemState((*nList)[0], LVNI_FOCUSED | LVIS_SELECTED,
-				LVNI_FOCUSED | LVIS_SELECTED);
-			m_ObjSel_Old = -1;
-			UISetBySingleSel((*nList)[0]);
-			HScroll((*nList)[0]);
-			m_PropertyList.SetFocus();
-			UpdateData(FALSE);
-		}
-		else if (Count > 1)
-		{
-			for (int i = 0; i < Count; i++)
-			{
-				m_PropertyList.SetItemState((*nList)[i], LVNI_FOCUSED | LVIS_SELECTED,
-					LVNI_FOCUSED | LVIS_SELECTED);
 				m_ObjSel_Old = -1;
 			}
-			m_ObjSel_Old = -1;
-			UISetByMultipleSel((*nList)[0]);
-			HScroll((*nList)[0]);
-			m_PropertyList.SetFocus();
-			UpdateData(FALSE);
 		}
+		//µ•—°ƒ£ Ω,—°÷–À˜“˝Œ™"lParam"∂‘œÛ¥¶¿ÌΩ· ¯
+		else if (wParam == 2)
+		{
+			//∏¥—°ƒ£ Ω
+			nIndex = FindProtyListIndex(lParam);
+			if (nIndex >= 0)
+			{
+				pObj = m_pObjList->GetObjAtIndex(lParam);
+				if (m_PropertyList.GetItemState(nIndex, LVIS_SELECTED) == LVIS_SELECTED)
+				{
+					pObj->m_bIsObjStatus &= ~IsObjSel;
+					m_ObjSel_Old = -1;
+					m_PropertyList.SetItemState(nIndex, LVNI_FOCUSED & LVIS_SELECTED,
+						LVNI_FOCUSED | LVIS_SELECTED);
+				}
+				else
+				{
+					pObj->m_bIsObjStatus |= IsObjSel;
+					m_ObjSel_Old = nIndex;
+					m_PropertyList.SetItemState(nIndex, LVNI_FOCUSED | LVIS_SELECTED,
+						LVNI_FOCUSED | LVIS_SELECTED);
+					HScroll(nIndex);
+				}
+			}
+		}
+		//∏¥—°ƒ£ Ω¥¶¿ÌΩ· ¯
+		else if (wParam == 3)
+		{
+			//∂‡—°ƒ£ Ω
+			ClearActiveLayerSel();
+			int Count = m_PropertyList.GetItemCount();
+			for (int i = 0; i < Count; i++)
+			{
+				pObj = m_pObjList->GetObjAtIndex(m_ProtyListIndex[i]);
+				pObj->m_bIsObjStatus &= ~IsObjSel;
+			}
+			m_PropertyList.SetItemState(-1, LVNI_FOCUSED & LVIS_SELECTED,
+				LVNI_FOCUSED | LVIS_SELECTED);
+			vector<int> *nList;
+			nList = (vector<int>*)(lParam);
+			Count = (*nList).size();
+			for (int i = 0; i < Count; i++)
+			{
+				pObj = m_pObjList->GetObjAtIndex((*nList)[i]);
+				pObj->m_bIsObjStatus |= IsObjSel;
+				nIndex = FindProtyListIndex((*nList)[i]);
+				m_PropertyList.SetItemState(nIndex, LVNI_FOCUSED | LVIS_SELECTED,
+					LVNI_FOCUSED | LVIS_SELECTED);
+				m_ObjSel_Old = nIndex;
+			}
+			HScroll(nIndex);
+		}
+		//∂‡—°ƒ£ Ω¥¶¿ÌΩ· ¯
+		UIRefreshObject();
 	}
-	return 0;
-}
-
-void CObjectProperty::OnClickObjectPropertyList(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
-	*pResult = 0;
-	
-	int nCount = m_PropertyList.GetSelectedCount();
-	if (nCount < 1)
-	{
-		m_pObjList->SetObjUnSelectAll();
-		m_ObjSel_Old = -1;
-		m_pView->Invalidate();
-		return;
-	}
-	int Index = pNMItemActivate->iItem;
-	if (nCount == 1)
-	{
-		//****ÂçïÈÄâ****
-		m_pObjList->SetObjUnSelectAll();
-		if (UISetBySingleSel(Index))
-			m_pObjList->SetObjSelect(Index);
-		
-	}
+	//∂‘œÛ Ù–‘¡–±ÌΩ· ¯
 	else
 	{
-		//****Â§öÈÄâ****
-		m_AllSelObjInLayer = FALSE;
-		m_pObjList->SetObjUnSelectAll();
-		UISetByMultipleSel(Index);
+		//Õº≤„¡–±Ì
+		CString str;
+		if (wParam == 1 && lParam < 0)
+		{
+			//µ„—°ƒ£ Ω,Œﬁ”––ß—°÷–∂‘œÛ
+			m_pObjList->SetLayerUnSelectAll();
+			m_LayerSel_Old = -1;
+			m_PropertyList.SetItemState(-1, LVNI_FOCUSED & LVIS_SELECTED,
+				LVNI_FOCUSED | LVIS_SELECTED);
+			UIRefreshLayer();
+		}
+		//µ„—°ƒ£ Ω,Œﬁ”––ß—°÷–∂‘œÛ¥¶¿ÌΩ· ¯
+		else if (wParam == 1)
+		{
+			//µ•—°ƒ£ Ω,—°÷–À˜“˝Œ™"lParam"∂‘œÛ
+			CMachineObj_Comm* pObj = m_pObjList->GetObjAtIndex(lParam);
+			pObj->m_bIsObjStatus &= ~IsObjSel;
+			int nLayer = pObj->m_ObjByLayer;
+			CMachinePara_Layer* pLayer = m_pObjList->GetLayerOfNumber(nLayer);
+			str = m_PropertyList.GetItemText(2, 1);
+			str.Remove(' ');
+			str.MakeUpper();
+			if (nLayer > LayerNum_Group)
+			{
+				if (str == _T("MIX"))
+					nLayer -= 2;
+				else
+					nLayer -= 3;
+			}
+			if (m_PropertyList.GetItemState(nLayer, LVIS_SELECTED) != 0)
+			{
+				pLayer->m_bIsLayerStatus &= IsObjSel;
+				m_LayerSel_Old = -1;
+				m_PropertyList.SetItemState(-1, LVNI_FOCUSED & LVIS_SELECTED,
+					LVNI_FOCUSED | LVIS_SELECTED);
+			}
+			else
+			{
+				pLayer->m_bIsLayerStatus |= IsObjSel;
+				m_LayerSel_Old = nLayer;
+				m_PropertyList.SetItemState(-1, LVNI_FOCUSED & LVIS_SELECTED,
+					LVNI_FOCUSED | LVIS_SELECTED);
+				m_PropertyList.SetItemState(nLayer, LVNI_FOCUSED | LVIS_SELECTED,
+					LVNI_FOCUSED | LVIS_SELECTED);
+			}
+		}
+		//µ•—°ƒ£ Ω,—°÷–À˜“˝Œ™"lParam"∂‘œÛ¥¶¿ÌΩ· ¯
+		else if (wParam == 2)
+		{
+			//∏¥—°ƒ£ Ω
+			CMachineObj_Comm* pObj = m_pObjList->GetObjAtIndex(lParam);
+			pObj->m_bIsObjStatus &= ~IsObjSel;
+			int nLayer = pObj->m_ObjByLayer;
+			CMachinePara_Layer* pLayer = m_pObjList->GetLayerOfNumber(nLayer);
+			str = m_PropertyList.GetItemText(2, 1);
+			str.Remove(' ');
+			str.MakeUpper();
+			if (nLayer > LayerNum_Group)
+			{
+				if (str == _T("MIX"))
+					nLayer -= 2;
+				else
+					nLayer -= 3;
+			}
+			if (m_PropertyList.GetItemState(nLayer, LVIS_SELECTED) != 0)
+			{
+				pLayer->m_bIsLayerStatus &= ~IsObjSel;
+				m_LayerSel_Old = -1;
+				m_PropertyList.SetItemState(nLayer, LVNI_FOCUSED & LVIS_SELECTED,
+					LVNI_FOCUSED | LVIS_SELECTED);
+			}
+			else
+			{
+				pLayer->m_bIsLayerStatus |= IsObjSel;
+				m_LayerSel_Old = nLayer;
+				m_PropertyList.SetItemState(nLayer, LVNI_FOCUSED & LVIS_SELECTED,
+					LVNI_FOCUSED | LVIS_SELECTED);
+				m_PropertyList.SetItemState(nLayer, LVNI_FOCUSED | LVIS_SELECTED,
+					LVNI_FOCUSED | LVIS_SELECTED);
+			}
+		}
+		//∏¥—°ƒ£ Ω¥¶¿ÌΩ· ¯
+		else if (wParam == 3)
+		{
+			//∂‡—°ƒ£ Ω
+			m_pObjList->SetObjUnSelectAll();
+			m_PropertyList.SetItemState(-1, LVNI_FOCUSED & LVIS_SELECTED,
+				LVNI_FOCUSED | LVIS_SELECTED);
+			vector<int> *nList;
+			nList = (vector<int>*)(lParam);
+			int Count_ObjSel = (*nList).size();
+			vector <bool> ListLayerSel;
+			int nLayer = m_pObjList->GetLayerCount();
+			for (int i = 0; i < nLayer; i++)
+			{
+				ListLayerSel.push_back(false);
+			}
+			for (int i = 0; i < Count_ObjSel; i++)
+			{
+				ListLayerSel[(m_pObjList->GetObjAtIndex((*nList)[i]))->m_ObjByLayer] = true;
+			}
+			for (int i = 0; i < nLayer; i++)
+			{
+				CMachinePara_Layer* pLayer = m_pObjList->GetLayerOfNumber(i);
+				if (ListLayerSel[i] == true)
+				{
+					pLayer->m_bIsLayerStatus |= IsObjSel;
+					if (i <= LayerNum_Group)
+						m_PropertyList.SetItemState(i, LVNI_FOCUSED | LVIS_SELECTED,
+						LVNI_FOCUSED | LVIS_SELECTED);
+					else
+					{
+						str = m_PropertyList.GetItemText(2, 1);
+						str.Remove(' ');
+						str.MakeUpper();
+						if (str == _T("MIX"))
+							m_PropertyList.SetItemState(i - 2, LVNI_FOCUSED | LVIS_SELECTED,
+							LVNI_FOCUSED | LVIS_SELECTED);
+						else
+							m_PropertyList.SetItemState(i - 3, LVNI_FOCUSED | LVIS_SELECTED,
+							LVNI_FOCUSED | LVIS_SELECTED);
+					}
+				}
+			}
+		}
+		//∂‡—°ƒ£ Ω¥¶¿ÌΩ· ¯
+		UIRefreshLayer();
 	}
+	//Õº≤„¡–±ÌΩ· ¯
+	m_PropertyList.SetFocus();
 	UpdateData(FALSE);
-	m_pView->Invalidate();
-	return;
+	return 0;
 }
 
 void CObjectProperty::OnKeydownObjectPropertyList(NMHDR *pNMHDR, LRESULT *pResult)
 {
 	LPNMLVKEYDOWN pLVKeyDow = reinterpret_cast<LPNMLVKEYDOWN>(pNMHDR);
 	*pResult = 0;
-	m_AllSelObjInLayer = FALSE;
-	if (!(pLVKeyDow->wVKey == VK_UP || pLVKeyDow->wVKey == VK_DOWN)
-		|| m_PropertyList.GetSelectedCount() == 0)
-		return;
-	int nCount = m_PropertyList.GetItemCount();
-	if ((pLVKeyDow->wVKey == VK_UP) && (m_ObjSel_Old != 0))
-		UISetBySingleSel(m_ObjSel_Old - 1);
-	else if ((pLVKeyDow->wVKey == VK_DOWN) && (m_ObjSel_Old < (nCount - 1)))
-		UISetBySingleSel(m_ObjSel_Old + 1);
-	m_pObjList->SetObjUnSelectAll();
-	m_pObjList->SetObjSelect(m_ObjSel_Old);
-	m_pView->Invalidate();
-}
-
-void CObjectProperty::OnRclickObjectPropertyList(NMHDR *pNMHDR, LRESULT *pResult)
-{
-	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
-	*pResult = 0;
-	if (pNMItemActivate->iSubItem != 2 && m_PropertyList.GetSelectedCount() == 1)
+	if (m_bDispObject)
 	{
-		m_AllSelObjInLayer = FALSE;
-		GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->SetWindowText(_T("‰øÆÊîπÂØπË±°\nÂä†Â∑•ÂèÇÊï∞"));
-		return;
-	}
-	CString str, str1;
-	POSITION pos;
-	ProcessPara para;
-	int Index, nCount;
-	pos = m_PropertyList.GetFirstSelectedItemPosition();
-	Index = m_PropertyList.GetNextSelectedItem(pos);
-	str = m_PropertyList.GetItemText(Index, 2);
-	nCount = m_PropertyList.GetItemCount();
-	for (int i = 0; i < nCount; i++)
-	{
-		str1 = m_PropertyList.GetItemText(i, 2);
-		if (str == str1)
+		//Õ˘…œªÚÕ˘œ¬—°÷–º”π§∂‘œÛ±Ì÷–‘™Àÿ
+		if (!(pLVKeyDow->wVKey == VK_UP || pLVKeyDow->wVKey == VK_DOWN) ||
+			m_PropertyList.GetSelectedCount() == 0)
+			return;
+		if (m_PropertyList.GetSelectedCount() > 1)
 		{
-			m_PropertyList.SetItemState(i, LVNI_FOCUSED | LVIS_SELECTED,
+			m_PropertyList.SetItemState(-1, LVNI_FOCUSED & LVIS_SELECTED,
 				LVNI_FOCUSED | LVIS_SELECTED);
+			ClearAllObjSel();
+			return;
 		}
-		else
-		{
-			m_PropertyList.SetItemState(i, LVNI_FOCUSED & LVIS_SELECTED,
-				LVNI_FOCUSED | LVIS_SELECTED);
-		}
-	}
-	m_pObjList->SetObjUnSelectAll();
-	m_pObjList->GetLayerOfName(str)->m_bIsLayerSel = TRUE;
-	m_ObjSel_Old = Index;
-	GetDlgItem(IDC_BTN_OBJ_UP)->EnableWindow(FALSE);
-	GetDlgItem(IDC_BTN_OBJ_DOWN)->EnableWindow(FALSE);
-	GetDlgItem(IDC_BTN_OBJ_EDIT)->EnableWindow(TRUE);
-	if (str != LayerName_Border&&str != LayerName_Mark)
-	{
-		m_AllSelObjInLayer = TRUE;
-		GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->SetWindowText(_T("‰øÆÊîπËØ•Â±Ç\nÂä†Â∑•ÂèÇÊï∞"));
-		GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->EnableWindow(TRUE);
-	}
-	else
-	{
-		m_AllSelObjInLayer = FALSE;
-		GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->SetWindowText(_T("‰øÆÊîπÂØπË±°\nÂä†Â∑•ÂèÇÊï∞"));
-		GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->EnableWindow(FALSE);
-		
-	}
-	GetDlgItem(IDC_OBJECT_PROPERTY_BTN2)->EnableWindow(TRUE);
-	para = m_pObjList->GetLayerOfName(str)->m_MachinePara;
-	m_Speed = para.Speed;
-	m_Power = para.Power;
-	m_Frequncy = (float)para.Frequncy / 1000;
-	m_Count = para.Times;
-	m_PulseWidth = para.PulseWidth;
-	UpdateData(FALSE);
-	m_pView->Invalidate();
-}
-
-void CObjectProperty::OnBnClickedBtnObjUp()
-{
-	int n, nIndex;
-	CString str;
-	if (n = m_PropertyList.GetSelectedCount() == 1)
-	{
-		POSITION pos;
-		pos = m_PropertyList.GetFirstSelectedItemPosition();
-		nIndex = m_PropertyList.GetNextSelectedItem(pos);
-		if (m_pObjList->MoveObjUp(nIndex))
-		{
-			str = m_PropertyList.GetItemText(nIndex - 1, 1);
-			m_PropertyList.SetItemText(nIndex - 1, 1, m_PropertyList.GetItemText(nIndex, 1));
-			m_PropertyList.SetItemText(nIndex, 1, str);
-			str = m_PropertyList.GetItemText(nIndex - 1, 2);
-			m_PropertyList.SetItemText(nIndex - 1, 2, m_PropertyList.GetItemText(nIndex, 2));
-			m_PropertyList.SetItemText(nIndex, 2, str);
-			str = m_PropertyList.GetItemText(nIndex - 1, 3);
-			m_PropertyList.SetItemText(nIndex - 1, 3, m_PropertyList.GetItemText(nIndex, 3));
-			m_PropertyList.SetItemText(nIndex, 3, str);
-			str = m_PropertyList.GetItemText(nIndex - 1, 4);
-			m_PropertyList.SetItemText(nIndex - 1, 4, m_PropertyList.GetItemText(nIndex, 4));
-			m_PropertyList.SetItemText(nIndex, 4, str);
-			m_PropertyList.SetItemState(nIndex - 1,
-				LVNI_FOCUSED | LVIS_SELECTED,
-				LVNI_FOCUSED | LVIS_SELECTED);
-			m_PropertyList.SetItemState(nIndex ,
-				LVNI_FOCUSED & LVIS_SELECTED,
-				LVNI_FOCUSED | LVIS_SELECTED);
-			m_ObjSel_Old = nIndex - 1;
-		}
-		else
-			MessageBox(_T("Êó†Ê≥ï‰∏äÁßª"));
-	}
-	else
-		MessageBox(_T("Êó†Ê≥ï‰∏äÁßª"));
-	HScroll(nIndex);
-	m_PropertyList.SetFocus();
-}
-
-void CObjectProperty::OnBnClickedBtnObjDown()
-{
-	int n, nIndex;
-	CString str;
-	if (n = m_PropertyList.GetSelectedCount() == 1)
-	{
-		POSITION pos;
-		pos = m_PropertyList.GetFirstSelectedItemPosition();
-		nIndex = m_PropertyList.GetNextSelectedItem(pos);
-		if (m_pObjList->MoveObjDown(nIndex))
-		{
-			str = m_PropertyList.GetItemText(nIndex + 1, 1);
-			m_PropertyList.SetItemText(nIndex + 1, 1, m_PropertyList.GetItemText(nIndex, 1));
-			m_PropertyList.SetItemText(nIndex, 1, str);
-			str = m_PropertyList.GetItemText(nIndex + 1, 2);
-			m_PropertyList.SetItemText(nIndex + 1, 2, m_PropertyList.GetItemText(nIndex, 2));
-			m_PropertyList.SetItemText(nIndex, 2, str);
-			str = m_PropertyList.GetItemText(nIndex + 1, 3);
-			m_PropertyList.SetItemText(nIndex + 1, 3, m_PropertyList.GetItemText(nIndex, 3));
-			m_PropertyList.SetItemText(nIndex, 3, str);
-			str = m_PropertyList.GetItemText(nIndex + 1, 4);
-			m_PropertyList.SetItemText(nIndex + 1, 4, m_PropertyList.GetItemText(nIndex, 4));
-			m_PropertyList.SetItemText(nIndex, 4, str);
-			m_PropertyList.SetItemState(nIndex + 1,
-				LVNI_FOCUSED | LVIS_SELECTED,
-				LVNI_FOCUSED | LVIS_SELECTED);
-			m_PropertyList.SetItemState(nIndex,
-				LVNI_FOCUSED & LVIS_SELECTED,
-				LVNI_FOCUSED | LVIS_SELECTED);
-			m_ObjSel_Old = nIndex + 1;
-		}
-		else
-			MessageBox(_T("Êó†Ê≥ï‰∏ãÁßª"));
-	}
-	else
-		MessageBox(_T("Êó†Ê≥ï‰∏ãÁßª"));
-	HScroll(nIndex);
-	m_PropertyList.SetFocus();
-}
-
-void CObjectProperty::OnBnClickedBtnObjDelete()
-{
-	m_AllSelObjInLayer = FALSE;
-	GetDlgItem(IDC_OBJECT_PROPERTY_BTN1)->SetWindowText(_T("‰øÆÊîπÂØπË±°\nÂä†Â∑•ÂèÇÊï∞"));
-	if (MessageBox(_T("Á°ÆÂÆöÂà†Èô§ÈÄâ‰∏≠ÂØπË±°?\n(Âà†Èô§ÊòØ‰∏çÂèØÊÅ¢Â§çÁöÑ!)"),
-		_T(""), MB_YESNO | MB_ICONWARNING) != IDYES)
-		return;
-	int Index, i;
-	POSITION pos;
-	pos = m_PropertyList.GetFirstSelectedItemPosition();
-	i = 0;
-	while (pos)
-	{
-		Index = m_PropertyList.GetNextSelectedItem(pos);
-		m_pObjList->DeleteObjAtIndex(Index - i);
-		i++;
-	}
-	OnObjlistRefresh(NULL, NULL);
-	HScroll(Index);
-	m_pObjList->RefeshBound();
-	m_pView->SendMessage(WM_ObjBound_ReSize, NULL, NULL);
-}
-
-//ÂØπË±°ÊèíÂÖ•ÂæÖÂÆö
-void CObjectProperty::OnBnClickedBtnObjInsert()
-{
-	// TODO:  Âú®Ê≠§Ê∑ªÂä†Êéß‰ª∂ÈÄöÁü•Â§ÑÁêÜÁ®ãÂ∫è‰ª£Á†Å
-}
-
-void CObjectProperty::OnBnClickedBtnObjPolymeric()
-{
-	if (m_PropertyList.GetSelectedCount() <= 1)
-		return;
-	POSITION pos;
-	int Index;
-	pos = m_PropertyList.GetFirstSelectedItemPosition();
-	vector<int> nList;
-	while (pos)
-	{
-		Index = m_PropertyList.GetNextSelectedItem(pos);
-		nList.push_back(Index);
-	}
-	if (m_pObjList->PolymerObjAtIndex(nList))
-	{
-		OnObjlistRefresh(NULL, NULL);
-		m_PropertyList.SetItemState(nList[0],
-			LVNI_FOCUSED | LVIS_SELECTED,
-			LVNI_FOCUSED | LVIS_SELECTED);
-		HScroll(nList[0]);
-		UISetBySingleSel(nList[0]);
-		m_pObjList->SetObjSelect(nList[0]);
-		m_PropertyList.SetFocus();
-		m_pView->Invalidate();
-	}
-	nList.clear();
-	vector<int>(nList).swap(nList);
-}
-
-void CObjectProperty::OnBnClickedBtnObjExplode()
-{
-	if (m_PropertyList.GetSelectedCount() < 1)
-		return;
-	POSITION pos;
-	int Index;
-	pos = m_PropertyList.GetFirstSelectedItemPosition();
-	if (m_PropertyList.GetSelectedCount() == 1)
-	{
-		//Â∑≤ÈÄâÂØπË±°=1 
-		Index = m_PropertyList.GetNextSelectedItem(pos);
-		int nType = m_pObjList->GetObjAtIndex(Index)->GetObjType();
-		//Âõ≠ÊàñÊ§≠ÂúÜ‰∏∫Êç¢Âêë
-		if (nType == MachineObj_Type_Circle)
-		{
-			CMachineObjCircle* pCircle = (CMachineObjCircle*) m_pObjList->GetObjAtIndex(Index);
-			pCircle->ExchangeDirection();
-			m_pView->Invalidate();
-		}
-		else if (nType == MachineObj_Type_Ellipse)
-		{
-			CMachineObjEllipse* pEllipse = (CMachineObjEllipse*)m_pObjList->GetObjAtIndex(Index);
-			pEllipse->ExchangeDirection();
-			m_pView->Invalidate();
-		}
-		//ÂÖ∂‰ªñÂàôÂàÜËß£ÊàñÊâìÊï£ 
-		else
-		{
-			if (m_pObjList->ExplodeObjAtIndex(Index))
-			{
-				OnObjlistRefresh(NULL, NULL);
-				m_PropertyList.SetItemState(Index,
-					LVNI_FOCUSED | LVIS_SELECTED,
-					LVNI_FOCUSED | LVIS_SELECTED);
-				HScroll(Index);
-				UISetBySingleSel(Index);
-				m_PropertyList.SetFocus();
-				m_pObjList->SetObjSelect(Index);
-				m_pView->Invalidate();
-			}
-		}
-	}
-	else
-	{
-		//Â∑≤ÈÄâÂØπË±°>1 ÁªÑÂêà
-		vector<int> nList;
-		while (pos)
-		{
-			Index = m_PropertyList.GetNextSelectedItem(pos);
-			nList.push_back(Index);
-		}
-		if (m_pObjList->GroupObjAtIndex(nList))
-		{
-			OnObjlistRefresh(NULL, NULL);
-			m_PropertyList.SetItemState(nList[0],
-				LVNI_FOCUSED | LVIS_SELECTED,
-				LVNI_FOCUSED | LVIS_SELECTED);
-			HScroll(nList[0]);
-			UISetBySingleSel(nList[0]);
-			m_pObjList->SetObjSelect(nList[0]);
-			m_PropertyList.SetFocus();
-		}
-		nList.clear();
-		vector<int>(nList).swap(nList);
-	}
-}
-
-void CObjectProperty::OnBnClickedBtnObjExchange()
-{
-	vector<int> nList;
-	POSITION pos;
-	int Index, Count;
-	ObjPoint point;
-	CString str;
-	pos = m_PropertyList.GetFirstSelectedItemPosition();
-	while (pos)
-	{
-		Index = m_PropertyList.GetNextSelectedItem(pos);
-		nList.push_back(Index);
-	}
-	if (m_pObjList->ExchangeObjStartAndEnd(nList))
-	{
 		CMachineObj_Comm* pObj;
-		Count = nList.size();
-		for (int i = 0; i < Count; i++)
+		int Count = m_PropertyList.GetItemCount();
+		POSITION pos = m_PropertyList.GetFirstSelectedItemPosition();
+		int	Index = m_PropertyList.GetNextSelectedItem(pos);
+		if ((pLVKeyDow->wVKey == VK_UP) && (Index > 0))
 		{
-			m_PropertyList.SetItemState(nList[i], LVNI_FOCUSED | LVIS_SELECTED,
+			pObj = m_pObjList->GetObjAtIndex(m_ProtyListIndex[Index]);
+			pObj->m_bIsObjStatus &= ~IsObjSel;
+			pObj = m_pObjList->GetObjAtIndex(m_ProtyListIndex[Index - 1]);
+			pObj->m_bIsObjStatus |= IsObjSel;
+			m_PropertyList.SetItemState(-1, LVNI_FOCUSED & LVIS_SELECTED,
 				LVNI_FOCUSED | LVIS_SELECTED);
-			pObj = m_pObjList->GetObjAtIndex(nList[i]);
-			point = pObj->GetObjStart(pObj);
-			str.Format(_T("%.3f,%.3f"), point.x, point.y);
-			m_PropertyList.SetItemText(nList[i], 3, str);
-			point = pObj->GetObjEnd(pObj);
-			str.Format(_T("%.3f,%.3f"), point.x, point.y);
-			m_PropertyList.SetItemText(nList[i], 4, str);
-
-		}
-		if (Count == 1)
-		{
-			m_ObjSel_Old = -1;
-			UISetBySingleSel(nList[0]);
-			m_ObjSel_Old = nList[0];
-		}
-		else
-		{
-			UISetByMultipleSel(nList[0]);
-			m_ObjSel_Old = nList[0];
-		}
-		m_pView->Invalidate();
-	}
-	HScroll(nList[0]);
-	m_PropertyList.SetFocus();
-	nList.clear();
-	vector<int>(nList).swap(nList);
-}
-
-//ÂæÖÂÆåÂñÑ
-void CObjectProperty::OnBnClickedBtnObjEdit()
-{
-	if (m_PropertyList.GetSelectedCount() < 1)
-		return;
-	CObjPropertyDlgEdit dlg;
-	dlg.m_pObjProty = this;
-	dlg.DoModal();
-	m_PropertyList.SetFocus();
-	OnObjlistRefresh(NULL, NULL);
-	POSITION pos = m_pObjList->GetObjHeadPosition();
-	int nIndex = 0;
-	int nSel = -1;
-	while (pos)
-	{
-		if ((m_pObjList->GetObjNext(pos))->m_bIsObjSel == TRUE)
-		{
-			m_PropertyList.SetItemState(nIndex, LVNI_FOCUSED | LVIS_SELECTED,
-				LVNI_FOCUSED | LVIS_SELECTED);
-			if (nSel < 0)
-				nSel = nIndex;
-		}
-		nIndex++;
-	}
-	if (m_PropertyList.GetSelectedCount() == 1)
-	{
-		UISetBySingleSel(nSel);
-	}
-	else if (m_PropertyList.GetSelectedCount() > 1)
-	{
-		UISetByMultipleSel(nSel);
-	}
-	HScroll(nSel);
-	m_PropertyList.SetFocus();
-	if (dlg.m_bSizeChanged)
-		m_pView->SendMessage(WM_ObjBound_ReSize, NULL, NULL);
-	else
-		m_pView->Invalidate();
-}
-
-void CObjectProperty::OnBnClickedObjectPropertyBtn1()
-{
-	if (!UpdateData(TRUE))
-		return;
-	POSITION pos;
-	ProcessPara para;
-	CMachinePara_Layer* pLayer;
-	CMachineObj_Comm* pObj;
-	int Index;
-	para.Speed = m_Speed;
-	para.Power = m_Power;
-	para.Frequncy = (UINT)(m_Frequncy * 1000);
-	para.Times = m_Count;
-	para.PulseWidth = m_PulseWidth;
-	if (!m_pDoc->Check_Process_Para1(para, m_ModeSel))
-		return;
-	if (m_AllSelObjInLayer)
-	{
-		pos = m_PropertyList.GetFirstSelectedItemPosition();
-		Index = m_pObjList->GetObjAtIndex(m_PropertyList.GetNextSelectedItem(pos))->m_ObjByLayer;
-		pLayer = m_pObjList->GetLayerOfNumber(Index);
-		pLayer->m_MachinePara = para;
-		pLayer->m_MachineMode = m_ModeSel;
-	}
-	else
-	{
-		vector<int> nList;
-		pos = m_PropertyList.GetFirstSelectedItemPosition();
-		while (pos)
-		{
-			Index = m_PropertyList.GetNextSelectedItem(pos);
-			nList.push_back(Index);
-		}
-		m_pObjList->FindLayerByParaAddOrChange(para, m_ModeSel, nList);
-		nList.clear();
-		vector<int>(nList).swap(nList);
-	}
-	if (GetDlgItem(IDC_OBJECT_PROPERTY_STATIC11)->IsWindowVisible()
-		&& m_pDoc->Check_Process_Para2(m_WaitTime))
-	{
-		pos = m_PropertyList.GetFirstSelectedItemPosition();
-		while (pos)
-		{
-			Index = m_PropertyList.GetNextSelectedItem(pos);
-			pObj = m_pObjList->GetObjAtIndex(Index);
-			if (pObj->GetObjType() == MachineObj_Type_Point)
-			{
-				((CMachineObjPoint*)pObj)->m_MachineWaitTime = m_WaitTime;
-			}
-		}
-	}
-	OnObjlistRefresh(NULL, NULL);
-	GetDlgItem(IDC_OBJECT_PROPERTY_STATIC11)->ShowWindow(SW_HIDE);
-	GetDlgItem(IDC_OBJECT_PROPERTY_EDIT6)->ShowWindow(SW_HIDE);
-	GetDlgItem(IDC_OBJECT_PROPERTY_STATIC12)->ShowWindow(SW_HIDE);
-
-	pos = m_pObjList->GetObjHeadPosition();
-	Index = 0;
-	int nSel = -1;
-	while (pos)
-	{
-		pObj = m_pObjList->GetObjNext(pos);
-		if (pObj->m_bIsObjSel == TRUE || (m_pObjList->GetLayerOfNumber(pObj->m_ObjByLayer))->m_bIsLayerSel)
-		{
 			m_PropertyList.SetItemState(Index, LVNI_FOCUSED | LVIS_SELECTED,
 				LVNI_FOCUSED | LVIS_SELECTED);
-			if (nSel < 0)
-				nSel = Index;
-			if (pObj->GetObjType() == MachineObj_Type_Point)
-			{
-				GetDlgItem(IDC_OBJECT_PROPERTY_STATIC11)->ShowWindow(SW_SHOW);
-				GetDlgItem(IDC_OBJECT_PROPERTY_EDIT6)->ShowWindow(SW_SHOW);
-				GetDlgItem(IDC_OBJECT_PROPERTY_STATIC12)->ShowWindow(SW_SHOW);
-			}
+			UIRefreshObject(Index - 1);
+			m_ObjSel_Old = Index - 1;
+			m_SelectedObj.swap(vector<UINT>());
+			m_SelectedObj.push_back(m_ObjSel_Old);
 		}
-		Index++;
+		else if ((pLVKeyDow->wVKey == VK_DOWN) && (Index + 1) < Count)
+		{
+			pObj = m_pObjList->GetObjAtIndex(m_ProtyListIndex[Index]);
+			pObj->m_bIsObjStatus &= ~IsObjSel;
+			pObj = m_pObjList->GetObjAtIndex(m_ProtyListIndex[Index + 1]);
+			pObj->m_bIsObjStatus |= IsObjSel;
+			m_PropertyList.SetItemState(-1, LVNI_FOCUSED & LVIS_SELECTED,
+				LVNI_FOCUSED | LVIS_SELECTED);
+			m_PropertyList.SetItemState(Index, LVNI_FOCUSED | LVIS_SELECTED,
+				LVNI_FOCUSED | LVIS_SELECTED);
+			UIRefreshObject(Index + 1);
+			m_ObjSel_Old = Index + 1;
+			m_SelectedObj.swap(vector<UINT>());
+			m_SelectedObj.push_back(m_ObjSel_Old);
+		}
+		m_pView->Invalidate();
+		return;
 	}
-	if (m_PropertyList.GetSelectedCount() == 1)
+	else
 	{
-		UISetBySingleSel(nSel);
+		//…œœ¬“∆∂ØÕº≤„¡–±Ì÷–‘™Àÿ
+		if (!(pLVKeyDow->wVKey == VK_UP || pLVKeyDow->wVKey == VK_DOWN)
+			|| m_PropertyList.GetSelectedCount() != 1)
+			return;
+		if (pLVKeyDow->wVKey == VK_UP)
+		{
+			m_LayerSel_Old = -1;
+			if (m_PropertyList.GetSelectedCount() != 1)
+				return;
+			POSITION pos;
+			int Index = 0;
+			pos = m_PropertyList.GetFirstSelectedItemPosition();
+			while (pos)
+			{
+				Index = m_PropertyList.GetNextSelectedItem(pos);
+			}
+			if (Index < 0 || Index >= m_PropertyList.GetItemCount())
+				return;
+			CString str = m_PropertyList.GetItemText(Index, 1);
+			int nLayer = m_pObjList->FindLayerByName(str);
+			if (nLayer < 0 || nLayer >= m_pObjList->GetLayerCount())
+				return;
+			if (nLayer < LayerNum_Default)
+			{
+				MessageBox(_T("≤ªø…“∆∂ØµƒÕº≤„!"));
+				m_PropertyList.SetItemState(Index + 1, LVNI_FOCUSED | LVIS_SELECTED,
+					LVNI_FOCUSED | LVIS_SELECTED);
+				return;
+			}
+			if (nLayer == LayerNum_Default)
+			{
+				MessageBox(_T("∏√Õº≤„“— «µ⁄“ªº”π§≤„!"));
+				m_PropertyList.SetItemState(Index + 1, LVNI_FOCUSED | LVIS_SELECTED,
+					LVNI_FOCUSED | LVIS_SELECTED);
+				return;
+			}
+			m_pObjList->LayerMoveUpAtIndex(nLayer);
+			CString str1;
+			str = m_PropertyList.GetItemText(Index, 1);
+			str1 = m_PropertyList.GetItemText(Index - 1, 1);
+			m_PropertyList.SetItemText(Index - 1, 1, str);
+			m_PropertyList.SetItemText(Index, 1, str1);
+			str = m_PropertyList.GetItemText(Index, 2);
+			str1 = m_PropertyList.GetItemText(Index - 1, 2);
+			m_PropertyList.SetItemText(Index - 1, 2, str);
+			m_PropertyList.SetItemText(Index, 2, str1);
+			str = m_PropertyList.GetItemText(Index, 3);
+			str1 = m_PropertyList.GetItemText(Index - 1, 3);
+			m_PropertyList.SetItemText(Index - 1, 3, str);
+			m_PropertyList.SetItemText(Index, 3, str1);
+			m_LayerSel_Old = Index - 1;
+		}
+		else if (pLVKeyDow->wVKey == VK_DOWN)
+		{
+			m_LayerSel_Old = -1;
+			if (m_PropertyList.GetSelectedCount() != 1)
+				return;
+			POSITION pos;
+			int Index = 0;
+			pos = m_PropertyList.GetFirstSelectedItemPosition();
+			while (pos)
+			{
+				Index = m_PropertyList.GetNextSelectedItem(pos);
+			}
+			if (Index < 0 || Index >= m_PropertyList.GetItemCount())
+				return;
+			CString str = m_PropertyList.GetItemText(Index, 1);
+			int nLayer = m_pObjList->FindLayerByName(str);
+			if (nLayer < 0 || nLayer >= m_pObjList->GetLayerCount())
+				return;
+			if (nLayer < LayerNum_Default)
+			{
+				MessageBox(_T("≤ªø…“∆∂ØµƒÕº≤„!"));
+				return;
+			}
+			if (nLayer >= m_pObjList->GetLayerCount() - 1)
+			{
+				MessageBox(_T("∏√Õº≤„“— «◊Ó∫Ûº”π§≤„!"));
+				return;
+			}
+			m_pObjList->LayerMoveDownAtIndex(nLayer);
+			CString str1;
+			str = m_PropertyList.GetItemText(Index, 1);
+			str1 = m_PropertyList.GetItemText(Index + 1, 1);
+			m_PropertyList.SetItemText(Index + 1, 1, str);
+			m_PropertyList.SetItemText(Index, 1, str1);
+			str = m_PropertyList.GetItemText(Index, 2);
+			str1 = m_PropertyList.GetItemText(Index + 1, 2);
+			m_PropertyList.SetItemText(Index + 1, 2, str);
+			m_PropertyList.SetItemText(Index, 2, str1);
+			str = m_PropertyList.GetItemText(Index, 3);
+			str1 = m_PropertyList.GetItemText(Index + 1, 3);
+			m_PropertyList.SetItemText(Index + 1, 3, str);
+			m_PropertyList.SetItemText(Index, 3, str1);
+			m_LayerSel_Old = Index + 1;
+		}
 	}
-	else if (m_PropertyList.GetSelectedCount() > 1)
-	{
-		UISetByMultipleSel(nSel);
-	}
-	HScroll(nSel);
-	m_PropertyList.SetFocus();
-	m_pView->Invalidate();
-}
-
-void CObjectProperty::OnBnClickedObjectPropertyBtn2()
-{
-	if (!UpdateData(TRUE))
-		return;
-	ProcessPara para;
-	int ntemp;
-	para.Speed = m_Speed;
-	para.Power = m_Power;
-	para.Frequncy = (UINT)(m_Frequncy * 1000);
-	para.Times = m_Count;
-	para.PulseWidth = m_PulseWidth;
-	ntemp = m_ModeSel;
-	if (!m_pDoc->Check_Process_Para1(para, ntemp))
-		return;
-	gProcessSpeed = m_Speed;
-	gProcessPower = m_Power;
-	gProcessFrequncy = (UINT)(m_Frequncy * 1000);
-	gProcessTimes = m_Count;
-	gProcessPulseWidth = m_PulseWidth;
-	gProcessMode = m_ModeSel;
-	if (GetDlgItem(IDC_OBJECT_PROPERTY_STATIC11)->IsWindowVisible()
-		&& m_pDoc->Check_Process_Para2(m_WaitTime))
-		gProcessWaitTime = m_WaitTime;
-}
-
-void CObjectProperty::OnBnClickedObjectPropertyBtn3()
-{
-	if (!UpdateData(TRUE))
-		return;
-	//Êï∞ÊçÆÊúâÊïàÊÄßÊ†°È™åÂæÖË°•
-	gLaserOnDelay = m_LaserOnDelay;
-	gLaserOffDelay = m_LaserOffDelay;
-	gBeforMarkDelay = m_BeforMarkDelay;
-	gAfterMarkDelay = m_AfterMarkDelay;
-	gPolylineDelay = m_PolylineDelay;
 }
 
 void CObjectProperty::OnMouseMove(UINT nFlags, CPoint point)
@@ -1155,61 +3331,1508 @@ void CObjectProperty::OnMouseMove(UINT nFlags, CPoint point)
 	CFormView::OnMouseMove(nFlags, point);
 }
 
-
-
-void CObjectProperty::OnBnClickedButtonObjectStartMark()
+////////////“‘œ¬Œ™2021ƒÍ÷ÿ–¥
+void CObjectProperty::OnClickedObjectOrLayer()
 {
-	// TODO: Âú®Ê≠§Ê∑ªÂä†Êéß‰ª∂ÈÄöÁü•Â§ÑÁêÜÁ®ãÂ∫è‰ª£Á†Å
+	POSITION pos;
+	CMachineObj_Comm* pObj;
 	CString str;
-	GetDlgItem(IDC_BUTTON_OBJECT_START_MARK)->GetWindowText(str);
-
-	if (_T("ÂÅúÊ≠¢Âä†Â∑•") == str)
+	m_bDispObject = !m_bDispObject;
+	m_ObjSel_Old = -1;
+	m_LayerSel_Old = -1;
+	m_pView->m_bObjNodeDisp = false;
+	if (!m_pObjList->IsEmptyObj())
 	{
-		::SendMessage(m_pView->GetSafeHwnd(), WM_STOP_MARK, NULL, NULL);
-		GetDlgItem(IDC_BUTTON_OBJECT_START_MARK)->SetWindowText(m_strBtnMark);
+		if (m_bDispObject)
+		{
+			//Object Panel
+			Disp_Object_List
+			Disp_Object_Panel
+
+			int i = 0;
+			int j = 0;
+			m_ProtyListIndex.swap(vector<UINT>());
+			pos = m_pObjList->GetObjHeadPosition();
+			while (pos)
+			{
+				CMachinePara_Layer* pLayer;
+				pObj = m_pObjList->GetObjNext(pos);
+				int nLayer = pObj->m_ObjByLayer;
+				pLayer = m_pObjList->GetLayerOfNumber(nLayer);
+				byte status = pLayer->m_bIsLayerStatus & IsObjClosed;
+				byte status1 = pLayer->m_bIsLayerStatus & IsObjLocked;
+				if (status == 0 && status1 == 0)
+				{
+					str.Format(_T("%d"), i + 1);
+					m_PropertyList.InsertItem(i, str);
+					switch (pObj->GetObjType())
+					{
+					case MachineObj_Type_Point:
+						str = _T("µ„");
+						break;
+					case MachineObj_Type_Line:
+						str = _T("÷±œﬂ");
+						break;
+					case MachineObj_Type_Circle:
+						str = _T("‘≤");
+						break;
+					case MachineObj_Type_Arc:
+						str = _T("‘≤ª°");
+						break;
+					case MachineObj_Type_Ellipse:
+						str = _T("Õ÷‘≤");
+						break;
+					case MachineObj_Type_ArcEll:
+						str = _T("Õ÷‘≤ª°");
+						break;
+					case MachineObj_Type_TiltEllipse:
+						str = _T("–±Õ÷‘≤ª°");
+						break;
+					case MachineObj_Type_Polyline:
+						str = _T("∂‡∂Œœﬂ");
+						break;
+					case MachineObj_Type_Group:
+						str = _T("»∫ ◊È");
+						break;
+					case MachineObj_Type_WLine:
+						str = _T("’πøÌ÷±œﬂ");
+						break;
+					case MachineObj_Type_WArc:
+						str = _T("’πøÌ‘≤ª°");
+						break;
+					case MachineObj_Type_WPolyline:
+						str = _T("’πøÌ∂‡∂Œœﬂ");
+						break;
+					case MachineObj_Type_FillPolyline:
+						str = _T("ÃÓ≥‰«¯”Ú");
+						break;
+					default:
+						str = "";
+						break;
+					}
+					if (((pLayer->m_bIsLayerStatus & IsObjSel) != 0) || (pObj->m_bIsObjStatus & IsObjSel) !=0)
+					{
+						m_PropertyList.SetItemState(i, LVNI_FOCUSED | LVIS_SELECTED,
+							LVNI_FOCUSED | LVIS_SELECTED);
+						m_ObjSel_Old = i;
+					}
+						
+					m_PropertyList.SetItemText(i, 1, str);
+					str = (m_pObjList->GetLayerOfNumber(pObj->m_ObjByLayer))->m_LayerName;
+					m_PropertyList.SetItemText(i, 2, str);
+					m_ProtyListIndex.push_back(j);
+					j++;
+					i++;
+				}
+				else
+				{
+					j++;
+				}
+			}
+			m_LayerNameListBox.ResetContent();
+			int LayerCount = m_pObjList->GetLayerCount();
+			int Index = 0;
+			for (int i = 0; i < LayerNum_Group; i++)
+			{
+				CString str = m_pObjList->GetLayerOfNumber(i)->m_LayerName;
+				m_LayerNameListBox.InsertString(Index, str);
+				Index++;
+			}
+			for (int i = LayerNum_Default; i < LayerCount; i++)
+			{
+				CString str = m_pObjList->GetLayerOfNumber(i)->m_LayerName;
+				m_LayerNameListBox.InsertString(Index, str);
+				Index++;
+			}
+			UIRefreshObject();
+		}
+		//Object Panel end
+		else
+		{
+			//Layer Panel
+			Disp_Layer_List
+			Disp_Layer_Panel
+			Enable_Layer_BTN_New
+
+			vector <UINT> ListLayerObjCount;
+			int nLayer = m_pObjList->GetLayerCount();
+			for (int i = 0; i < nLayer; i++)
+			{
+				ListLayerObjCount.push_back(0);
+			}
+			pos = m_pObjList->GetObjHeadPosition();
+			while (pos)
+			{
+				pObj = m_pObjList->GetObjNext(pos);
+				ListLayerObjCount[pObj->m_ObjByLayer]++;
+			}
+			int nLayerCount = 0;
+			m_LayerSel_Old = -1;
+			for (int i = 0; i < LayerNum_Group; i++)
+			{
+				str.Format(_T("%d"), nLayerCount + 1);
+				m_PropertyList.InsertItem(nLayerCount, str);
+				str = (m_pObjList->GetLayerOfNumber(i))->m_LayerName;
+				m_PropertyList.SetItemText(nLayerCount, 1, str);
+				if (((m_pObjList->GetLayerOfNumber(i)->m_bIsLayerStatus) & IsObjSel) != 0)
+				{
+					m_PropertyList.SetItemState(nLayerCount, LVNI_FOCUSED | LVIS_SELECTED,
+						LVNI_FOCUSED | LVIS_SELECTED);
+					m_LayerSel_Old = nLayerCount;
+				}
+				str.Format(_T("%d"), ListLayerObjCount[i]);
+				m_PropertyList.SetItemText(nLayerCount, 3, str);
+				nLayerCount++;
+			}
+			if (ListLayerObjCount[LayerNum_Group] != 0)
+			{
+				str.Format(_T("%d"), nLayerCount + 1);
+				m_PropertyList.InsertItem(nLayerCount, str);
+				str = (m_pObjList->GetLayerOfNumber(LayerNum_Group))->m_LayerName;
+				m_PropertyList.SetItemText(nLayerCount, 1, str);
+				if (((m_pObjList->GetLayerOfNumber(LayerNum_Group)->m_bIsLayerStatus) & IsObjSel) != 0)
+				{
+					m_PropertyList.SetItemState(nLayerCount, LVNI_FOCUSED | LVIS_SELECTED,
+						LVNI_FOCUSED | LVIS_SELECTED);
+					m_LayerSel_Old = nLayerCount;
+				}
+				str.Format(_T("%d"), ListLayerObjCount[LayerNum_Group]);
+				m_PropertyList.SetItemText(nLayerCount, 3, str);
+				nLayerCount++;
+			}
+			for (int i = LayerNum_Default; i < nLayer; i++)
+			{
+				str.Format(_T("%d"), nLayerCount + 1);
+				m_PropertyList.InsertItem(nLayerCount, str);
+				str = m_pObjList->GetLayerOfNumber(i)->m_LayerName;
+				m_PropertyList.SetItemText(nLayerCount, 1, str);
+				if (((m_pObjList->GetLayerOfNumber(i)->m_bIsLayerStatus) & IsObjSel) != 0)
+				{
+					m_PropertyList.SetItemState(nLayerCount, LVNI_FOCUSED | LVIS_SELECTED,
+						LVNI_FOCUSED | LVIS_SELECTED);
+					m_LayerSel_Old = nLayerCount;
+				}
+				str.Format(_T("%d"), ListLayerObjCount[i]);
+				if (ListLayerObjCount[LayerNum_Group] != 0)
+					str = str + _T("*");
+				m_PropertyList.SetItemText(nLayerCount, 3, str);
+				nLayerCount++;
+			}
+			UIRefreshLayer();
+		}
+		//Layer Panel end
 	}
 	else
 	{
-		GetDlgItem(IDC_BUTTON_OBJECT_START_MARK)->SetWindowText(_T("ÂÅúÊ≠¢Âä†Â∑•"));
-		::SendMessage(m_pView->GetSafeHwnd(), WM_START_MARK, m_bLocate, NULL);
-		GetDlgItem(IDC_BUTTON_OBJECT_START_MARK)->SetWindowText(m_strBtnMark);
+		m_bDispObject = false;
+		Disp_Layer_List
+		Disp_Layer_Panel
+		Disable_Layer_BTN_ClearLayer
+		Disable_Layer_BTN_Combine
+		Disable_Layer_BTN_New
 	}
+	UpdateData(FALSE);
 }
 
+void CObjectProperty::OnClickedObjProtyBtnSave()
+{
+	if (!UpdateData(TRUE))
+		return;
+	ProcessPara para;
+	para.Speed = m_Speed;
+	para.Power = m_Power;
+	para.Frequncy = (UINT)(m_Frequncy * 1000);
+	para.Times = m_Count;
+	para.PulseWidth = m_PulseWidth;
+	para.LaserOnDelay = m_LaserOnDelay;
+	para.LaserOffDelay = m_LaserOffDelay;
+	para.BeforMarkDelay = m_BeforMarkDelay;
+	para.AfterMarkDelay = m_AfterMarkDelay;
+	para.PolylineDelay = m_PolylineDelay;
+	if (!m_pDoc->Check_Process_Para1(para, m_ModeSel))
+	{
+		MessageBox(_T("º”π§≤Œ ˝≥¨œﬁ!"));
+		return;
+	}
+	gProcessSpeed = m_Speed;
+	gProcessPower = m_Power;
+	gProcessFrequncy = (UINT)(m_Frequncy * 1000);
+	gProcessTimes = m_Count;
+	gProcessPulseWidth = m_PulseWidth;
+	gProcessMode = m_ModeSel;
+	gLaserOnDelay = m_LaserOnDelay;
+	gLaserOffDelay = m_LaserOffDelay;
+	gBeforMarkDelay = m_BeforMarkDelay;
+	gAfterMarkDelay = m_AfterMarkDelay;
+	gPolylineDelay = m_PolylineDelay;
+}
+
+void CObjectProperty::OnObjProtyBtnLayerNew()
+{
+	if (m_bDispObject)
+	{
+		int Count = m_SelectedObj.size();
+		if (Count == 0)
+			return;
+		int Index = m_LayerNameListBox.GetCurSel();
+		CString str;
+		m_LayerNameListBox.GetLBText(Index, str);
+		int nLayer = m_pObjList->FindLayerByName(str);
+		if ((nLayer < 0) || (nLayer > m_pObjList->GetLayerCount()))
+			return;
+		for (int i = 0; i < Count; i++)
+		{
+			Index = m_SelectedObj[i];
+			CMachineObj_Comm*pObj = m_pObjList->GetObjAtIndex(m_ProtyListIndex[Index]);
+			m_pObjList->ChangeObjByLayer(pObj, nLayer);
+		}
+		m_bDispObject = false;
+		OnClickedObjectOrLayer();
+		m_pView->Invalidate();
+	}
+	//Change_ObjectByLayer End
+	else
+	{
+		if (!UpdateData(TRUE))
+			return;
+		if (m_pObjList->IsEmptyObj())
+			return;
+		CString str = m_LayerName;
+		str.Remove(' ');
+		if (str == "")
+		{
+			MessageBox(_T("Õº≤„√˚≤ªƒ‹Œ™ø’"));
+			return;
+		}
+		int nTemp = m_pObjList->FindLayerByName(str);
+		if (nTemp >= LayerNum_Default)
+		{
+			MessageBox(_T("Õº≤„√˚“—¥Ê‘⁄"));
+			return;
+		}
+		if (nTemp >= 0)
+		{
+			MessageBox(_T("Œﬁ–ßµƒÕº≤„√˚"));
+			return;
+		}
+		ProcessPara para;
+		para.Speed = m_Speed;
+		para.Power = m_Power;
+		para.Frequncy = (UINT)(m_Frequncy * 1000);
+		para.Times = m_Count;
+		para.PulseWidth = m_PulseWidth;
+		para.LaserOnDelay = m_LaserOnDelay;
+		para.LaserOffDelay = m_LaserOffDelay;
+		para.BeforMarkDelay = m_BeforMarkDelay;
+		para.AfterMarkDelay = m_AfterMarkDelay;
+		para.PolylineDelay = m_PolylineDelay;
+		if (!m_pDoc->Check_Process_Para1(para, m_ModeSel))
+		{
+			MessageBox(_T("º”π§≤Œ ˝≥¨œﬁ!"));
+			return;
+		}
+		CMachinePara_Layer* pLayer = new CMachinePara_Layer(str, m_ModeSel, para, 0);
+		m_pObjList->AddLayer(pLayer);
+		int ListCount = m_PropertyList.GetItemCount();
+		str.Format(_T("%d"), ListCount + 1);
+		m_PropertyList.InsertItem(ListCount, str);
+		m_PropertyList.SetItemText(ListCount, 1, pLayer->m_LayerName);
+		m_PropertyList.SetItemText(ListCount, 2, _T("ªÓ∂Ø"));
+		m_PropertyList.SetItemText(ListCount, 3, _T("0"));
+	}
+	//New_Layer End
+}
+
+void CObjectProperty::OnObjProtyBtnLayerOpenAndCloseOrObjDelete()
+{
+	if (m_bDispObject)
+	{
+		if (MessageBox(_T("»∑∂®…æ≥˝—°÷–∂‘œÛ?\n(…æ≥˝ «≤ªø…ª÷∏¥µƒ!)"),
+			_T(""), MB_YESNO | MB_ICONWARNING) != IDYES)
+			return;
+		int Count = m_SelectedObj.size();
+		if (Count == 0)
+		{
+			MessageBox(_T("Œﬁø……æ≥˝∂‘œÛ!"));
+			return;
+		}
+		int Index;
+		for (int i = 0; i < Count; i++)
+		{
+			Index = m_SelectedObj[Count - 1 - i];
+			m_pObjList->DeleteObjAtIndex(m_ProtyListIndex[Index]);
+		}
+		m_SelectedObj.swap(vector<UINT>());
+		m_bDispObject = false;
+		OnClickedObjectOrLayer();
+		m_pObjList->RefeshBound();
+		ObjRect rect = m_pObjList->GetObjBound();
+		if ((abs(rect.min_x) > InvalidLength) || (abs(rect.min_y) > InvalidLength))
+			m_pObjList->MoveObjectListCoordinate(-rect.min_x, -rect.min_y);
+		m_pView->SendMessage(WM_ObjBound_ReSize, NULL, NULL);
+	}
+	//Obj_Delete End
+	else
+	{
+		if (m_PropertyList.GetSelectedCount() != 1)
+			return;
+		POSITION pos;
+		int Index = 0;
+		pos = m_PropertyList.GetFirstSelectedItemPosition();
+		while (pos)
+		{
+			Index = m_PropertyList.GetNextSelectedItem(pos);
+		}
+		CString str = m_PropertyList.GetItemText(Index, 1);
+		int nLayer = m_pObjList->FindLayerByName(str);
+		CMachinePara_Layer* pLayer = m_pObjList->GetLayerOfNumber(nLayer);
+		if ((pLayer->m_bIsLayerStatus & IsObjClosed) == 0)
+		{
+			Enable_Layer_BTN_Open
+			Enable_Layer_BTN_UpAndDown
+			Disable_Layer_BTN_Lock
+			Disable_Layer_BTN_Modify
+			Disable_Layer_BTN_Delete
+			pLayer->m_bIsLayerStatus = pLayer->m_bIsLayerStatus | IsObjClosed;
+			m_PropertyList.SetItemText(Index, 2, _T("“—πÿ±’"));
+		}
+		else
+		{
+			Enable_Layer_BTN_Close
+			Enable_Layer_BTN_UpAndDown
+			pLayer->m_bIsLayerStatus = pLayer->m_bIsLayerStatus & ~IsObjClosed;
+			if ((pLayer->m_bIsLayerStatus & IsObjLocked) == 0)
+			{
+				Enable_Layer_BTN_Lock
+				Enable_Layer_BTN_Modify
+				Enable_Layer_BTN_Delete
+				m_PropertyList.SetItemText(Index, 2, _T("ªÓ ∂Ø"));
+			}
+			else
+			{
+				Enable_Layer_BTN_Unlock
+				Disable_Layer_BTN_Modify
+				Disable_Layer_BTN_Delete
+				m_PropertyList.SetItemText(Index, 2, _T("“—À¯∂®"));
+			}
+		}
+		UpdateData(FALSE);
+		m_pView->Invalidate();
+	}
+	//Layer_Open_Close End
+}
+
+void CObjectProperty::OnObjProtyBtnLayerLockAndUnlockOrObjEdit()
+{
+	if (m_bDispObject)
+	{
+		int Count = m_SelectedObj.size();
+		if ((Count <= 0) || (Count > m_PropertyList.GetItemCount()))
+			return;
+		m_pView->m_bObjNodeDisp = false;
+		if (Count == 1)
+		{
+			//Single Object_Edit
+			POSITION pos;
+			int Index;
+			pos = m_PropertyList.GetFirstSelectedItemPosition();
+			while (pos)
+			{
+				Index = m_PropertyList.GetNextSelectedItem(pos);
+			}
+			CMachineObj_Comm* pObj = m_pObjList->GetObjAtIndex(m_ProtyListIndex[Index]);
+			int nType = pObj->GetObjType();
+			switch (nType)
+			{
+			case MachineObj_Type_Point:
+				EditPoint(pObj);
+				break;
+			case MachineObj_Type_Line:
+				EditLine(pObj);
+				break;
+			case MachineObj_Type_Circle:
+				EditCircle(pObj);
+				break;
+			case MachineObj_Type_Arc:
+				EditArc(pObj);
+				break;
+			case MachineObj_Type_Ellipse:
+				EditEllipse(pObj);
+				break;
+			case MachineObj_Type_ArcEll:
+				EditArcEll(pObj);
+				break;
+			case MachineObj_Type_TiltEllipse:
+				EditTiltEllipse(pObj);
+				break;
+			case MachineObj_Type_Polyline:
+				m_SelNode = 0;
+				EditPolyline(pObj);
+				break;
+			case MachineObj_Type_Group:
+				EditGroup(pObj);
+				break;
+			case MachineObj_Type_WLine:
+				EditWiden(pObj);
+				break;
+			case MachineObj_Type_WArc:
+				EditWiden(pObj);
+				break;
+			case MachineObj_Type_WPolyline:
+				EditWiden(pObj);
+				break;
+			case MachineObj_Type_FillPolyline:
+				EditFill(pObj);
+				break;
+			default:
+				break;
+			}
+		}
+		//Single Object_Edit End
+		else
+		{
+			//Multi Object_Edit
+			CMachineObj_Comm* pObj = m_pObjList->GetObjAtIndex(m_ProtyListIndex[m_SelectedObj[0]]);
+			int nType = pObj->GetObjType();
+			if (nType == MachineObj_Type_WLine
+				|| nType == MachineObj_Type_WArc
+				|| nType == MachineObj_Type_WPolyline)
+			{
+				EditWiden(pObj);
+			}
+			else if (nType == MachineObj_Type_FillPolyline)
+			{
+				EditFill(pObj);
+			}
+		}
+		//Multi Object_Edit End
+		Disable_OBJ_BTN_UpAndDown
+			Disable_OBJ_BTN_FillCreat
+			Disable_OBJ_BTN_ChangeLayer
+			Disable_OBJ_BTN_WidenCreat
+			Disable_OBJ_BTN_Polyline
+			Disable_OBJ_BTN_DisGroup
+			Disable_OBJ_BTN_Route
+			Disable_OBJ_BTN_Group
+		m_pView->Invalidate();
+	}
+	//Object_Edit End
+	else
+	{
+		if (m_PropertyList.GetSelectedCount() != 1)
+			return;
+		POSITION pos;
+		int Index = 0;
+		pos = m_PropertyList.GetFirstSelectedItemPosition();
+		while (pos)
+		{
+			Index = m_PropertyList.GetNextSelectedItem(pos);
+		}
+		CString str = m_PropertyList.GetItemText(Index, 1);
+		int nLayer = m_pObjList->FindLayerByName(str);
+		CMachinePara_Layer* pLayer = m_pObjList->GetLayerOfNumber(nLayer);
+		if ((pLayer->m_bIsLayerStatus & IsObjLocked) == 0)
+		{
+			Enable_Layer_BTN_Unlock
+			Disable_Layer_BTN_Modify
+			Disable_Layer_BTN_Delete
+			pLayer->m_bIsLayerStatus = pLayer->m_bIsLayerStatus | IsObjLocked;
+			m_PropertyList.SetItemText(Index, 2, _T("“—À¯∂®"));
+		}
+		else
+		{
+			Enable_Layer_BTN_Lock
+			Enable_Layer_BTN_Modify
+			Enable_Layer_BTN_Delete
+			pLayer->m_bIsLayerStatus = pLayer->m_bIsLayerStatus & ~IsObjLocked;
+			m_PropertyList.SetItemText(Index, 2, _T("ªÓ ∂Ø"));
+		}
+		UpdateData(FALSE);
+		m_pView->Invalidate();
+	}
+	//Layer_Lock_Unlock End
+}
+
+void CObjectProperty::OnObjProtyBtnLayerModifyOrObjGroup()
+{
+	if (m_bDispObject)
+	{
+		int Count = m_SelectedObj.size();
+		if (Count <= 1)
+			return;
+		vector<int> nList;
+		int Index = m_ProtyListIndex[m_SelectedObj[0]];
+		for (int i = 0; i < Count; i++)
+		{
+			nList.push_back(m_ProtyListIndex[m_SelectedObj[i]]);
+		}
+		if (m_pObjList->GroupObjAtIndex(nList))
+		{
+			m_pObjList->SetObjSelect(Index);
+			m_bDispObject = false;
+			OnClickedObjectOrLayer();
+			HScroll(m_SelectedObj[0]);
+			m_PropertyList.SetFocus();
+		}
+	}
+	//Object_Group End
+	else
+	{
+		if (m_PropertyList.GetSelectedCount() != 1)
+			return;
+		POSITION pos;
+		int Index = 0;
+		pos = m_PropertyList.GetFirstSelectedItemPosition();
+		while (pos)
+		{
+			Index = m_PropertyList.GetNextSelectedItem(pos);
+		}
+		if (Index < 0 || Index >= m_PropertyList.GetItemCount())
+			return;
+		CString str = m_PropertyList.GetItemText(Index, 1);
+		int nLayer = m_pObjList->FindLayerByName(str);
+		if (nLayer < LayerNum_Default)
+		{
+			MessageBox(_T("œµÕ≥±£¡Ù≤„,≤ªƒ‹–ﬁ∏ƒ!"));
+			return;
+		}
+		UpdateData(TRUE);
+		str = m_LayerName;
+		str.Remove(' ');
+		int nLayer1 = m_pObjList->FindLayerByName(str);
+		if (nLayer1 > 0 && nLayer1 != nLayer)
+		{
+			MessageBox(_T("Õº≤„“—¥Ê‘⁄!"));
+			return;
+		}
+		ProcessPara para;
+		para.Speed = m_Speed;
+		para.Power = m_Power;
+		para.Frequncy = (UINT)(m_Frequncy * 1000);
+		para.Times = m_Count;
+		para.PulseWidth = m_PulseWidth;
+		para.LaserOnDelay = m_LaserOnDelay;
+		para.LaserOffDelay = m_LaserOffDelay;
+		para.BeforMarkDelay = m_BeforMarkDelay;
+		para.AfterMarkDelay = m_AfterMarkDelay;
+		para.PolylineDelay = m_PolylineDelay;
+		if (!m_pDoc->Check_Process_Para1(para, m_ModeSel))
+		{
+			MessageBox(_T("º”π§≤Œ ˝≥¨œﬁ!"));
+			return;
+		}
+		CMachinePara_Layer* pLayer;
+		pLayer = m_pObjList->GetLayerOfNumber(nLayer);
+		if ((nLayer1 < 0) && (!(str == "")))
+			pLayer->m_LayerName = str;
+		pLayer->m_MachineMode = m_ModeSel;
+		pLayer->m_MachinePara = para;
+		m_PropertyList.SetItemText(Index, 1, pLayer->m_LayerName);
+	}
+	//Layer_Modify End
+}
+
+void CObjectProperty::OnObjProtyBtnLayerDeleteOrObjExplode()
+{
+	if (m_bDispObject)
+	{
+		int Count = m_SelectedObj.size();
+		if (Count < 1)
+			return;
+		int Index;
+		for (int i = 0; i < Count; i++)
+		{
+			Index = m_SelectedObj[Count - 1 - i];
+			m_pObjList->ExplodeObjAtIndex(m_ProtyListIndex[Index]);
+		}
+		m_SelectedObj.swap(vector<UINT>());
+		m_pObjList->SetObjSelect(m_ProtyListIndex[Index]);
+		m_bDispObject = false;
+		OnClickedObjectOrLayer();
+		HScroll(m_SelectedObj[0]);
+		m_PropertyList.SetFocus();
+		m_pView->Invalidate();
+	}
+	//Object_Explode End
+	else
+	{
+		if (m_PropertyList.GetSelectedCount() > 1)
+			return;
+		int Index = m_PropertyList.GetSelectionMark();
+		CString str = m_PropertyList.GetItemText(Index, 1);
+		int nLayer = m_pObjList->FindLayerByName(str);
+		if ((nLayer < 0) || (nLayer >= m_pObjList->GetLayerCount()))
+		{
+			MessageBox(_T("÷∏∂®Õº≤„≤ª¥Ê‘⁄!"));
+			return;
+		}
+		else if (nLayer < LayerNum_Default)
+		{
+			MessageBox(_T("’‚∏ˆÕº≤„≤ª»›–Ì…æ≥˝!"));
+			return;
+		}
+		str = _T("…æ≥˝Õº≤„\"") + str + _T("\"") + _T("∫Õ∆‰÷–µƒÀ˘”–º”π§∂‘œÛ\n\n");
+		str = str + _T("   ∏√…æ≥˝ «≤ªø…ƒÊµƒ!  «∑ÒºÃ–¯?");
+		if (IDNO == MessageBox(str, _T("…æ  ≥˝"), MB_YESNO))
+			return;
+		m_pObjList->DeleteLayerOfNumber(nLayer);
+		m_bDispObject = true;
+		OnClickedObjectOrLayer();
+		ObjRect rect = m_pObjList->GetObjBound();
+		if ((abs(rect.min_x) > InvalidLength) || (abs(rect.min_y) > InvalidLength))
+			m_pObjList->MoveObjectListCoordinate(-rect.min_x, -rect.min_y);
+		m_pView->Invalidate();
+	}
+	//Layer_Delete End
+}
+
+void CObjectProperty::OnObjProtyBtnLayerClear()
+{
+	if (m_bDispObject)
+	{
+		int Count = m_SelectedObj.size();
+		if (Count < 1)
+			return;
+		int Index;
+		for (int i = 0; i < Count; i++)
+		{
+			Index = m_SelectedObj[i];
+			Index = m_ProtyListIndex[Index];
+			m_pObjList->PolymerObjAtIndex(Index);
+		}
+		m_bDispObject = false;
+		OnClickedObjectOrLayer();
+	}
+	//Object_PolyLine End
+	else
+	{
+		if (m_PropertyList.GetSelectedCount() == 1)
+		{
+			int Index = m_PropertyList.GetSelectionMark();
+			CString str = m_PropertyList.GetItemText(Index, 1);
+			int nLayer = m_pObjList->FindLayerByName(str);
+			if ((nLayer < 0) || (nLayer >= m_pObjList->GetLayerCount()))
+				return;
+			else if (nLayer < LayerNum_Default)
+				return;
+			m_pObjList->ClearNullObject(nLayer);
+			m_bDispObject = true;
+			OnClickedObjectOrLayer();
+			m_pView->Invalidate();
+		}
+		else
+		{
+			m_pObjList->ClearNullLayer();
+			m_bDispObject = true;
+			OnClickedObjectOrLayer();
+		}
+	}
+	//Layer_Clear End
+}
+
+void CObjectProperty::OnObjProtyBtnLayerOrObjUp()
+{
+	int Index;
+	POSITION pos;
+	CString str, str1;
+	if (m_bDispObject)
+	{
+		int Count = m_SelectedObj.size();
+		if ((Count <= 0) || (Count > m_PropertyList.GetItemCount()))
+			return;
+		if (Count == 1)
+		{
+			m_ObjSel_Old = -1;
+			if (m_PropertyList.GetSelectedCount() != 1)
+			{
+				MessageBox(_T("Œﬁ∑®…œ“∆"));
+				return;
+			}
+			pos = m_PropertyList.GetFirstSelectedItemPosition();
+			while (pos)
+			{
+				Index = m_PropertyList.GetNextSelectedItem(pos);
+			}
+			if (Index <= 0 || Index >= m_PropertyList.GetItemCount())
+			{
+				MessageBox(_T("Œﬁ∑®…œ“∆"));
+				return;
+			}
+			if (!m_pObjList->ExchangeObjAtIndex(m_ProtyListIndex[Index], m_ProtyListIndex[Index - 1]))
+			{
+				MessageBox(_T("Œﬁ∑®…œ“∆"));
+				return;
+			}
+			str = m_PropertyList.GetItemText(Index - 1, 1);
+			m_PropertyList.SetItemText(Index - 1, 1, m_PropertyList.GetItemText(Index, 1));
+			m_PropertyList.SetItemText(Index, 1, str);
+			str = m_PropertyList.GetItemText(Index - 1, 2);
+			m_PropertyList.SetItemText(Index - 1, 2, m_PropertyList.GetItemText(Index, 2));
+			m_PropertyList.SetItemText(Index, 2, str);
+			str = m_PropertyList.GetItemText(Index - 1, 3);
+			m_PropertyList.SetItemText(Index - 1, 3, m_PropertyList.GetItemText(Index, 3));
+			m_PropertyList.SetItemText(Index, 3, str);
+			m_PropertyList.SetItemState(Index, LVNI_FOCUSED & LVIS_SELECTED,
+				LVNI_FOCUSED | LVIS_SELECTED);
+			m_PropertyList.SetItemState(Index - 1, LVNI_FOCUSED | LVIS_SELECTED,
+				LVNI_FOCUSED | LVIS_SELECTED);
+			m_LayerSel_Old = Index - 1;
+			HScroll(Index);
+			m_PropertyList.SetFocus();
+		}
+		//Object_Up End
+		else
+		{
+			vector<int> nList;
+			for (int i = 0; i < Count; i++)
+			{
+				nList.push_back(m_ProtyListIndex[m_SelectedObj[i]]);
+			}
+			if (!m_pObjList->ReverseObj(nList))
+				MessageBox(_T("Œﬁ∑®ªªœÚ!"));
+			else
+				m_pView->Invalidate();
+		}
+		//Object_Redir End
+	}
+	//Object End
+	else
+	{
+		m_LayerSel_Old = -1;
+		if (m_PropertyList.GetSelectedCount() != 1)
+			return;
+		pos = m_PropertyList.GetFirstSelectedItemPosition();
+		while (pos)
+		{
+			Index = m_PropertyList.GetNextSelectedItem(pos);
+		}
+		if (Index < 0 || Index >= m_PropertyList.GetItemCount())
+			return;
+		str = m_PropertyList.GetItemText(Index, 1);
+		int nLayer = m_pObjList->FindLayerByName(str);
+		if (nLayer < 0 || nLayer >= m_pObjList->GetLayerCount())
+			return;
+		if (nLayer < LayerNum_Default)
+		{
+			MessageBox(_T("≤ªø…“∆∂ØµƒÕº≤„!"));
+			return;
+		}
+		if (nLayer == LayerNum_Default)
+		{
+			MessageBox(_T("∏√Õº≤„“— «µ⁄“ªº”π§≤„!"));
+			return;
+		}
+		m_pObjList->LayerMoveUpAtIndex(nLayer);
+		str = m_PropertyList.GetItemText(Index, 1);
+		str1 = m_PropertyList.GetItemText(Index - 1, 1);
+		m_PropertyList.SetItemText(Index - 1, 1, str);
+		m_PropertyList.SetItemText(Index, 1, str1);
+		str = m_PropertyList.GetItemText(Index, 2);
+		str1 = m_PropertyList.GetItemText(Index - 1, 2);
+		m_PropertyList.SetItemText(Index - 1, 2, str);
+		m_PropertyList.SetItemText(Index, 2, str1);
+		str = m_PropertyList.GetItemText(Index, 3);
+		str1 = m_PropertyList.GetItemText(Index - 1, 3);
+		m_PropertyList.SetItemText(Index - 1, 3, str);
+		m_PropertyList.SetItemText(Index, 3, str1);
+		m_PropertyList.SetItemState(Index, LVNI_FOCUSED & LVIS_SELECTED,
+			LVNI_FOCUSED | LVIS_SELECTED);
+		m_PropertyList.SetItemState(Index - 1, LVNI_FOCUSED | LVIS_SELECTED,
+			LVNI_FOCUSED | LVIS_SELECTED);
+		m_LayerSel_Old = Index - 1;
+		HScroll(Index);
+		m_PropertyList.SetFocus();
+	}
+	//Layer_Up End
+}
+
+void CObjectProperty::OnObjProtyBtnLayerOrObjDown()
+{
+	int Index;
+	POSITION pos;
+	CString str, str1;
+	if (m_bDispObject)
+	{
+		int Count = m_SelectedObj.size();
+		if ((Count <= 0) || (Count > m_PropertyList.GetItemCount()))
+			return;
+		if (Count == 1)
+		{
+			m_ObjSel_Old = -1;
+			if (m_PropertyList.GetSelectedCount() != 1)
+			{
+				MessageBox(_T("Œﬁ∑®œ¬“∆"));
+				return;
+			}
+			pos = m_PropertyList.GetFirstSelectedItemPosition();
+			while (pos)
+			{
+				Index = m_PropertyList.GetNextSelectedItem(pos);
+			}
+			if (Index < 0 || (Index + 1) >= m_PropertyList.GetItemCount())
+			{
+				MessageBox(_T("Œﬁ∑®œ¬“∆"));
+				return;
+			}
+			if (!m_pObjList->ExchangeObjAtIndex(m_ProtyListIndex[Index], m_ProtyListIndex[Index + 1]))
+			{
+				MessageBox(_T("Œﬁ∑®…œ“∆"));
+				return;
+			}
+			str = m_PropertyList.GetItemText(Index + 1, 1);
+			m_PropertyList.SetItemText(Index + 1, 1, m_PropertyList.GetItemText(Index, 1));
+			m_PropertyList.SetItemText(Index, 1, str);
+			str = m_PropertyList.GetItemText(Index + 1, 2);
+			m_PropertyList.SetItemText(Index + 1, 2, m_PropertyList.GetItemText(Index, 2));
+			m_PropertyList.SetItemText(Index, 2, str);
+			str = m_PropertyList.GetItemText(Index + 1, 3);
+			m_PropertyList.SetItemText(Index + 1, 3, m_PropertyList.GetItemText(Index, 3));
+			m_PropertyList.SetItemText(Index, 3, str);
+			m_PropertyList.SetItemState(Index, LVNI_FOCUSED & LVIS_SELECTED,
+				LVNI_FOCUSED | LVIS_SELECTED);
+			m_PropertyList.SetItemState(Index + 1, LVNI_FOCUSED | LVIS_SELECTED,
+				LVNI_FOCUSED | LVIS_SELECTED);
+			m_LayerSel_Old = Index + 1;
+			HScroll(Index);
+			m_PropertyList.SetFocus();
+		}
+		//Object_Down End
+		else
+		{
+			vector<int> nList;
+			for (int i = 0; i < Count; i++)
+			{
+				nList.push_back(m_ProtyListIndex[m_SelectedObj[i]]);
+			}
+			if (!m_pObjList->ChangeObjNode(nList))
+				MessageBox(_T("Œﬁ∑®ªªœÚ!"));
+			else
+				m_pView->Invalidate();
+		}
+		//Object_ChangeNode End
+	}
+	//Object End
+	else
+	{
+		m_LayerSel_Old = -1;
+		if (m_PropertyList.GetSelectedCount() != 1)
+			return;
+		pos = m_PropertyList.GetFirstSelectedItemPosition();
+		while (pos)
+		{
+			Index = m_PropertyList.GetNextSelectedItem(pos);
+		}
+		if (Index < 0 || Index >= m_PropertyList.GetItemCount())
+			return;
+		CString str = m_PropertyList.GetItemText(Index, 1);
+		int nLayer = m_pObjList->FindLayerByName(str);
+		if (nLayer < 0 || nLayer >= m_pObjList->GetLayerCount())
+			return;
+		if (nLayer < LayerNum_Default)
+		{
+			MessageBox(_T("≤ªø…“∆∂ØµƒÕº≤„!"));
+			return;
+		}
+		if (nLayer >= m_pObjList->GetLayerCount() - 1)
+		{
+			MessageBox(_T("∏√Õº≤„“— «◊Ó∫Ûº”π§≤„!"));
+			return;
+		}
+		m_pObjList->LayerMoveDownAtIndex(nLayer);
+		str = m_PropertyList.GetItemText(Index, 1);
+		str1 = m_PropertyList.GetItemText(Index + 1, 1);
+		m_PropertyList.SetItemText(Index + 1, 1, str);
+		m_PropertyList.SetItemText(Index, 1, str1);
+		str = m_PropertyList.GetItemText(Index, 2);
+		str1 = m_PropertyList.GetItemText(Index + 1, 2);
+		m_PropertyList.SetItemText(Index + 1, 2, str);
+		m_PropertyList.SetItemText(Index, 2, str1);
+		str = m_PropertyList.GetItemText(Index, 3);
+		str1 = m_PropertyList.GetItemText(Index + 1, 3);
+		m_PropertyList.SetItemText(Index + 1, 3, str);
+		m_PropertyList.SetItemText(Index, 3, str1);
+		m_PropertyList.SetItemState(Index, LVNI_FOCUSED & LVIS_SELECTED,
+			LVNI_FOCUSED | LVIS_SELECTED);
+		m_PropertyList.SetItemState(Index + 1, LVNI_FOCUSED | LVIS_SELECTED,
+			LVNI_FOCUSED | LVIS_SELECTED);
+		m_LayerSel_Old = Index + 1;
+		HScroll(Index);
+		m_PropertyList.SetFocus();
+	}
+	//Layer_Down End
+}
+
+void CObjectProperty::OnClickObjectPropertyList(NMHDR *pNMHDR, LRESULT *pResult)
+{
+	LPNMITEMACTIVATE pNMItemActivate = reinterpret_cast<LPNMITEMACTIVATE>(pNMHDR);
+	if (m_pObjList->IsEmptyObj())
+		return;
+	CString str;
+	int Index, nCount;
+	nCount = m_PropertyList.GetSelectedCount();
+	if (m_bDispObject)
+	{
+		//∂‘œÛ¡–±Ì
+		m_pView->m_bObjNodeDisp = false;
+		Disp_Machine_Property
+		Index = pNMItemActivate->iItem;
+		CMachineObj_Comm* pObj;
+		ClearActiveLayerSel();
+		if (nCount < 1)
+		{
+			//ø’—°
+			ClearAllObjSel();
+			m_ObjSel_Old = -1;
+			m_PropertyList.SetItemState(-1, LVNI_FOCUSED & LVIS_SELECTED,
+				LVNI_FOCUSED | LVIS_SELECTED);
+		}
+		//ø’—°
+		else if (nCount == 1)
+		{
+			//****µ•—°****
+			ClearAllObjSel();
+			m_PropertyList.SetItemState(-1, LVNI_FOCUSED & LVIS_SELECTED,
+				LVNI_FOCUSED | LVIS_SELECTED);
+			if (Index == m_ObjSel_Old)
+			{
+				//‘Ÿ¥Œ—°÷–Õ¨“ª––,»°œ˚—°÷–
+				m_ObjSel_Old = -1;
+			}
+			//—°÷–»°œ˚ ¥¶¿ÌΩ· ¯
+			else
+			{
+				//—°÷––¬––
+				m_ObjSel_Old = Index;
+				pObj = m_pObjList->GetObjAtIndex(m_ProtyListIndex[Index]);
+				pObj->m_bIsObjStatus |= IsObjSel;
+				m_PropertyList.SetItemState(Index, LVNI_FOCUSED | LVIS_SELECTED,
+					LVNI_FOCUSED | LVIS_SELECTED);
+			}
+			//—°÷–”––ß
+		}
+		//µ•—° ¥¶¿ÌΩ· ¯
+		else
+		{
+			//****∂‡—°****
+			int Count1 = m_PropertyList.GetItemCount();
+			for (int i = 0; i < Count1; i++)
+			{
+				pObj = m_pObjList->GetObjAtIndex(m_ProtyListIndex[i]);
+				pObj->m_bIsObjStatus &= ~IsObjSel;
+			}
+			m_ObjSel_Old = Index;
+			POSITION pos = m_PropertyList.GetFirstSelectedItemPosition();
+			for (int i = 0; i < nCount; i++)
+			{
+				Index = m_PropertyList.GetNextSelectedItem(pos);
+				pObj = m_pObjList->GetObjAtIndex(m_ProtyListIndex[Index]);
+				pObj->m_bIsObjStatus |= IsObjSel;
+			}
+		}
+		//∂‡—° Ω· ¯
+		UIRefreshObject();
+	}
+	//∂‘œÛ¡–±Ì Ω· ¯
+	else
+	{
+		//Õº≤„¡–±Ì
+		Index = pNMItemActivate->iItem;
+		if (nCount < 1)
+		{
+			//ø’—°
+			m_pObjList->SetLayerUnSelectAll();
+			m_LayerSel_Old = -1;
+			m_PropertyList.SetItemState(-1, LVNI_FOCUSED & LVIS_SELECTED,
+				LVNI_FOCUSED | LVIS_SELECTED);
+		}
+		//ø’—°
+		else if (nCount == 1)
+		{
+			//****µ•—°****
+			m_pObjList->SetLayerUnSelectAll();
+			m_PropertyList.SetItemState(-1, LVNI_FOCUSED & LVIS_SELECTED,
+				LVNI_FOCUSED | LVIS_SELECTED);
+			if (Index == m_LayerSel_Old)
+			{
+				//‘Ÿ¥Œ—°÷–Õ¨“ª––,»°œ˚—°÷–
+				m_LayerSel_Old = -1;
+			}
+			//—°÷–»°œ˚ ¥¶¿ÌΩ· ¯
+			else
+			{
+				//—°÷––¬––
+				m_LayerSel_Old = Index;
+				CString str = m_PropertyList.GetItemText(Index, 1);
+				CMachinePara_Layer* pLayer = m_pObjList->GetLayerOfName(str);
+				pLayer->m_bIsLayerStatus |= IsObjSel;
+				m_PropertyList.SetItemState(Index, LVNI_FOCUSED | LVIS_SELECTED,
+					LVNI_FOCUSED | LVIS_SELECTED);
+			}
+			//—°÷–”––ß
+		}
+		//µ•—° ¥¶¿ÌΩ· ¯
+		else
+		{
+			//****∂‡—°****
+			m_LayerSel_Old = Index;
+			POSITION pos = m_PropertyList.GetFirstSelectedItemPosition();
+			for (int i = 0; i < nCount; i++)
+			{
+				Index = m_PropertyList.GetNextSelectedItem(pos);
+				str = m_PropertyList.GetItemText(Index, 1);
+				int nLayer = m_pObjList->FindLayerByName(str);
+				CMachinePara_Layer* pLayer = m_pObjList->GetLayerOfNumber(nLayer);
+				pLayer->m_bIsLayerStatus = pLayer->m_bIsLayerStatus | IsObjSel;
+			}
+		}
+		//∂‡—° Ω· ¯
+		UIRefreshLayer();
+	}
+	//Õº≤„¡–±Ì
+	UpdateData(FALSE);
+	m_pView->Invalidate();
+	*pResult = 0;
+}
+
+void CObjectProperty::OnObjProtyBtnCombine()
+{
+	if (m_bDispObject)
+	{
+		int Count = m_SelectedObj.size();
+		if (Count <= 1)
+			return;
+		vector<int> nList;
+		int Index = m_ProtyListIndex[m_SelectedObj[0]];
+		for (int i = 0; i < Count; i++)
+		{
+			nList.push_back(m_ProtyListIndex[m_SelectedObj[i]]);
+		}
+		ClearAllObjSel();
+		m_pObjList->PolymerObjAtIndex(nList);
+		m_pObjList->SetObjSelect(Index);
+		m_bDispObject = false;
+		OnClickedObjectOrLayer();
+		HScroll(m_SelectedObj[0]);
+		m_PropertyList.SetFocus();
+		m_pView->Invalidate();
+	}
+	//Object_Combine_Polyline End
+	else
+	{
+		CString str = _T("    ∫œ≤¢º”π§≤Œ ˝œ‡Õ¨µƒÕº≤„\n\n");
+		str = str + _T("   ∏√≤Ÿ◊˜ «≤ªø…ƒÊµƒ!  «∑ÒºÃ–¯?");
+		if (IDNO == MessageBox(str, _T("∫œ≤¢»ﬂ”‡≤„"), MB_YESNO))
+			return;
+		m_pObjList->ClearRedundLayer();
+		m_bDispObject = true;
+		OnClickedObjectOrLayer();
+	}
+	//Layer_Combine End
+}
+
+void CObjectProperty::OnClickedObjProtyExtend()
+{
+	if (m_bDispObject)
+	{
+		int Count = m_SelectedObj.size();
+		if (Count < 1)
+			return;
+		vector<int> nList;
+		for (int i = 0; i < Count; i++)
+		{
+			nList.push_back(m_ProtyListIndex[m_SelectedObj[i]]);
+		}
+		if (!m_bDegenerate)
+			m_pObjList->ExtendObjAtIndex(nList, gDupNumber, gGapDistance);
+		else
+			m_pObjList->Degenerate(nList);
+		m_bDispObject = false;
+		OnClickedObjectOrLayer();
+		HScroll(m_SelectedObj[0]);
+		m_PropertyList.SetFocus();
+		m_pView->Invalidate();
+	}
+	//Object End
+	else
+	{
+
+	}
+	//Layer End
+}
 
 BOOL CObjectProperty::PreTranslateMessage(MSG* pMsg)
 {
-	// TODO: Âú®Ê≠§Ê∑ªÂä†‰∏ìÁî®‰ª£Á†ÅÂíå/ÊàñË∞ÉÁî®Âü∫Á±ª
-	if (WM_RBUTTONDOWN == pMsg->message)
+	// TODO:  ‘⁄¥ÀÃÌº”◊®”√¥˙¬Î∫Õ/ªÚµ˜”√ª˘¿‡
+	if (pMsg->message == WM_RBUTTONDOWN)
 	{
-		CRect rt;
-		POINT pt;
-		::GetWindowRect(GetDlgItem(IDC_BUTTON_OBJECT_START_MARK)->GetSafeHwnd(), &rt); //ÂæóÂà∞buttonÊâÄÂú®ÁöÑrect
-		::GetCursorPos(&pt);															//ÂæóÂà∞Èº†Ê†áÂä®‰ΩúÁöÑ‰ΩçÁΩÆ
-		if (PtInRect(&rt, pt))															 //Âà§Êñ≠Èº†Ê†áÂä®‰ΩúÊòØÂê¶Âú®buttonËåÉÂõ¥‰πãÂÜÖ ¬† ¬†¬†
+		CButton* pBTN = ((CButton*)GetDlgItem(IDC_OBJ_PROTY_BTN11));
+		if (pBTN->GetState() != 0)
+		{
+			SetExtenfPara();
+			return TRUE;
+		}
+		pBTN = ((CButton*)GetDlgItem(IDC_OBJ_PROTY_BTN10));
+		if (pBTN->GetState() != 0)
+		{
+			SetFillPara();
+			return TRUE;
+		}
+		pBTN = ((CButton*)GetDlgItem(IDC_BUTTON_OBJECT_START_MARK));
+		if (pBTN->GetState() != 0)
 		{
 			CString str;
 			GetDlgItem(IDC_BUTTON_OBJECT_START_MARK)->GetWindowText(str);
 
-			if (_T("ÂÅúÊ≠¢Âä†Â∑•") == str)
+			if (_T("Õ£÷πº”π§") == str)
 			{
 				//do nothing
 			}
 			else if (FALSE == m_bLocate)
 			{
 				m_bLocate = TRUE;
-				m_strBtnMark = _T("ÂÆö‰ΩçÂä†Â∑•");
+				m_strBtnMark = _T("∂®Œªº”π§");
 				GetDlgItem(IDC_BUTTON_OBJECT_START_MARK)->SetWindowText(m_strBtnMark);
 			}
 			else
 			{
 				m_bLocate = FALSE;
-				m_strBtnMark = _T("Áõ¥Êé•Âä†Â∑•");
+				m_strBtnMark = _T("÷±Ω”º”π§");
 				GetDlgItem(IDC_BUTTON_OBJECT_START_MARK)->SetWindowText(m_strBtnMark);
 			}
 		}
+
+		
 	}
-
-
 	return CFormView::PreTranslateMessage(pMsg);
 }
+
+void CObjectProperty::OnClickedObjProtyFill()
+{
+	if (m_bDispObject)
+	{
+		int Count = m_SelectedObj.size();
+		if (Count < 1)
+			return;
+		vector<int> nList;
+		for (int i = 0; i < Count; i++)
+		{
+			nList.push_back(m_ProtyListIndex[m_SelectedObj[i]]);
+		}
+		if (!m_bDegenerate)
+		{
+			FillPara para1, para2, para3, para4;
+			para1.FillAngle = gFillAngle0;
+			para1.FillGap = gFillGap0;
+			para1.Curtail = gCurtail0;
+			para1.FillMode = gFillMode0;
+			para1.GapMode = gGapMode0;
+			para1.IsEnable = gFillEnable0;
+			para2.FillAngle = gFillAngle1;
+			para2.FillGap = gFillGap1;
+			para2.Curtail = gCurtail1;
+			para2.FillMode = gFillMode1;
+			para2.GapMode = gGapMode1;
+			para2.IsEnable = gFillEnable1;
+			para3.FillAngle = gFillAngle2;
+			para3.FillGap = gFillGap2;
+			para3.Curtail = gCurtail2;
+			para3.FillMode = gFillMode2;
+			para3.GapMode = gGapMode2;
+			para3.IsEnable = gFillEnable2;
+			para4.FillAngle = gFillAngle3;
+			para4.FillGap = gFillGap3;
+			para4.Curtail = gCurtail3;
+			para4.FillMode = gFillMode3;
+			para4.GapMode = gGapMode3;
+			para4.IsEnable = gFillEnable3;
+			m_pObjList->FillObjAtIndex(nList, gFillOutlinePrior, para1, para2, para3, para4);
+		}
+			
+		else
+			m_pObjList->Degenerate(nList);
+		m_bDispObject = false;
+		OnClickedObjectOrLayer();
+		HScroll(m_SelectedObj[0]);
+		m_PropertyList.SetFocus();
+		m_pView->Invalidate();
+	}
+	//Object End
+	else
+	{
+
+	}
+	//Layer End
+}
+
+void CObjectProperty::OnClickedObjProtyBtn15()
+{
+	if (!m_bDispObject)
+	{
+		Disp_Machine_Property
+			return;
+	}
+	else if (m_Edit_pObj != NULL)
+	{
+		int nType = m_Edit_pObj->GetObjType();
+		switch (nType)
+		{
+		case MachineObj_Type_Point:
+
+			break;
+		case MachineObj_Type_Line:
+			ExchangeLineStartAndEnd(m_Edit_pObj);
+			break;
+		case MachineObj_Type_Circle:
+			ExchangeCircleStartAndEnd(m_Edit_pObj);
+			break;
+		case MachineObj_Type_Arc:
+			ExchangeArcStartAndEnd(m_Edit_pObj);
+			break;
+		case MachineObj_Type_Ellipse:
+			ExchangeEllipseStartAndEnd(m_Edit_pObj);
+			break;
+		case MachineObj_Type_ArcEll:
+			ExchangeArcEllStartAndEnd(m_Edit_pObj);
+			break;
+		case MachineObj_Type_TiltEllipse:
+			ExchangeTiltEllipseStartAndEnd(m_Edit_pObj);
+			break;
+		case MachineObj_Type_Polyline:
+			ExchangePolylineStartAndEnd(m_Edit_pObj);
+		default:
+			break;
+		}
+		return;
+	}
+}
+
+void CObjectProperty::OnClickedObjProtyBtn16()
+{
+	if (!m_bDispObject)
+	{
+		Disp_Machine_Property
+		return;
+	}
+	else if (m_Edit_pObj != NULL)
+	{
+		int nType = m_Edit_pObj->GetObjType();
+		switch (nType)
+		{
+		case MachineObj_Type_Point:
+			SavePoint(m_Edit_pObj);
+			break;
+		case MachineObj_Type_Line:
+			SaveLineModify(m_Edit_pObj);
+			break;
+		case MachineObj_Type_Circle:
+			SaveCircleModify(m_Edit_pObj);
+			break;
+		case MachineObj_Type_Arc:
+			SaveArcModify(m_Edit_pObj);
+			break;
+		case MachineObj_Type_Ellipse:
+			SaveEllipseModify(m_Edit_pObj);
+			break;
+		case MachineObj_Type_ArcEll:
+			SaveArcEllModify(m_Edit_pObj);
+			break;
+		case MachineObj_Type_TiltEllipse:
+			SaveTiltEllipseModify(m_Edit_pObj);
+			break;
+		case MachineObj_Type_Polyline:
+			SavePolylineModify(m_Edit_pObj);
+			break;
+		case MachineObj_Type_Group:
+			SaveGroupModify(m_Edit_pObj);
+			break;
+		case MachineObj_Type_WLine:
+			SaveWiden();
+			break;
+		case MachineObj_Type_WArc:
+			SaveWiden();
+			break;
+		case MachineObj_Type_WPolyline:
+			SaveWiden();
+			break;
+		case MachineObj_Type_FillPolyline:
+			SaveFill();
+			break;
+		default:
+			break;
+		}
+	}
+}
+
+void CObjectProperty::OnClickedObjProtyBtn17()
+{
+	m_pView->m_bObjNodeDisp = false;
+	m_pView->Invalidate();
+	Disp_Machine_Property
+	UIRefreshObject();
+}
+
+void CObjectProperty::OnClickedObjProtyBtn18()
+{
+	if (!m_bDispObject)
+	{
+		Disp_Machine_Property
+			return;
+	}
+	else if (m_Edit_pObj != NULL)
+	{
+		int nType = m_Edit_pObj->GetObjType();
+		switch (nType)
+		{
+		case MachineObj_Type_Circle:
+			ChangeCircleNode(m_Edit_pObj);
+			break;
+		case MachineObj_Type_Ellipse:
+			ChangeEllipseNode(m_Edit_pObj);
+			break;
+		case MachineObj_Type_Polyline:
+			ClosePolyline(m_Edit_pObj);
+			break;
+		default:
+			break;
+		}
+		return;
+	}
+}
+
+void CObjectProperty::OnClickedObjProtyBtn19()
+{
+	if (!m_bDispObject)
+	{
+		Disp_Machine_Property
+		return;
+	}
+	else if (m_Edit_pObj != NULL)
+	{
+		int nType = m_Edit_pObj->GetObjType();
+		switch (nType)
+		{
+		case MachineObj_Type_Polyline:
+			LastNodePolyline(m_Edit_pObj);
+			break;
+		default:
+			break;
+		}
+		return;
+	}
+}
+
+void CObjectProperty::OnClickedObjProtyBtn20()
+{
+	if (!m_bDispObject)
+	{
+		Disp_Machine_Property
+			return;
+	}
+	else if (m_Edit_pObj != NULL)
+	{
+		int nType = m_Edit_pObj->GetObjType();
+		switch (nType)
+		{
+		case MachineObj_Type_Polyline:
+			NextNodePolyline(m_Edit_pObj);
+			break;
+		default:
+			break;
+		}
+		return;
+	}
+}
+
+void CObjectProperty::OnClickedObjProtyCheck1()
+{
+	CButton* pBtn = (CButton*)GetDlgItem(IDC_OBJ_PROTY_CHECK1);
+	if (pBtn->GetCheck())
+	{
+		GetDlgItem(IDC_OBJ_PROTY_EDIT14)->EnableWindow(TRUE);
+		GetDlgItem(IDC_OBJ_PROTY_EDIT15)->EnableWindow(TRUE);
+		GetDlgItem(IDC_OBJ_PROTY_EDIT16)->EnableWindow(TRUE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO10)->EnableWindow(TRUE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO11)->EnableWindow(TRUE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO12)->EnableWindow(TRUE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO13)->EnableWindow(TRUE);
+	}
+	else
+	{
+		GetDlgItem(IDC_OBJ_PROTY_EDIT14)->EnableWindow(FALSE);
+		GetDlgItem(IDC_OBJ_PROTY_EDIT15)->EnableWindow(FALSE);
+		GetDlgItem(IDC_OBJ_PROTY_EDIT16)->EnableWindow(FALSE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO10)->EnableWindow(FALSE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO11)->EnableWindow(FALSE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO12)->EnableWindow(FALSE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO13)->EnableWindow(FALSE);
+	}
+}
+
+void CObjectProperty::OnClickedObjProtyRadio6()
+{
+	UpdateData(TRUE);
+	if (m_nSel_Old == m_nSelGroup)
+		return;
+	if (m_nSel_Old > 3 || m_nSelGroup > 3)
+		return;
+	m_FillPara[m_nSel_Old].FillAngle = m_dVar1;
+	m_FillPara[m_nSel_Old].FillGap = m_dVar2;
+	m_FillPara[m_nSel_Old].Curtail = m_dVar3;
+	m_FillPara[m_nSel_Old].GapMode = m_GapMode;
+	m_FillPara[m_nSel_Old].FillMode = m_FillMode;
+	if (m_FillEnable)
+		m_FillPara[m_nSel_Old].IsEnable = true;
+	else
+		m_FillPara[m_nSel_Old].IsEnable = false;
+	m_nSel_Old = m_nSelGroup;
+	m_dVar1 = m_FillPara[m_nSelGroup].FillAngle;
+	m_dVar2 = m_FillPara[m_nSelGroup].FillGap;
+	m_dVar3 = m_FillPara[m_nSelGroup].Curtail;
+	m_GapMode = m_FillPara[m_nSelGroup].GapMode;
+	m_FillMode = m_FillPara[m_nSelGroup].FillMode;
+	m_FillEnable = m_FillPara[m_nSelGroup].IsEnable;
+	if (m_FillEnable)
+	{
+		GetDlgItem(IDC_OBJ_PROTY_EDIT14)->EnableWindow(TRUE);
+		GetDlgItem(IDC_OBJ_PROTY_EDIT15)->EnableWindow(TRUE);
+		GetDlgItem(IDC_OBJ_PROTY_EDIT16)->EnableWindow(TRUE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO10)->EnableWindow(TRUE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO11)->EnableWindow(TRUE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO12)->EnableWindow(TRUE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO13)->EnableWindow(TRUE);
+		((CButton*)GetDlgItem(IDC_OBJ_PROTY_CHECK1))->SetCheck(TRUE);
+	}
+	else
+	{
+		GetDlgItem(IDC_OBJ_PROTY_EDIT14)->EnableWindow(FALSE);
+		GetDlgItem(IDC_OBJ_PROTY_EDIT15)->EnableWindow(FALSE);
+		GetDlgItem(IDC_OBJ_PROTY_EDIT16)->EnableWindow(FALSE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO10)->EnableWindow(FALSE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO11)->EnableWindow(FALSE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO12)->EnableWindow(FALSE);
+		GetDlgItem(IDC_OBJ_PROTY_RADIO13)->EnableWindow(FALSE);
+		((CButton*)GetDlgItem(IDC_OBJ_PROTY_CHECK1))->SetCheck(FALSE);
+	}
+	UpdateData(FALSE);
+}
+
+
+void CObjectProperty::OnBnClickedButtonObjectStartMark()
+{
+	// TODO: ‘⁄¥ÀÃÌº”øÿº˛Õ®÷™¥¶¿Ì≥Ã–Ú¥˙¬Î
+	CString str;
+	GetDlgItem(IDC_BUTTON_OBJECT_START_MARK)->GetWindowText(str);
+
+	if (_T("Õ£÷πº”π§") == str)
+	{
+		::SendMessage(m_pView->GetSafeHwnd(), WM_STOP_MARK, NULL, NULL);
+		GetDlgItem(IDC_BUTTON_OBJECT_START_MARK)->SetWindowText(m_strBtnMark);
+	}
+	else
+	{
+		GetDlgItem(IDC_BUTTON_OBJECT_START_MARK)->SetWindowText(_T("Õ£÷πº”π§"));
+		::SendMessage(m_pView->GetSafeHwnd(), WM_START_MARK, m_bLocate, NULL);
+		GetDlgItem(IDC_BUTTON_OBJECT_START_MARK)->SetWindowText(m_strBtnMark);
+	}
+}
+

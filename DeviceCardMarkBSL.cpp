@@ -432,11 +432,16 @@ BOOL CDeviceCardMarkBSL::SetPensFromAllLayers(CMachineListContainer* pObjList)
 		penParaTmp.nFreq = pMachineParaLayerTmp->m_MachinePara.Frequncy;			//频率HZ
 		penParaTmp.nQPulseWidth = pMachineParaLayerTmp->m_MachinePara.PulseWidth;	//Q脉冲宽度us	
 
-		penParaTmp.nStartTC = gLaserOnDelay;										//开始延时us
-		penParaTmp.nLaserOffTC = gLaserOffDelay;									//激光关闭延时us 
-		penParaTmp.nEndTC = gAfterMarkDelay;										//结束延时us
-		penParaTmp.nPolyTC = gPolylineDelay;										//拐角延时us	
-		penParaTmp.nJumpPosTC = gBeforMarkDelay;									//标刻后延时/跳转延时
+		penParaTmp.nStartTC = pMachineParaLayerTmp->m_MachinePara.LaserOnDelay;										//开始延时us
+		penParaTmp.nLaserOffTC = pMachineParaLayerTmp->m_MachinePara.LaserOffDelay;									//激光关闭延时us 
+		penParaTmp.nEndTC = pMachineParaLayerTmp->m_MachinePara.AfterMarkDelay;										//结束延时us
+		penParaTmp.nPolyTC = pMachineParaLayerTmp->m_MachinePara.PolylineDelay;										//拐角延时us	
+		penParaTmp.nJumpPosTC = pMachineParaLayerTmp->m_MachinePara.BeforMarkDelay;									//标刻前延时/跳转延时
+		//penParaTmp.nStartTC = gLaserOnDelay;										//开始延时us
+		//penParaTmp.nLaserOffTC = gLaserOffDelay;									//激光关闭延时us 
+		//penParaTmp.nEndTC = gAfterMarkDelay;										//结束延时us
+		//penParaTmp.nPolyTC = gPolylineDelay;										//拐角延时us	
+		//penParaTmp.nJumpPosTC = gBeforMarkDelay;									//标刻后延时/跳转延时
 
 		//将penPara写入卡中
 		BSL_SetPenParam func = (BSL_SetPenParam)::GetProcAddress(m_hMarkDll, "SetPenParam");

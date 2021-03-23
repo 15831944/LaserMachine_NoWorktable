@@ -34,6 +34,10 @@ public:
 	int m_nVScrollPos;
 	int m_nHScrollMax;			
 	int m_nVScrollMax;
+	bool m_bObjDirDisp;
+	bool m_bObjDirDisp_EN;
+	bool m_bObjNodeDisp;
+	ObjPoint m_NodePoint;
 	vector<int> m_nList;
 
 // ÖØÐ´

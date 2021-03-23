@@ -20,6 +20,7 @@ protected:
 	CToolBar m_wndToolBar;
 	CToolBar m_wndToolBar1;
 	bool m_bToolBar_Flag;
+	bool m_bObjDir_Hide;
 
 public:
 	CSplitterWnd m_wndSplitter;
@@ -61,6 +62,7 @@ protected:
 
 public:
 	afx_msg void OnObjPrtyPanelDisp();
+	afx_msg void OnObjDirctionDisp();
 	afx_msg void OnCamPosPanelDisp();
 	afx_msg void OnDrawToVideo();
 	

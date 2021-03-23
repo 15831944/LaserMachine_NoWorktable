@@ -12,6 +12,8 @@ extern void SetScannerInvertX(int nScannerInvertX);
 extern int ReadScannerInvertX();
 extern void SetScannerInvertY(int nScannerInvertY);
 extern int ReadScannerInvertY();
+extern void SetScannerMarkArcStep(double fScannerArcStep);
+extern double ReadScannerMarkArcStep();
 
 
 

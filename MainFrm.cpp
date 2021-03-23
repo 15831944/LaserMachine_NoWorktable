@@ -36,6 +36,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
 	ON_MESSAGE(WM_MainWindows_Resume, &CMainFrame::OnMainwindowsResume)
 	//命令
 	ON_COMMAND(IDM_OBJPRTY_PANEL_DISP, &CMainFrame::OnObjPrtyPanelDisp)
+	ON_COMMAND(IDM_OBJECT_DIRECTION, &CMainFrame::OnObjDirctionDisp)
 	ON_COMMAND(IDM_CAMPOS_PANEL_DISP, &CMainFrame::OnCamPosPanelDisp)
 	ON_COMMAND(IDM_GRAPH_TO_VIDEO, &CMainFrame::OnDrawToVideo)
 	ON_COMMAND(IDM_DEVICE_CONFIG, &CMainFrame::OnDeviceConfig)
@@ -52,7 +53,7 @@ static UINT indicators[] =
 	ID_INDICATOR_DEVICE_COORD,
 	ID_INDICATOR_VIEW_COORD,
 	ID_INDICATOR_USED_TIME,
-	ID_INDICATOR_MACHINE_STATUS,
+	//ID_INDICATOR_MACHINE_STATUS,
 	//ID_INDICATOR_CAPS,
 	//ID_INDICATOR_NUM,
 	//ID_INDICATOR_SCRL,
@@ -62,7 +63,9 @@ static UINT indicators[] =
 
 CMainFrame::CMainFrame()
 {
-	// TODO:  在此添加成员初始化代码
+	m_bObPrtyWindows_Hide = true;
+	m_bCamPosWindows_Hide = true;
+	m_bObjDir_Hide = true;
 	m_bAutoMenuEnable = FALSE; //使能调用EnableMenuItem
 }
 
@@ -100,11 +103,6 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	}
 	m_wndStatusBar.SetIndicators(indicators, sizeof(indicators)/sizeof(UINT));
 
-
-	// TODO:  如果不需要可停靠工具栏，则删除这三行
-	//m_wndToolBar.EnableDocking(CBRS_ALIGN_ANY);
-	//EnableDocking(CBRS_ALIGN_ANY);
-	//DockControlBar(&m_wndToolBar);
 
 	return 0;
 }
@@ -315,6 +313,30 @@ void CMainFrame::OnObjPrtyPanelDisp()
 	m_wndSplitter.RecalcLayout();
 }
 
+void CMainFrame::OnObjDirctionDisp()
+{
+	CLaserMachineView* pView = (CLaserMachineView*)m_wndSplitter1.GetPane(0, 0);
+	if (pView->m_bObjDirDisp_EN)
+	{
+		if (m_bObjDir_Hide)
+		{
+			m_bObjDir_Hide = false;
+			m_wndToolBar1.LoadBitmapW(IDR_TOOLBAR_MODIFY_1);
+			pView->m_bObjDirDisp = true;
+			pView->Invalidate();
+		}
+		else
+		{
+			m_bObjDir_Hide = true;
+			m_wndToolBar1.LoadBitmapW(IDR_TOOLBAR_MODIFY);
+			pView->m_bObjDirDisp = false;
+			pView->Invalidate();
+		}
+		pView->m_bObjDirDisp_EN = false;
+	}
+}
+
+
 void CMainFrame::OnCamPosPanelDisp()
 {
 	//刷新理论坐标
@@ -358,7 +380,7 @@ void CMainFrame::OnDrawToVideo()
 
 void CMainFrame::OnDeviceConfig()
 {
-	m_strSysPassword = _T("");
+	m_strSysPassword = _T("yllaser");
 	CCheckPassword dlg;
 	dlg.m_strCheckTitle = _T("请输入系统管理员密码");
 	dlg.DoModal();

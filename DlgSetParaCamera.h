@@ -54,7 +54,7 @@ public:
 	int m_nCameraExposure;
 	CSliderCtrl m_cSliderCameraExposure;
 	const int m_cnSliderSliderCameraExposureMin = 36;      /* Slider min position                                   */
-	const int m_cnSliderSliderCameraExposureMax = 1000000;    /* Slider max position                                   */
+	const int m_cnSliderSliderCameraExposureMax = 50000;    /* Slider max position                                   */
 	//增益
 	int m_nCameraGain;
 	CSliderCtrl m_cSliderCameraGain;

@@ -321,10 +321,10 @@ BOOL CCameraView::PreTranslateMessage(MSG* pMsg)
 			m_pHalconWnd->MoveContourMask(0, fCameraMoveUnit, 0);
 			break;
 		case VK_PRIOR:
-			m_pHalconWnd->MoveContourMask(0, 0, 0.1);
+			m_pHalconWnd->MoveContourMask(0, 0, 0.05);
 			break;
 		case VK_NEXT:
-			m_pHalconWnd->MoveContourMask(0, 0, -0.1);
+			m_pHalconWnd->MoveContourMask(0, 0, -0.05);
 			break;
 		default:
 			break;
@@ -528,6 +528,19 @@ void CCameraView::OnCameraAutoMatchBorder()
 		return;
 	CMachineListContainer* pList = pDoc->m_pLaserObjList;
 	CPreProcess preProcess;
+	std::vector<CPointF> vecBorder = preProcess.GetBorderPtArray(pList);
+	if (0 >= vecBorder.size())
+	{
+		AfxMessageBox(_T("生成模板失败，请将Border层设置为一条封闭多段线"));
+		return;
+	}
+	if (vecBorder.front() != vecBorder.back())
+	{
+		AfxMessageBox(_T("生成模板失败，请将Border层设置为一条封闭多段线"));
+		return;
+	}
+
+
 	double fRadius, fPixelSize, fScaleMin, fScaleMax, fMinScore;
 	fRadius = ReadDevCameraMarkCircleRadius();
 	fPixelSize = ReadDevCameraPixelSize();
@@ -535,14 +548,13 @@ void CCameraView::OnCameraAutoMatchBorder()
 	fScaleMin = ReadDevCameraMarkCircleFindScaleMin();
 	fScaleMax = ReadDevCameraMarkCircleFindScaleMax();
 
-	ModelBase* pModel = ModelFactory::creatModel(ModelType::MT_ClosedPolyline, fPixelSize, preProcess.GetBorderPtArray(pList));
+	ModelBase* pModel = ModelFactory::creatModel(ModelType::MT_ClosedPolyline, fPixelSize, vecBorder);
 	pModel->SetScale(fScaleMin, fScaleMax);
 	pModel->SetMinScore(fMinScore);
 
 	std::vector<CPointF> vecPtPos;
 	std::vector <double> vFAngle;
 	pModel->LocateModel(vecPtPos, vFAngle);
-	//m_pHalconWnd->SetContourMask(pModel->m_hoModel);
 	delete pModel;
 	pModel = NULL;
 

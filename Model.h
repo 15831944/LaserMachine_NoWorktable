@@ -54,8 +54,8 @@ protected:
 
 	//抓标参数
 	double m_fPixelSize;					//像素尺寸 mm/p
-	int m_nModelOriginRow;					//抓标锚点
-	int m_nModelOriginColumn;
+	double m_fModelOriginRow;					//抓标锚点
+	double m_fModelOriginColumn;
 	double m_fModelScaleMin;				//抓标缩放容差
 	double m_fModelScaleMax;
 	double m_fModelMinScore;				//抓标最小得分

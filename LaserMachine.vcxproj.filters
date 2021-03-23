@@ -92,51 +92,6 @@
     <ClInclude Include="CheckPassword.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MachineListContainer.h">
-      <Filter>MachineObjList\头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MachineObj_Comm.h">
-      <Filter>MachineObjList\头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MachineObjArc.h">
-      <Filter>MachineObjList\头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MachineObjCircle.h">
-      <Filter>MachineObjList\头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MachineObjDef.h">
-      <Filter>MachineObjList\头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MachineObjLine.h">
-      <Filter>MachineObjList\头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MachineObjPoint.h">
-      <Filter>MachineObjList\头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MachinePara_Layer.h">
-      <Filter>MachineObjList\头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MachineObjEllipse.h">
-      <Filter>MachineObjList\头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MachineObjArcEll.h">
-      <Filter>MachineObjList\头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MachineObjTiltEllipse.h">
-      <Filter>MachineObjList\头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MachineObjPolyline.h">
-      <Filter>MachineObjList\头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectProperty.h">
-      <Filter>ObjProperty\头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjPropertyDlgEdit.h">
-      <Filter>ObjProperty\头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="MachineObjGroup.h">
-      <Filter>MachineObjList\头文件</Filter>
-    </ClInclude>
     <ClInclude Include="CDlgDevCfgTabLaser.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -266,6 +221,69 @@
     <ClInclude Include="CDialogAxisZMove.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="MachineObject\include\MachineListContainer.h">
+      <Filter>MachineObjList\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MachineObject\include\MachineObj_Comm.h">
+      <Filter>MachineObjList\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MachineObject\include\MachineObjArc.h">
+      <Filter>MachineObjList\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MachineObject\include\MachineObjArcEll.h">
+      <Filter>MachineObjList\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MachineObject\include\MachineObjCircle.h">
+      <Filter>MachineObjList\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MachineObject\include\MachineObjDef.h">
+      <Filter>MachineObjList\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MachineObject\include\MachineObjEllipse.h">
+      <Filter>MachineObjList\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MachineObject\include\MachineObjFillPolyline.h">
+      <Filter>MachineObjList\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MachineObject\include\MachineObjGroup.h">
+      <Filter>MachineObjList\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MachineObject\include\MachineObjLine.h">
+      <Filter>MachineObjList\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MachineObject\include\MachineObjPoint.h">
+      <Filter>MachineObjList\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MachineObject\include\MachineObjPolyline.h">
+      <Filter>MachineObjList\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MachineObject\include\MachineObjTiltEllipse.h">
+      <Filter>MachineObjList\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MachineObject\include\MachineObjWArc.h">
+      <Filter>MachineObjList\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MachineObject\include\MachineObjWLine.h">
+      <Filter>MachineObjList\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MachineObject\include\MachineObjWPolyline.h">
+      <Filter>MachineObjList\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MachineObject\include\MachinePara_Layer.h">
+      <Filter>MachineObjList\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="MachineObject\include\stdafx.h">
+      <Filter>MachineObjList\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectProperty.h">
+      <Filter>ObjProperty\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectProtyDlg1.h">
+      <Filter>ObjProperty\头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectProtyDlg2.h">
+      <Filter>ObjProperty\头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LaserMachine.cpp">
@@ -294,48 +312,6 @@
     </ClCompile>
     <ClCompile Include="CheckPassword.cpp">
       <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MachineListContainer.cpp">
-      <Filter>MachineObjList\源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MachineObj_Comm.cpp">
-      <Filter>MachineObjList\源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MachineObjArc.cpp">
-      <Filter>MachineObjList\源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MachineObjCircle.cpp">
-      <Filter>MachineObjList\源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MachineObjLine.cpp">
-      <Filter>MachineObjList\源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MachineObjPoint.cpp">
-      <Filter>MachineObjList\源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MachinePara_Layer.cpp">
-      <Filter>MachineObjList\源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MachineObjEllipse.cpp">
-      <Filter>MachineObjList\源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MachineObjArcEll.cpp">
-      <Filter>MachineObjList\源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MachineObjTiltEllipse.cpp">
-      <Filter>MachineObjList\源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MachineObjPolyline.cpp">
-      <Filter>MachineObjList\源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectProperty.cpp">
-      <Filter>ObjProperty\源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjPropertyDlgEdit.cpp">
-      <Filter>ObjProperty\源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="MachineObjGroup.cpp">
-      <Filter>MachineObjList\源文件</Filter>
     </ClCompile>
     <ClCompile Include="CDlgDevCfgTabLaser.cpp">
       <Filter>源文件</Filter>
@@ -453,6 +429,63 @@
     </ClCompile>
     <ClCompile Include="CDialogAxisZMove.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MachineObject\source\MachineListContainer.cpp">
+      <Filter>MachineObjList\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MachineObject\source\MachineObj_Comm.cpp">
+      <Filter>MachineObjList\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MachineObject\source\MachineObjArc.cpp">
+      <Filter>MachineObjList\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MachineObject\source\MachineObjArcEll.cpp">
+      <Filter>MachineObjList\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MachineObject\source\MachineObjCircle.cpp">
+      <Filter>MachineObjList\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MachineObject\source\MachineObjEllipse.cpp">
+      <Filter>MachineObjList\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MachineObject\source\MachineObjFillPolyline.cpp">
+      <Filter>MachineObjList\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MachineObject\source\MachineObjGroup.cpp">
+      <Filter>MachineObjList\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MachineObject\source\MachineObjLine.cpp">
+      <Filter>MachineObjList\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MachineObject\source\MachineObjPoint.cpp">
+      <Filter>MachineObjList\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MachineObject\source\MachineObjPolyline.cpp">
+      <Filter>MachineObjList\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MachineObject\source\MachineObjTiltEllipse.cpp">
+      <Filter>MachineObjList\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MachineObject\source\MachineObjWArc.cpp">
+      <Filter>MachineObjList\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MachineObject\source\MachineObjWLine.cpp">
+      <Filter>MachineObjList\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MachineObject\source\MachineObjWPolyline.cpp">
+      <Filter>MachineObjList\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="MachineObject\source\MachinePara_Layer.cpp">
+      <Filter>MachineObjList\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectProperty.cpp">
+      <Filter>ObjProperty\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectProtyDlg1.cpp">
+      <Filter>ObjProperty\源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectProtyDlg2.cpp">
+      <Filter>ObjProperty\源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -10,8 +10,8 @@ ModelBase::ModelBase()
 	//m_hoModel = HObject();
 	m_hoContourAffine = HObject();
 
-	m_nModelOriginRow = 0;
-	m_nModelOriginColumn = 0;
+	m_fModelOriginRow = 0;
+	m_fModelOriginColumn = 0;
 	m_fModelScaleMin = DEFAULT_SCALE_MIN;
 	m_fModelScaleMax = DEFAULT_SCALE_MAX;
 	m_fModelMinScore = DEFAULT_MIN_SCORE;
@@ -51,8 +51,8 @@ int ModelBase::LocateModel(std::vector <CPointF>& vPtPos, std::vector <double>& 
 		hv_ScaleMin = m_fModelScaleMin;
 		hv_ScaleMax = m_fModelScaleMax;
 		hv_MinScore = m_fModelMinScore;
-		hv_ModelOriginRow = m_nModelOriginRow;
-		hv_ModelOriginColumn = m_nModelOriginColumn;
+		hv_ModelOriginRow = m_fModelOriginRow;
+		hv_ModelOriginColumn = m_fModelOriginColumn;
 
 		GetImageSize(hoImageDisplay, &hv_ImgWidth, &hv_ImgHeight);
 
@@ -518,18 +518,30 @@ ModelCross::ModelCross(double fPixelSize, double fLength, double fWidth)
 /// <returns></returns>
 ModelClosedPolyline::ModelClosedPolyline(double fPixelSize, std::vector<CPointF> const vecPt)
 {
+
 	m_eModelType = ModelType::MT_ClosedPolyline;
 	m_fPixelSize = fPixelSize;
 	m_vecPt = vecPt;
 
+	if (0 >= vecPt.size())
+	{
+		AfxMessageBox(_T("Border层需设置为一条闭合多段线"));
+		return;
+	}
+
 	CPointF ptStart = vecPt.front();
 	CPointF ptEnd = vecPt.back();
 	if (ptStart != ptEnd)
+	{
+		AfxMessageBox(_T("Border层需设置为一条闭合多段线"));
 		return;
+	}
 
-	HObject hoContour, hoContourCentered, hoContourImg, hoContourRgn, hoContourRgnDilation;
-	HTuple hv_Row, hv_Column;
+	HObject hoContour, hoContourCentered, hoContourImg, hoContourRgn, hoContourRgnDilation, hoRgnGravity;
+	HTuple hv_Row, hv_Column, hv_Area, hv_RowCenter, hv_ColumnCenter, hv_PointOrder;
 	HTuple hv_Heitht, hv_Width, hv_Hom2d;
+	HTuple hv_DomainArea, hv_DomainRow, hv_DomainColumn;
+	HTuple hv_DomainArea1, hv_DomainRow1, hv_DomainColumn1, hv_DomainPointOrder1;
 
 	{
 		hv_Row = HTuple();
@@ -542,20 +554,9 @@ ModelClosedPolyline::ModelClosedPolyline(double fPixelSize, std::vector<CPointF>
 		}
 		GenContourPolygonXld(&hoContour, hv_Row, hv_Column);
 
-		//HTuple hv_RgnRow1, hv_RgnCol1, hv_RgnRow2, hv_RgnCol2;
-		//double fcr, fcl, fcr1, fcl1;
-		//SmallestRectangle1Xld(hoContour, &hv_RgnRow1, &hv_RgnCol1, &hv_RgnRow2, &hv_RgnCol2);
-		//fcl = (hv_RgnCol2 + hv_RgnCol1).D() / 2;
-		//fcr = (hv_RgnRow2 + hv_RgnRow1).D() / 2;
-		//fcl1 = (hv_Column.TupleMax() + hv_Column.TupleMin()).D() / 2;
-		//fcr1 = (hv_Row.TupleMax() + hv_Row.TupleMin()).D() / 2;
-		//HomMat2dIdentity(&hv_Hom2d);
-		//HomMat2dTranslate(hv_Hom2d, (1944) / 2, (2592) / 2, &hv_Hom2d);
-		//AffineTransContourXld(hoContour, &m_hoModel, hv_Hom2d);
-		//return;
-
 		hv_Heitht = 10 + hv_Row.TupleMax() - hv_Row.TupleMin();
 		hv_Width = 10 + hv_Column.TupleMax() - hv_Column.TupleMin();
+
 		HomMat2dIdentity(&hv_Hom2d);
 		HomMat2dTranslate(hv_Hom2d, hv_Heitht / 2, hv_Width / 2, &hv_Hom2d);
 		AffineTransContourXld(hoContour, &hoContourCentered, hv_Hom2d);
@@ -564,6 +565,22 @@ ModelClosedPolyline::ModelClosedPolyline(double fPixelSize, std::vector<CPointF>
 		Threshold(hoContourImg, &hoContourRgn, 10, 255);
 		DilationRectangle1(hoContourRgn, &hoContourRgnDilation, 3, 3);
 		ReduceDomain(hoContourImg, hoContourRgnDilation, &m_hoModel);
+		
+		//Threshold(m_hoModel, &hoRgnGravity, 1, 255);
+		//AreaCenterGray(hoRgnGravity, m_hoModel, &hv_DomainArea, &hv_DomainRow, &hv_DomainColumn);
+		//AreaCenter(hoContourRgnDilation, &hv_DomainArea, &hv_DomainRow, &hv_DomainColumn);
+		//AreaCenterXld(hoContourCentered, &hv_DomainArea1, &hv_DomainRow1, &hv_DomainColumn1, &hv_DomainPointOrder1);
+		AreaCenterXld(hoContourCentered, &hv_Area, &hv_RowCenter, &hv_ColumnCenter, &hv_PointOrder);
+		//double w, h, c, r, c1, r1;
+		//w = hv_Heitht.D();
+		//h = hv_Width.D();
+		//r = hv_RowCenter.D();
+		//c = hv_ColumnCenter.D();
+		//r1 = hv_DomainRow1.D();
+		//c1 = hv_DomainColumn1.D();
+		m_fModelOriginRow = hv_Heitht.D() / 2 - hv_RowCenter.D();
+		m_fModelOriginColumn = hv_Width.D() / 2 - hv_ColumnCenter.D();
+
 
 		//WriteImage(m_hoModel, "bmp", 0, "D://YuanLu//4. Halcon//CCD Sample//m_hoModel.bmp");
 	}

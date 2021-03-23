@@ -91,7 +91,9 @@ CLaserMachineView::CLaserMachineView()
 	m_nVScrollMax = InitScrollMax;
 	m_rcBound = InitBound;
 	m_rcZoomBound = m_rcBound;
-
+	m_bObjDirDisp = false;
+	m_bObjDirDisp_EN = true;
+	m_bObjNodeDisp = false;
 }
 
 CLaserMachineView::~CLaserMachineView()
@@ -128,16 +130,42 @@ void CLaserMachineView::OnDraw(CDC* pDC)
 	Mem_DC.DPtoLP(m_rcClient);
 	//Mem_DC.FillSolidRect(m_rcClient, RGB(255, 255, 255));      //背景填充白色，否则可能为黑色
 	Mem_DC.FillSolidRect(m_rcClient, pDC->GetBkColor());
-	m_pLaserObjList->DrawObjList(&Mem_DC, m_pLaserObjList, (float)m_fZoomFactor);
-	//m_pLaserObjList->DrawObjList(&Mem_DC, m_pLaserObjList, (float)m_fZoomFactor, Objrc); //备用,若绘图刷新过慢,可考虑仅绘制窗口内图形
+	m_pLaserObjList->DrawObjList(&Mem_DC, m_pLaserObjList, (float)m_fZoomFactor, Objrc, m_bObjDirDisp);
 	pDC->BitBlt(m_rcClient.left, m_rcClient.top, m_rcClient.Width(), m_rcClient.Height(),
 		&Mem_DC, m_rcClient.left, m_rcClient.top, SRCCOPY);
+	if (m_bObjNodeDisp)
+	{
+		CPen* pOldPen = NULL;
+		CPen penNew;
+		penNew.CreatePen(PS_SOLID, 2, PenColor_Point);
+		pOldPen = pDC->SelectObject(&penNew);
+		CPoint point, point1;
+		point = TransRPtoLP(m_NodePoint);
+		point = TransLPtoDP(point);
+		point1.x = point.x - 4;
+		point1.y = point.y - 4;
+		point1 = TransDPtoLP(point1);
+		pDC->MoveTo(point1);
+		point1.x = point.x + 4;
+		point1.y = point.y + 4;
+		point1 = TransDPtoLP(point1);
+		pDC->LineTo(point1);
+		point1.x = point.x - 4;
+		point1.y = point.y + 4;
+		point1 = TransDPtoLP(point1);
+		pDC->MoveTo(point1);
+		point1.x = point.x + 4;
+		point1.y = point.y - 4;
+		point1 = TransDPtoLP(point1);
+		pDC->LineTo(point1);
+		pDC->SelectObject(pOldPen);
+	}
 	DrawCoord(pDC);
 	DrawGrid(pDC, m_pLaserObjList);
-
 	bmp.DeleteObject();
 	Mem_DC.DeleteDC();
 	ReleaseDC(&Mem_DC);
+	m_bObjDirDisp_EN = true;
 }
 
 void CLaserMachineView::OnPrepareDC(CDC* pDC, CPrintInfo* pInfo)
@@ -375,7 +403,6 @@ void CLaserMachineView::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBa
 }
 
 
-//****待补充
 void CLaserMachineView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	m_MouseMoved = FALSE;
@@ -390,40 +417,10 @@ void CLaserMachineView::OnLButtonDown(UINT nFlags, CPoint point)
 		m_LButtonDown = TRUE;
 		m_LButtonFirst = TransDPtoLP(point);
 		m_ptLButtonTemp = m_LButtonFirst;
-
-		/*ObjPoint Objpt = TransLPtoRP(TransDPtoLP(point));
-		CRect rc;
-		ObjRect Objrc;
-		rc = CRect(CPoint(-PickBoxSize, -PickBoxSize), CPoint(PickBoxSize, PickBoxSize));
-		Objrc = TransLPtoRP(TransDPtoLP(rc));
-		float BoxSize = (float)(Objrc.max_x - Objrc.min_x) / 2;
-		Objrc = TransLPtoRP(TransDPtoLP(m_rcClient));
-		int nSel;
-		CObjectProperty* pObjProperty = (CObjectProperty*)
-			((CMainFrame*)AfxGetApp()->m_pMainWnd)->m_wndSplitter.GetPane(0, 2);
-		if (GetAsyncKeyState(VK_CONTROL) >= 0)
-		{
-			m_pLaserObjList->SetObjUnSelectAll();
-			nSel = m_pLaserObjList->PickObjectList(m_pLaserObjList, Objpt, Objrc, BoxSize);
-			if (nSel >= 0)
-				pObjProperty->SendMessage(WM_ObjList_Refresh, 1, nSel);
-			else
-				pObjProperty->SendMessage(WM_ObjList_Refresh, NULL, NULL);
-			Invalidate();
-		}
-		else
-		{
-			nSel = m_pLaserObjList->PickObjectList(m_pLaserObjList, Objpt, Objrc, BoxSize);
-			if (nSel >= 0)
-			{
-				pObjProperty->SendMessage(WM_ObjList_Refresh, 2, nSel);
-				Invalidate();
-			}
-		}*/
 	}
 	CView::OnLButtonDown(nFlags, point);
 }
-//****待补充
+
 void CLaserMachineView::OnLButtonUp(UINT nFlags, CPoint point)
 {
 	if (m_DrawType == DrawType_Zoom && m_LButtonDown && m_MouseMoved)
@@ -479,7 +476,7 @@ void CLaserMachineView::OnLButtonUp(UINT nFlags, CPoint point)
 		rcTemp.NormalizeRect();
 		pDC->Rectangle(rcTemp);
 		ReleaseDC(pDC);
-		
+
 		ObjRect Objrc, Objrc1;
 		Objrc = TransLPtoRP(TransDPtoLP(m_rcClient));
 		Objrc1.min_x = TransLPtoRP(m_LButtonFirst).x;
@@ -489,11 +486,17 @@ void CLaserMachineView::OnLButtonUp(UINT nFlags, CPoint point)
 		m_pLaserObjList->SetObjUnSelectAll();
 		m_nList.clear();
 		m_nList = m_pLaserObjList->PickMultObjList(m_pLaserObjList, Objrc, Objrc1);
+		CObjectProperty* pObjProperty = (CObjectProperty*)
+			((CMainFrame*)AfxGetApp()->m_pMainWnd)->m_wndSplitter.GetPane(0, 2);
 		if (!m_nList.empty())
 		{
-			CObjectProperty* pObjProperty = (CObjectProperty*)
-				((CMainFrame*)AfxGetApp()->m_pMainWnd)->m_wndSplitter.GetPane(0, 2);
+			//多选返回选中对象列表
 			pObjProperty->SendMessage(WM_ObjList_Refresh, 3, (LPARAM)&m_nList);
+		}
+		else
+		{
+			//空表返回
+			pObjProperty->SendMessage(WM_ObjList_Refresh, 1, -1);
 		}
 		Invalidate();
 	}
@@ -511,16 +514,15 @@ void CLaserMachineView::OnLButtonUp(UINT nFlags, CPoint point)
 			((CMainFrame*)AfxGetApp()->m_pMainWnd)->m_wndSplitter.GetPane(0, 2);
 		if (GetAsyncKeyState(VK_CONTROL) >= 0)
 		{
+			//单选模式,直接返回选中对象序号,返回值小于0表示无有效选中对象
 			m_pLaserObjList->SetObjUnSelectAll();
 			nSel = m_pLaserObjList->PickObjectList(m_pLaserObjList, Objpt, Objrc, BoxSize);
-			if (nSel >= 0)
-				pObjProperty->SendMessage(WM_ObjList_Refresh, 1, nSel);
-			else
-				pObjProperty->SendMessage(WM_ObjList_Refresh, NULL, NULL);
+			pObjProperty->SendMessage(WM_ObjList_Refresh, 1, nSel);
 			Invalidate();
 		}
 		else
 		{
+			//复选模式,只返回有效选中对象序号
 			nSel = m_pLaserObjList->PickObjectList(m_pLaserObjList, Objpt, Objrc, BoxSize);
 			if (nSel >= 0)
 			{
@@ -539,7 +541,7 @@ void CLaserMachineView::OnLButtonUp(UINT nFlags, CPoint point)
 	m_MouseMoved = FALSE;
 	CView::OnLButtonUp(nFlags, point);
 }
-//****待补充
+
 void CLaserMachineView::OnMouseMove(UINT nFlags, CPoint point)
 {
 	

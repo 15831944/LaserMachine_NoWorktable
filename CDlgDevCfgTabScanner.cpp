@@ -17,6 +17,20 @@
 #include "HalconModel.h"
 #include "Model.h"
 
+void SetScannerMarkArcStep(double fScannerArcStep)
+{
+	CString strTmp;
+	strTmp.Format(_T("%lf"), fScannerArcStep);
+	WritePrivateProfileString(_T("Scanner"), _T("SCANNER_MARK_ARC_STEP"), strTmp, CONFIG_INI_PATH);
+}
+double ReadScannerMarkArcStep()
+{
+	CString strTmp;
+	GetPrivateProfileString(_T("Scanner"), _T("SCANNER_MARK_ARC_STEP"), _T("0.05"), strTmp.GetBuffer(MAX_DOUBLE_PRECISION), MAX_DOUBLE_PRECISION, CONFIG_INI_PATH);
+	return (double)_ttof(strTmp);
+}
+
+
 void SetScannerLenRegion(double fScannerLenRegion)
 {
 	CString strTmp;
