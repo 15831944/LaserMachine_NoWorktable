@@ -272,9 +272,6 @@
     <ClInclude Include="MachineObject\include\MachinePara_Layer.h">
       <Filter>MachineObjList\头文件</Filter>
     </ClInclude>
-    <ClInclude Include="MachineObject\include\stdafx.h">
-      <Filter>MachineObjList\头文件</Filter>
-    </ClInclude>
     <ClInclude Include="ObjectProperty.h">
       <Filter>ObjProperty\头文件</Filter>
     </ClInclude>

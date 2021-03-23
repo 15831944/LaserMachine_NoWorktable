@@ -251,7 +251,6 @@
     <ClInclude Include="MachineObject\include\MachineObjWPolyline.h" />
     <ClInclude Include="MachineObject\include\MachineObj_Comm.h" />
     <ClInclude Include="MachineObject\include\MachinePara_Layer.h" />
-    <ClInclude Include="MachineObject\include\stdafx.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="ObjectProperty.h" />
     <ClInclude Include="ObjectProtyDlg1.h" />
